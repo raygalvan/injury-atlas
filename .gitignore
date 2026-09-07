@@ -4,3 +4,5 @@ data/
 .env
 .atlas-source/
 .atlas-build/
+
+__pycache__/

@@ -53,7 +53,7 @@ npm run build:atlas
 
 ## AWS setup and deployment
 
-See [deploy/README.md](deploy/README.md). The application has not been deployed to AWS yet. Build verification does not prove that your EC2 instance, SES sender, domain, or IAM role is configured. The manual Deploy AWS workflow requires those values and deploys only main. Pull requests never modify production.
+See [deploy/README.md](deploy/README.md). The application has not been deployed to AWS yet. Build verification does not prove that your EC2 instance, SES sender, domain, or IAM role is configured. Deploy AWS runs automatically on pushes to main, including PR merges, and can also be started manually. Complete the GitHub OIDC and dedicated security group setup in deploy/README.md before enabling it. Pull requests never modify production.
 
 ## Evidence and access limitations
 

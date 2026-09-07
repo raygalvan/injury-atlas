@@ -1,5 +1,7 @@
 name: Deploy AWS
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -11,85 +13,62 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: production
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: us-east-2
+      AWS_DEPLOY_SECURITY_GROUP_ID: ${{ vars.AWS_DEPLOY_SECURITY_GROUP_ID }}
     steps:
-      - name: Check deployment settings and wait for SSH
-        timeout-minutes: 17
+      - name: Check deployment configuration
         env:
           AWS_HOST: ${{ secrets.AWS_HOST }}
           AWS_DEPLOY_USER: ${{ secrets.AWS_DEPLOY_USER }}
           AWS_DEPLOY_KEY: ${{ secrets.AWS_DEPLOY_KEY }}
           AWS_HOST_FINGERPRINT: ${{ secrets.AWS_HOST_FINGERPRINT }}
+          AWS_DEPLOY_ROLE_ARN: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           APP_URL: ${{ vars.APP_URL }}
         run: |
-          python3 -u - <<'PY'
-          import ipaddress
-          import os
-          import socket
-          import sys
-          import time
-          import urllib.request
-
-          required = ("AWS_HOST", "AWS_DEPLOY_USER", "AWS_DEPLOY_KEY",
-                      "AWS_HOST_FINGERPRINT", "APP_URL")
-          missing = [name for name in required if not os.environ.get(name, "").strip()]
+          python3 - <<'PYTHON'
+          import os, sys
+          required = ('AWS_HOST', 'AWS_DEPLOY_USER', 'AWS_DEPLOY_KEY',
+                      'AWS_HOST_FINGERPRINT', 'AWS_DEPLOY_ROLE_ARN',
+                      'AWS_DEPLOY_SECURITY_GROUP_ID', 'APP_URL')
+          missing = [key for key in required if not os.environ.get(key, '').strip()]
           if missing:
-              sys.exit("Missing production environment settings: " + ", ".join(missing))
-
-          with urllib.request.urlopen("https://checkip.amazonaws.com", timeout=15) as response:
-              runner_ip = str(ipaddress.IPv4Address(response.read(128).decode().strip()))
-          instruction = (
-              f"Runner SSH source: {runner_ip}/32\n"
-              "If needed, add an EC2 inbound SSH (TCP 22) rule for this exact source.\n"
-              "Keep the EC2 Instance Connect rule. Remove this temporary runner rule "
-              "after the deployment finishes, fails, or is cancelled.\n"
-              "Each new workflow run may use a different IP.\n"
-          )
-          print(instruction, flush=True)
-          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
-              summary.write("### Deployment SSH access\n\n" + instruction + "\n")
-
-          deadline = time.monotonic() + 900
-          while True:
-              try:
-                  with socket.create_connection((os.environ["AWS_HOST"], 22), timeout=3):
-                      pass
-                  print("TCP port 22 is reachable. SSH authentication and host fingerprint "
-                        "will be verified by the deployment steps.", flush=True)
-                  break
-              except OSError:
-                  if time.monotonic() >= deadline:
-                      sys.exit("Timed out waiting for SSH. Check the instance security group, "
-                               "public IP and SSH service, then start a new workflow run.")
-                  print("Waiting for SSH access; checking again in 10 seconds.", flush=True)
-                  time.sleep(10)
-          PY
+              sys.exit('Missing production settings: ' + ', '.join(missing) +
+                       '. Complete deploy/setup-github-aws.py and GitHub environment setup.')
+          PYTHON
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-      - run: npm ci && npm test && npm run build && npm run build:atlas && node scripts/release.mjs
+      - run: npm ci && npm test
+      - run: python3 -m unittest discover -s tests -p 'test_deployment.py' -v
+      - run: npm run build && npm run build:atlas && node scripts/release.mjs
       - run: tar -czf release.tgz dist .atlas-build server package.json package-lock.json deploy
-      - uses: appleboy/scp-action@v0.1.7
+      - name: Obtain temporary AWS deployment credentials
+        id: aws
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_DEPLOY_USER }}
-          key: ${{ secrets.AWS_DEPLOY_KEY }}
-          fingerprint: ${{ secrets.AWS_HOST_FINGERPRINT }}
-          source: release.tgz
-          target: /opt/injury-atlas/incoming/${{ github.sha }}
-      - uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.AWS_HOST }}
-          username: ${{ secrets.AWS_DEPLOY_USER }}
-          key: ${{ secrets.AWS_DEPLOY_KEY }}
-          fingerprint: ${{ secrets.AWS_HOST_FINGERPRINT }}
-          command_timeout: 10m
-          script: |
-            set -eu
-            mkdir -p /opt/injury-atlas/releases/${{ github.sha }}
-            tar -xzf /opt/injury-atlas/incoming/${{ github.sha }}/release.tgz -C /opt/injury-atlas/releases/${{ github.sha }}
-            bash /opt/injury-atlas/releases/${{ github.sha }}/deploy/activate.sh ${{ github.sha }}
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: injury-atlas-${{ github.run_id }}
+          role-duration-seconds: 3600
+      - name: Allow this runner through SSH
+        id: access
+        env:
+          AWS_HOST: ${{ secrets.AWS_HOST }}
+        run: python3 deploy/runner-access.py open
+      - name: Verify ED25519 host, upload and activate release
+        env:
+          AWS_HOST: ${{ secrets.AWS_HOST }}
+          AWS_DEPLOY_USER: ${{ secrets.AWS_DEPLOY_USER }}
+          AWS_DEPLOY_KEY: ${{ secrets.AWS_DEPLOY_KEY }}
+          AWS_HOST_FINGERPRINT: ${{ secrets.AWS_HOST_FINGERPRINT }}
+        run: python3 deploy/release-ssh.py
       - name: Verify public release
         env:
           APP_URL: ${{ vars.APP_URL }}
@@ -98,3 +77,6 @@ jobs:
           test -n "$APP_URL"
           curl --fail --silent --show-error "$APP_URL/api/health" > health.json
           node -e 'const h=require("./health.json");if(!h.ok||!h.atlasReady||h.release!==process.env.RELEASE_SHA)process.exit(1)'
+      - name: Remove temporary runner SSH access
+        if: ${{ always() && steps.aws.outcome == 'success' && steps.access.outcome != 'skipped' }}
+        run: python3 deploy/runner-access.py close
