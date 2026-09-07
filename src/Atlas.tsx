@@ -1,12 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Box } from "lucide-react";
+import { Box, Maximize2, Minimize2, Menu } from "lucide-react";
 import { api } from "./api";
 import type { Case } from "./domain";
-export function Atlas({ caseRecord }: { caseRecord?: Case }) {
+const PROTOCOL = 1;
+export function Atlas({
+  caseRecord,
+  expanded,
+  onToggleExpand,
+  onOpenNav,
+}: {
+  caseRecord?: Case;
+  expanded: boolean;
+  onToggleExpand: () => void;
+  onOpenNav?: () => void;
+}) {
   const frame = useRef<HTMLIFrameElement>(null);
   const [ready, setReady] = useState(false),
     [installed, setInstalled] = useState<boolean | null>(null),
     [selection, setSelection] = useState(""),
+    [appliedCount, setAppliedCount] = useState(0),
     [timeout, setTimeoutState] = useState(false);
   useEffect(() => {
     api("/health")
@@ -16,39 +28,80 @@ export function Atlas({ caseRecord }: { caseRecord?: Case }) {
   useEffect(() => {
     setReady(false);
     setSelection("");
+    setAppliedCount(0);
     setTimeoutState(false);
     const timer = window.setTimeout(() => setTimeoutState(true), 45000);
-    function receive(e: MessageEvent) {
+    const post = (message: Record<string, unknown>) =>
+      frame.current?.contentWindow?.postMessage(
+        { version: PROTOCOL, ...message },
+        window.location.origin,
+      );
+    async function receive(e: MessageEvent) {
       if (
         e.source !== frame.current?.contentWindow ||
         e.origin !== window.location.origin ||
-        e.data?.version !== 1
+        e.data?.version !== PROTOCOL
       )
         return;
-      if (e.data.type === "human-atlas:ready") {
+      const d = e.data;
+      if (d.type === "human-atlas:ready") {
         setReady(true);
-        if (caseRecord)
-          frame.current?.contentWindow?.postMessage(
-            {
-              type: "injurybot:atlas:init",
-              version: 1,
-              case: {
-                id: caseRecord.id,
-                title: caseRecord.title,
-                client: caseRecord.client,
-                findings: [],
-                activeReferenceGroups: [],
-              },
-            },
-            window.location.origin,
-          );
+        if (!caseRecord) return;
+        // Applied and generated injuries are persisted per case; the viewer
+        // renders them and reports changes back.
+        let injuries = { applied: [], generated: [] as unknown[] };
+        try {
+          injuries = await api(`/cases/${caseRecord.id}/injuries`);
+        } catch {
+          /* The viewer still opens with reference anatomy. */
+        }
+        setAppliedCount(injuries.applied.length);
+        post({
+          type: "injurybot:atlas:init",
+          case: {
+            id: caseRecord.id,
+            title: caseRecord.title,
+            client: caseRecord.client,
+            findings: [],
+            activeReferenceGroups: [],
+            appliedInjuries: injuries.applied,
+            generatedInjuries: injuries.generated,
+          },
+        });
       }
-      if (
-        e.data.type === "human-atlas:selection" &&
-        e.data.caseId === caseRecord?.id &&
-        typeof e.data.label === "string"
-      )
-        setSelection(e.data.label);
+      if (d.caseId !== caseRecord?.id) return;
+      if (d.type === "human-atlas:selection" && typeof d.label === "string")
+        setSelection(d.label);
+      if (d.type === "human-atlas:injuries-applied" && Array.isArray(d.injuries)) {
+        setAppliedCount(d.injuries.length);
+        api(`/cases/${caseRecord!.id}/injuries/apply`, { injuries: d.injuries }).catch(() => {});
+      }
+      if (d.type === "human-atlas:match-request" && typeof d.description === "string") {
+        try {
+          const result = await api(`/cases/${caseRecord!.id}/injuries/match`, {
+            description: d.description,
+          });
+          post({
+            type: "injurybot:atlas:match-result",
+            requestId: d.requestId,
+            matches: result.matches,
+            unmatched: result.unmatched,
+          });
+        } catch {
+          /* The viewer falls back to its own matcher after a timeout. */
+        }
+      }
+      if (d.type === "human-atlas:generate-request" && typeof d.name === "string") {
+        try {
+          const queued = await api(`/cases/${caseRecord!.id}/injuries/generate`, {
+            name: d.name,
+            description: String(d.description ?? ""),
+          });
+          post({ type: "injurybot:atlas:generation", caseId: caseRecord!.id, injury: queued });
+        } catch {
+          /* Reported in the viewer as not queued. */
+        }
+      }
     }
     window.addEventListener("message", receive);
     return () => {
@@ -68,48 +121,71 @@ export function Atlas({ caseRecord }: { caseRecord?: Case }) {
       : {}),
   });
   return (
-    <section className="viewer">
+    <section className={`viewer ${expanded ? "expanded" : ""}`}>
       <div className="viewer-toolbar">
         <span>
           <span className="live-dot" /> REFERENCE ANATOMY
         </span>
-        <span>
+        <span className="viewer-status">
           {ready
             ? "Viewer connected"
             : installed
               ? "Loading anatomy"
               : "Engine setup"}
+          <button
+            className="viewer-expand"
+            onClick={onToggleExpand}
+            aria-label={expanded ? "Exit expanded view" : "Expand atlas"}
+            title={expanded ? "Exit expanded view" : "Expand atlas"}
+          >
+            {expanded ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+          </button>
         </span>
       </div>
-      {installed ? (
-        <iframe
-          key={caseRecord?.id || "reference"}
-          ref={frame}
-          title="Human Atlas anatomical viewer"
-          src={"/atlas-engine/index.html?" + q}
-          allow="fullscreen"
-        />
-      ) : (
-        <div className="viewer-empty">
-          <Box size={48} />
-          <h2>
-            {installed === null
-              ? "Checking anatomy engine…"
-              : "Human Atlas is not installed yet"}
-          </h2>
-          <p>
-            The application needs its pinned anatomy build before the 3D viewer
-            can open.
-          </p>
-        </div>
-      )}
+      <div className="viewer-stage">
+        {onOpenNav && (
+          <button
+            className="viewer-nav mobile"
+            onClick={onOpenNav}
+            aria-label="Open workspace"
+          >
+            <Menu size={20} />
+          </button>
+        )}
+        {installed ? (
+          <iframe
+            key={caseRecord?.id || "reference"}
+            ref={frame}
+            title="Human Atlas anatomical viewer"
+            src={"/atlas-engine/index.html?" + q}
+            allow="fullscreen"
+          />
+        ) : (
+          <div className="viewer-empty">
+            <Box size={48} />
+            <h2>
+              {installed === null
+                ? "Checking anatomy engine…"
+                : "Human Atlas is not installed yet"}
+            </h2>
+            <p>
+              The application needs its pinned anatomy build before the 3D viewer
+              can open.
+            </p>
+          </div>
+        )}
+      </div>
       <div className="viewer-footer">
         {selection
           ? "Selected: " + selection
           : timeout && !ready && installed
             ? "Viewer has not connected. Check engine assets and reload."
             : "Rotate · Zoom · Isolate anatomical structures"}
-        <span>Reference anatomy · No case injuries rendered</span>
+        <span>
+          {appliedCount
+            ? `${appliedCount} ${appliedCount === 1 ? "injury" : "injuries"} applied · placement pending review`
+            : "Reference anatomy · No case injuries rendered"}
+        </span>
       </div>
     </section>
   );
