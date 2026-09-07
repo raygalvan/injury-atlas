@@ -85,6 +85,30 @@
   border-radius: 9px;
   background: white;
 }
+.entry-form .entry-remember {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 10px;
+  cursor: pointer;
+}
+.entry-form .entry-remember input {
+  width: 18px;
+  height: 18px;
+  min-height: 0;
+  margin: 1px 0 0;
+  padding: 0;
+  accent-color: #263d38;
+  cursor: pointer;
+}
+.entry-form .entry-remember span {
+  display: grid;
+  gap: 3px;
+}
+.entry-form .entry-remember small {
+  color: #68756f;
+  font-size: 12px;
+  font-weight: 400;
+}
 .entry-form .primary-button {
   width: 100%;
   min-height: 50px;
