@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PrivateVersionedEvidence",
+      "Effect": "Allow",
+      "Action": ["s3:PutObject", "s3:GetObjectVersion"],
+      "Resource": "arn:aws:s3:::injury-bot-evidence-585534523139-us-east-2/evidence/*",
+      "Condition": {
+        "StringEquals": {"s3:ResourceAccount": "585534523139"}
+      }
+    }
+  ]
+}

@@ -68,6 +68,10 @@ The command creates the account or promotes and reactivates an existing account 
 
 Then request your access link from the public sign-in page. Bootstrap does not send email. Application invitations send email only when an authenticated member submits the invitation form.
 
+## Private S3 evidence storage
+
+See [S3 setup](s3-storage.md) to connect a private, versioned evidence bucket using the EC2 instance role. New uploads can use S3 while existing local uploads remain readable. The database stays on EBS.
+
 ## Storage and recovery
 
 Keep the database, its WAL/SHM files, and evidence on EBS at `/var/lib/injury-atlas`. Release activation never overwrites them. Use SQLite's backup API or `VACUUM INTO` to make consistent database backups; do not copy only the live `.sqlite` file. Snapshot/back up evidence with the database metadata and regularly test restoring both. This first release creates tables idempotently and has no destructive migrations. Future migrations need versioned backups and an explicit rollback strategy.
