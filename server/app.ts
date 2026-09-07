@@ -2,13 +2,12 @@ import express from "express";
 import multer from "multer";
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
+import { readFileSync, existsSync, rmSync } from "node:fs";
 import {
-  mkdirSync,
-  writeFileSync,
-  readFileSync,
-  existsSync,
-  rmSync,
-} from "node:fs";
+  createEvidenceStorage,
+  MAX_EVIDENCE_BYTES,
+  type EvidenceStorage,
+} from "./evidence-storage";
 import path from "node:path";
 import {
   hash,
@@ -37,13 +36,15 @@ export function createApp(
     dataDir: string;
     origin: string;
     production?: boolean;
+    evidenceStorage?: EvidenceStorage;
     send: (email: string, url: string) => Promise<void>;
   },
 ) {
   const app = express();
   const origin = new URL(options.origin).origin;
   const files = path.resolve(options.dataDir, "evidence");
-  mkdirSync(files, { recursive: true, mode: 0o700 });
+  const storage =
+    options.evidenceStorage || createEvidenceStorage(options.dataDir);
   app.disable("x-powered-by");
   app.set("trust proxy", "loopback");
   app.use((_req, res, next) => {
@@ -211,14 +212,9 @@ export function createApp(
     const data = caseSchema.parse(req.body);
     const u = res.locals.user as User;
     const id = randomUUID();
-    db.prepare("INSERT INTO cases(id,firm_id,title,client,incident,created) VALUES(?,?,?,?,?,?)").run(
-      id,
-      u.firm_id,
-      data.title,
-      data.client,
-      data.incident,
-      Date.now(),
-    );
+    db.prepare(
+      "INSERT INTO cases(id,firm_id,title,client,incident,created) VALUES(?,?,?,?,?,?)",
+    ).run(id, u.firm_id, data.title, data.client, data.incident, Date.now());
     audit(db, u.id, "case.created", id);
     res.status(201).json({ id, ...data });
   });
@@ -325,7 +321,12 @@ export function createApp(
       archived ? 1 : 0,
       id,
     );
-    audit(db, res.locals.user.id, archived ? "case.archived" : "case.restored", id);
+    audit(
+      db,
+      res.locals.user.id,
+      archived ? "case.archived" : "case.restored",
+      id,
+    );
     res.json(caseRow(id));
   });
   // Deletion is owner-only, requires the exact title, and removes the case's
@@ -345,6 +346,13 @@ export function createApp(
     const stored = db
       .prepare("SELECT file FROM evidence WHERE case_id=?")
       .all(id) as { file: string }[];
+    // The S3 runtime deliberately has no version-deletion permission. Preserve
+    // references as well as bytes until a dedicated S3 deletion flow exists.
+    if (stored.some(({ file }) => file.startsWith("s3:")))
+      return res.status(409).json({
+        error:
+          "This case contains retained S3 evidence. Archive the case instead of deleting it.",
+      });
     db.exec("BEGIN");
     try {
       db.prepare("DELETE FROM findings WHERE case_id=?").run(id);
@@ -373,15 +381,16 @@ export function createApp(
   });
   const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 25 * 1024 * 1024, files: 1 },
+    limits: { fileSize: MAX_EVIDENCE_BYTES, files: 1 },
   }).single("file");
-  app.post("/api/cases/:caseId/evidence", upload, (req, res) => {
+  app.post("/api/cases/:caseId/evidence", upload, async (req, res) => {
     if (!req.file) return res.status(400).json({ error: "Choose a file" });
-    const id = randomUUID(),
-      file = token();
-    writeFileSync(path.join(files, file), req.file.buffer, {
-      mode: 0o600,
-      flag: "wx",
+    const id = randomUUID();
+    const file = await storage.put({
+      file: token(),
+      firmId: res.locals.user.firm_id,
+      caseId: String(req.params.caseId),
+      body: req.file.buffer,
     });
     const name =
       path
@@ -407,17 +416,25 @@ export function createApp(
     );
     res.status(201).json({ id });
   });
-  app.get("/api/cases/:caseId/evidence/:id", (req, res) => {
+  app.get("/api/cases/:caseId/evidence/:id", async (req, res) => {
     const u = res.locals.user as User;
     const e = db
       .prepare(
         `SELECT * FROM evidence WHERE id=? AND case_id=? AND (?!='client' OR uploader=?)`,
       )
       .get(String(req.params.id), String(req.params.caseId), u.role, u.id) as
-      { file: string; name: string } | undefined;
+      { file: string; name: string; bytes: number; sha256: string } | undefined;
     if (!e) return res.status(404).json({ error: "Evidence not found" });
+    const body = await storage.get(e.file);
+    if (body.length !== e.bytes || createFileHash(body) !== e.sha256) {
+      return res.status(409).json({
+        error: "Evidence integrity check failed. Contact your administrator.",
+      });
+    }
     res.set("Content-Security-Policy", "sandbox; default-src 'none'");
-    res.download(path.join(files, e.file), e.name);
+    res.attachment(e.name);
+    res.type("application/octet-stream");
+    res.send(body);
   });
   app.get("/api/cases/:caseId/findings", staff, (req, res) =>
     res.json(
