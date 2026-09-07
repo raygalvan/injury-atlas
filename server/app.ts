@@ -101,13 +101,20 @@ export function createApp(
       return res
         .status(429)
         .json({ error: "Please wait before requesting another link" });
-    res.cookie("injurybot_login_email", parsed.data, {
+    // "Remember me" is an explicit opt-in. It only prefills the sign-in form;
+    // it never authenticates. Unchecking forgets a previously remembered address.
+    const preference = {
       httpOnly: true,
       secure: !!options.production,
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
-      maxAge: 365 * 86400000,
-    });
+    };
+    if (req.body.remember === true)
+      res.cookie("injurybot_login_email", parsed.data, {
+        ...preference,
+        maxAge: 365 * 86400000,
+      });
+    else res.clearCookie("injurybot_login_email", preference);
     const user = db
       .prepare("SELECT * FROM users WHERE email=? AND active=1")
       .get(parsed.data) as User | undefined;
