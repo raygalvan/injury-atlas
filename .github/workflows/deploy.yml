@@ -1,0 +1,49 @@
+name: Deploy AWS
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: injury-atlas-production
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci && npm test && npm run build && npm run build:atlas && node scripts/release.mjs
+      - run: tar -czf release.tgz dist .atlas-build server package.json package-lock.json deploy
+      - uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_DEPLOY_USER }}
+          key: ${{ secrets.AWS_DEPLOY_KEY }}
+          fingerprint: ${{ secrets.AWS_HOST_FINGERPRINT }}
+          source: release.tgz
+          target: /opt/injury-atlas/incoming/${{ github.sha }}
+      - uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_DEPLOY_USER }}
+          key: ${{ secrets.AWS_DEPLOY_KEY }}
+          fingerprint: ${{ secrets.AWS_HOST_FINGERPRINT }}
+          command_timeout: 10m
+          script: |
+            set -eu
+            mkdir -p /opt/injury-atlas/releases/${{ github.sha }}
+            tar -xzf /opt/injury-atlas/incoming/${{ github.sha }}/release.tgz -C /opt/injury-atlas/releases/${{ github.sha }}
+            bash /opt/injury-atlas/releases/${{ github.sha }}/deploy/activate.sh ${{ github.sha }}
+      - name: Verify public release
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          test -n "$APP_URL"
+          curl --fail --silent --show-error "$APP_URL/api/health" > health.json
+          node -e 'const h=require("./health.json");if(!h.ok||!h.atlasReady||h.release!==process.env.RELEASE_SHA)process.exit(1)'

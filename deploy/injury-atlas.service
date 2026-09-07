@@ -1,0 +1,21 @@
+[Unit]
+Description=Injury Atlas
+After=network.target
+[Service]
+Type=simple
+User=injury-atlas
+Group=injury-atlas
+WorkingDirectory=/opt/injury-atlas/current
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/injury-atlas.env
+ExecStart=/usr/bin/node --import tsx server/index.ts
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/injury-atlas
+[Install]
+WantedBy=multi-user.target
