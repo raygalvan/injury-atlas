@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import { z } from "zod";
 import { randomUUID } from "node:crypto";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, rmSync } from "node:fs";
 import {
   createEvidenceStorage,
   MAX_EVIDENCE_BYTES,
@@ -42,6 +42,7 @@ export function createApp(
 ) {
   const app = express();
   const origin = new URL(options.origin).origin;
+  const files = path.resolve(options.dataDir, "evidence");
   const storage =
     options.evidenceStorage || createEvidenceStorage(options.dataDir);
   app.disable("x-powered-by");
@@ -107,13 +108,20 @@ export function createApp(
       return res
         .status(429)
         .json({ error: "Please wait before requesting another link" });
-    res.cookie("injurybot_login_email", parsed.data, {
+    // "Remember me" is an explicit opt-in. It only prefills the sign-in form;
+    // it never authenticates. Unchecking forgets a previously remembered address.
+    const preference = {
       httpOnly: true,
       secure: !!options.production,
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
-      maxAge: 365 * 86400000,
-    });
+    };
+    if (req.body.remember === true)
+      res.cookie("injurybot_login_email", parsed.data, {
+        ...preference,
+        maxAge: 365 * 86400000,
+      });
+    else res.clearCookie("injurybot_login_email", preference);
     const user = db
       .prepare("SELECT * FROM users WHERE email=? AND active=1")
       .get(parsed.data) as User | undefined;
@@ -185,7 +193,7 @@ export function createApp(
     res.json(
       db
         .prepare(
-          `SELECT id,title,client,incident,created FROM cases WHERE firm_id=? AND (?!='client' OR EXISTS(SELECT 1 FROM grants WHERE case_id=cases.id AND user_id=?)) ORDER BY created DESC`,
+          `SELECT id,title,client,incident,created,archived FROM cases WHERE firm_id=? AND (?!='client' OR EXISTS(SELECT 1 FROM grants WHERE case_id=cases.id AND user_id=?)) ORDER BY archived ASC, created DESC`,
         )
         .all(u.firm_id, u.role, u.id),
     );
@@ -195,24 +203,18 @@ export function createApp(
       return res.status(403).json({ error: "Attorney access required" });
     next();
   };
+  const caseSchema = z.object({
+    title: z.string().trim().min(1).max(160),
+    client: str,
+    incident: z.string().max(4000),
+  });
   app.post("/api/cases", staff, (req, res) => {
-    const data = z
-      .object({
-        title: z.string().trim().min(1).max(160),
-        client: str,
-        incident: z.string().max(4000),
-      })
-      .parse(req.body);
+    const data = caseSchema.parse(req.body);
     const u = res.locals.user as User;
     const id = randomUUID();
-    db.prepare("INSERT INTO cases VALUES(?,?,?,?,?,?)").run(
-      id,
-      u.firm_id,
-      data.title,
-      data.client,
-      data.incident,
-      Date.now(),
-    );
+    db.prepare(
+      "INSERT INTO cases(id,firm_id,title,client,incident,created) VALUES(?,?,?,?,?,?)",
+    ).run(id, u.firm_id, data.title, data.client, data.incident, Date.now());
     audit(db, u.id, "case.created", id);
     res.status(201).json({ id, ...data });
   });
@@ -285,6 +287,88 @@ export function createApp(
       return res.status(404).json({ error: "Case not found" });
     next();
   });
+  const caseRow = (id: string) =>
+    db
+      .prepare(
+        "SELECT id,title,client,incident,created,archived FROM cases WHERE id=?",
+      )
+      .get(id) as
+      | {
+          id: string;
+          title: string;
+          client: string;
+          incident: string;
+          created: number;
+          archived: number;
+        }
+      | undefined;
+  app.post("/api/cases/:caseId/update", staff, (req, res) => {
+    const data = caseSchema.parse(req.body);
+    const id = String(req.params.caseId);
+    db.prepare("UPDATE cases SET title=?,client=?,incident=? WHERE id=?").run(
+      data.title,
+      data.client,
+      data.incident,
+      id,
+    );
+    audit(db, res.locals.user.id, "case.updated", id);
+    res.json(caseRow(id));
+  });
+  app.post("/api/cases/:caseId/archive", staff, (req, res) => {
+    const { archived } = z.object({ archived: z.boolean() }).parse(req.body);
+    const id = String(req.params.caseId);
+    db.prepare("UPDATE cases SET archived=? WHERE id=?").run(
+      archived ? 1 : 0,
+      id,
+    );
+    audit(
+      db,
+      res.locals.user.id,
+      archived ? "case.archived" : "case.restored",
+      id,
+    );
+    res.json(caseRow(id));
+  });
+  // Deletion is owner-only, requires the exact title, and removes the case's
+  // findings, grants and evidence bytes together. The audit trail is kept.
+  app.post("/api/cases/:caseId/delete", (req, res) => {
+    if (res.locals.user.role !== "owner")
+      return res.status(403).json({ error: "Owner access required" });
+    const { confirmTitle } = z
+      .object({ confirmTitle: z.string().max(160) })
+      .parse(req.body);
+    const id = String(req.params.caseId);
+    const row = caseRow(id);
+    if (!row || row.title !== confirmTitle.trim())
+      return res
+        .status(400)
+        .json({ error: "Type the case title exactly to confirm deletion" });
+    const stored = db
+      .prepare("SELECT file FROM evidence WHERE case_id=?")
+      .all(id) as { file: string }[];
+    // The S3 runtime deliberately has no version-deletion permission. Preserve
+    // references as well as bytes until a dedicated S3 deletion flow exists.
+    if (stored.some(({ file }) => file.startsWith("s3:")))
+      return res.status(409).json({
+        error:
+          "This case contains retained S3 evidence. Archive the case instead of deleting it.",
+      });
+    db.exec("BEGIN");
+    try {
+      db.prepare("DELETE FROM findings WHERE case_id=?").run(id);
+      db.prepare("DELETE FROM evidence WHERE case_id=?").run(id);
+      db.prepare("DELETE FROM grants WHERE case_id=?").run(id);
+      db.prepare("DELETE FROM cases WHERE id=?").run(id);
+      db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      throw error;
+    }
+    for (const { file } of stored)
+      rmSync(path.join(files, path.basename(file)), { force: true });
+    audit(db, res.locals.user.id, "case.deleted", id);
+    res.json({ ok: true });
+  });
   app.get("/api/cases/:caseId/evidence", (req, res) => {
     const u = res.locals.user as User;
     res.json(
@@ -343,11 +427,9 @@ export function createApp(
     if (!e) return res.status(404).json({ error: "Evidence not found" });
     const body = await storage.get(e.file);
     if (body.length !== e.bytes || createFileHash(body) !== e.sha256) {
-      return res
-        .status(409)
-        .json({
-          error: "Evidence integrity check failed. Contact your administrator.",
-        });
+      return res.status(409).json({
+        error: "Evidence integrity check failed. Contact your administrator.",
+      });
     }
     res.set("Content-Security-Policy", "sandbox; default-src 'none'");
     res.attachment(e.name);

@@ -5,11 +5,13 @@ export function Field({
   label,
   type = "text",
   placeholder = "",
+  defaultValue,
 }: {
   name: string;
   label: string;
   type?: string;
   placeholder?: string;
+  defaultValue?: string;
 }) {
   return (
     <label>
@@ -18,6 +20,7 @@ export function Field({
         name={name}
         type={type}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         required
         maxLength={240}
       />

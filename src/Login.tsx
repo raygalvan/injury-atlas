@@ -11,12 +11,17 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
     return token;
   });
   const [email, setEmail] = useState("");
+  const [remember, setRemember] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   useEffect(() => {
     api("/auth/preferences")
-      .then((data) => setEmail((current) => current || data.email || ""))
+      .then((data) => {
+        if (!data.email) return;
+        setEmail((current) => current || data.email);
+        setRemember(true);
+      })
       .catch(() => {});
   }, []);
   return (
@@ -82,6 +87,7 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
                     await api("/auth/request", {
                       email,
                       portal: client ? "client" : "firm",
+                      remember,
                     });
                     setSent(true);
                   }
@@ -118,6 +124,22 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
                     required
                     type="email"
                   />
+                </label>
+              )}
+              {!accessToken && (
+                <label className="entry-remember">
+                  <input
+                    checked={remember}
+                    name="remember"
+                    onChange={(e) => setRemember(e.target.checked)}
+                    type="checkbox"
+                  />
+                  <span>
+                    Remember my email on this device
+                    <small>
+                      Prefills this form next time. It never signs you in.
+                    </small>
+                  </span>
                 </label>
               )}
               <button className="primary wide" type="submit" disabled={busy}>

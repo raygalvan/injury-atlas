@@ -78,14 +78,9 @@ test("failed S3 upload creates no evidence record; corrupt bytes are blocked bef
     "owner",
     "firm",
   );
-  db.prepare("INSERT INTO cases VALUES(?,?,?,?,?,?)").run(
-    "case",
-    "firm",
-    "Synthetic case",
-    "Client",
-    "",
-    Date.now(),
-  );
+  db.prepare(
+    "INSERT INTO cases(id,firm_id,title,client,incident,created) VALUES(?,?,?,?,?,?)",
+  ).run("case", "firm", "Synthetic case", "Client", "", Date.now());
   const cookie = "atlas_session=" + consumeLink(db, issueLink(db, "owner")!);
   const fake = fakeS3();
   let fail = true;
@@ -121,6 +116,31 @@ test("failed S3 upload creates no evidence record; corrupt bytes are blocked bef
     assert.equal(ok.status, 201);
     const { id } = (await ok.json()) as { id: string };
     const url = base + `/api/cases/case/evidence/${id}`;
+    const remove = await fetch(base + "/api/cases/case/delete", {
+      method: "POST",
+      headers: {
+        origin: "http://localhost",
+        cookie,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ confirmTitle: "Synthetic case" }),
+    });
+    assert.equal(remove.status, 409);
+    assert.equal(db.prepare("SELECT count(*) AS n FROM evidence").get()?.n, 1);
+    assert.equal(db.prepare("SELECT count(*) AS n FROM cases").get()?.n, 1);
+    assert.equal(fake.objects.size, 1);
+    const archive = await fetch(base + "/api/cases/case/archive", {
+      method: "POST",
+      headers: {
+        origin: "http://localhost",
+        cookie,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ archived: true }),
+    });
+    assert.equal(archive.status, 200);
+    assert.equal(db.prepare("SELECT archived FROM cases").get()?.archived, 1);
+
     const good = await fetch(url, { headers: { cookie } });
     assert.equal(await good.text(), "source");
     assert.match(good.headers.get("content-disposition")!, /^attachment/);

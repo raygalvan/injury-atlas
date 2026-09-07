@@ -61,6 +61,8 @@ Upload a synthetic file through the signed-in Evidence workspace and download it
 
 ## Behavior and recovery
 
+Cases containing S3 evidence can be edited, archived and restored. Permanent case deletion is refused before changing any database records because this runtime intentionally has no S3 version-deletion permission. Local-only case deletion keeps its existing behavior.
+
 - Original filenames stay in the database and download headers, not the S3 object key. Keys contain application-generated IDs.
 - Downloads require the same authenticated case and uploader checks as local storage. No public or presigned URLs are returned.
 - Uploads send a SHA-256 checksum, use conditional creation, and store the returned VersionId. Downloads request that exact version and verify its byte length and source hash before sending it to the user.
