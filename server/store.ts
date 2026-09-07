@@ -26,6 +26,14 @@ export function openStore(file: string) {
  CREATE TABLE IF NOT EXISTS findings(id TEXT PRIMARY KEY,case_id TEXT NOT NULL REFERENCES cases(id),body TEXT NOT NULL);
  CREATE TABLE IF NOT EXISTS audit(id TEXT PRIMARY KEY,case_id TEXT,actor TEXT NOT NULL,action TEXT NOT NULL,created INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS throttle(key TEXT PRIMARY KEY,count INTEGER NOT NULL,reset INTEGER NOT NULL);`);
+  // Additive migrations for databases created before a column existed.
+  const caseColumns = (
+    db.prepare("PRAGMA table_info(cases)").all() as { name: string }[]
+  ).map((c) => c.name);
+  if (!caseColumns.includes("archived"))
+    db.exec(
+      "ALTER TABLE cases ADD COLUMN archived INTEGER NOT NULL DEFAULT 0",
+    );
   return db;
 }
 export type Store = ReturnType<typeof openStore>;

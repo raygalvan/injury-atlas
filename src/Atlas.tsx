@@ -35,6 +35,7 @@ export function Atlas({ caseRecord }: { caseRecord?: Case }) {
               case: {
                 id: caseRecord.id,
                 title: caseRecord.title,
+                client: caseRecord.client,
                 findings: [],
                 activeReferenceGroups: [],
               },
@@ -59,7 +60,11 @@ export function Atlas({ caseRecord }: { caseRecord?: Case }) {
     embed: "injurybot",
     parentOrigin: window.location.origin,
     ...(caseRecord
-      ? { caseId: caseRecord.id, caseTitle: caseRecord.title }
+      ? {
+          caseId: caseRecord.id,
+          caseTitle: caseRecord.title,
+          caseClient: caseRecord.client,
+        }
       : {}),
   });
   return (
