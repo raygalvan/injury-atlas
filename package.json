@@ -16,6 +16,7 @@
     "bootstrap": "node --import tsx server/bootstrap.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.124.0",
     "@aws-sdk/client-s3": "^3.1127.0",
     "@aws-sdk/client-sesv2": "^3.0.0",
     "express": "^5.2.1",

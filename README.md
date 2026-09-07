@@ -23,7 +23,11 @@ React/TypeScript with an Express API. Node 24's built-in SQLite stores users, ca
 
 ## Deliberately unfinished
 
-No automated medical extraction, atlas injury placement editor, incident simulation, agent execution or exhibit publishing is claimed. The atlas currently receives case identity and no findings: source approval alone never permits placement. The engine's synthetic test controls are disabled in embedded mode. There are no preloaded Homer injuries. Create **Homer Cortez Injury Reconstruction** as the first case and upload the actual source documents.
+No automated medical extraction, incident simulation, agent execution or exhibit publishing is claimed. Source approval alone never permits placement. The engine's synthetic test controls are disabled in embedded mode. There are no preloaded Homer injuries. Create **Homer Cortez Injury Reconstruction** as the first case and upload the actual source documents.
+
+## Injury library and applied injuries
+
+The embedded viewer's **Apply Injuries** tab reads the injury library (`injury_library`, seeded with the engine's reference groups) and records what an attorney applies to a case (`case_injuries`, with hidden state and a pending placement review). **Describe client's injuries** sends free text to `POST /api/cases/:id/injuries/match`; when `ANTHROPIC_API_KEY` is set the server asks Claude to match the description against the library, otherwise a keyword matcher answers, and the viewer falls back to its own matcher if the host does not respond. **Create & apply with AI** queues a library row (`status: queued`) through `POST /api/cases/:id/injuries/generate`. Nothing generates a mesh yet: the placement job that turns a queued row into engine geometry is future work, and queued rows stay out of the applicable library until then.
 
 Human Atlas may show healthy-anatomy reference group names from its existing Homer research UI. These are engine reference groups, not approved case findings. Engine selection is temporary working context and does not mutate case records.
 

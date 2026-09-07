@@ -16,7 +16,7 @@ import {
   Menu,
   X,
   ShieldCheck,
-  Settings2,
+  SlidersHorizontal,
   Archive,
   ArchiveRestore,
   Trash2,
@@ -54,6 +54,8 @@ function App() {
     [notice, setNotice] = useState(""),
     [dialog, setDialog] = useState(""),
     [mobile, setMobile] = useState(false),
+    [railOpen, setRailOpen] = useState(true),
+    [atlasExpanded, setAtlasExpanded] = useState(false),
     [busy, setBusy] = useState(false);
   const currentContext = useRef("");
   currentContext.current = `${member?.id || ""}:${caseId}`;
@@ -151,8 +153,18 @@ function App() {
     setNotice("Evidence saved. Original file retained.");
   };
   return (
-    <div className="app">
+    <div
+      className={`app ${railOpen ? "" : "rail-closed"} ${view === "atlas" ? "view-atlas" : ""} ${atlasExpanded ? "atlas-expanded" : ""}`}
+    >
       <header className="site-header">
+        <button
+          className="rail-toggle desktop"
+          onClick={() => setRailOpen((open) => !open)}
+          aria-label="Toggle workspace"
+          aria-expanded={railOpen}
+        >
+          <Menu size={18} />
+        </button>
         <a className="site-brand" href={client ? "/client" : "/"}>
           injury<span>.bot</span>
         </a>
@@ -161,6 +173,13 @@ function App() {
           <span>{client ? "Client portal" : "Injury command center"}</span>
         </div>
       </header>
+      {mobile && (
+        <div
+          className="scrim"
+          onClick={() => setMobile(false)}
+          aria-hidden="true"
+        />
+      )}
       <aside className={mobile ? "rail open" : "rail"}>
         <div className="brand">
           <div>
@@ -168,8 +187,11 @@ function App() {
             <small>PRIVATE PILOT</small>
           </div>
           <button
-            className="close mobile"
-            onClick={() => setMobile(false)}
+            className="close"
+            onClick={() => {
+              setMobile(false);
+              setRailOpen(false);
+            }}
             aria-label="Close navigation"
           >
             <X />
@@ -338,7 +360,7 @@ function App() {
                 onClick={() => setDialog("managecase")}
                 aria-label="Manage case"
               >
-                <Settings2 size={15} /> <span>Manage</span>
+                <SlidersHorizontal size={15} /> <span>Manage</span>
               </button>
             )}
           </div>
@@ -354,7 +376,12 @@ function App() {
           )}
           {view === "atlas" && (
             <div className="atlas-layout">
-              <Atlas caseRecord={active} />
+              <Atlas
+                caseRecord={active}
+                expanded={atlasExpanded}
+                onToggleExpand={() => setAtlasExpanded((v) => !v)}
+                onOpenNav={() => setMobile(true)}
+              />
               <aside className="context-panel">
                 <p className="eyebrow">CASE CONTEXT</p>
                 <h2>{active?.title || "Begin with a case"}</h2>

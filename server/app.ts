@@ -21,6 +21,14 @@ import {
   type Store,
   type User,
 } from "./store";
+import {
+  applyInjuries,
+  caseInjuries,
+  ensureInjuryTables,
+  listLibrary,
+  matchInjuries,
+  queueGeneration,
+} from "./injuries";
 const str = z.string().trim().min(1).max(240);
 const findingSchema = z.object({
   anatomicalStructure: str,
@@ -41,6 +49,7 @@ export function createApp(
   },
 ) {
   const app = express();
+  ensureInjuryTables(db);
   const origin = new URL(options.origin).origin;
   const files = path.resolve(options.dataDir, "evidence");
   const storage =
@@ -491,6 +500,42 @@ export function createApp(
       String(req.params.caseId),
     );
     res.json(f);
+  });
+  // Injury library and per-case applications feed the embedded viewer.
+  app.get("/api/injuries", staff, (_req, res) => res.json(listLibrary(db)));
+  app.get("/api/cases/:caseId/injuries", (req, res) =>
+    res.json(caseInjuries(db, String(req.params.caseId))),
+  );
+  app.post("/api/cases/:caseId/injuries/apply", staff, (req, res) => {
+    const { injuries } = z
+      .object({
+        injuries: z
+          .array(z.object({ id: str, hidden: z.boolean().default(false) }))
+          .max(200),
+      })
+      .parse(req.body);
+    const id = String(req.params.caseId);
+    const result = applyInjuries(db, id, res.locals.user.id, injuries);
+    audit(db, res.locals.user.id, "injuries.applied", id);
+    res.json(result);
+  });
+  app.post("/api/cases/:caseId/injuries/match", staff, async (req, res) => {
+    const { description } = z
+      .object({ description: z.string().trim().min(1).max(4000) })
+      .parse(req.body);
+    res.json(await matchInjuries(description, listLibrary(db)));
+  });
+  app.post("/api/cases/:caseId/injuries/generate", staff, (req, res) => {
+    const { name, description } = z
+      .object({
+        name: z.string().trim().min(1).max(160),
+        description: z.string().trim().max(4000),
+      })
+      .parse(req.body);
+    const id = String(req.params.caseId);
+    const queued = queueGeneration(db, id, res.locals.user.id, name, description);
+    audit(db, res.locals.user.id, "injury.generation-queued", id);
+    res.status(202).json(queued);
   });
   app.use(
     "/atlas-engine",
