@@ -1,0 +1,39 @@
+{
+  "name": "injury-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "server": "node --import tsx server/index.ts",
+    "build": "tsc --noEmit && vite build",
+    "build:atlas": "node scripts/build-atlas.mjs",
+    "start": "node --import tsx server/index.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "bootstrap": "node --import tsx server/bootstrap.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.0.0",
+    "express": "^5.2.1",
+    "lucide-react": "^0.562.0",
+    "multer": "^2.0.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsx": "^4.20.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "prettier": "^3.9.6",
+    "typescript": "~5.9.3",
+    "vite": "^6.4.1"
+  }
+}
