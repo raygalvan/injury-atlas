@@ -9,6 +9,7 @@ export type Case = {
   title: string;
   client: string;
   incident: string;
+  archived: number;
 };
 export type Evidence = {
   id: string;

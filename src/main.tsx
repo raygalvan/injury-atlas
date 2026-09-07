@@ -16,6 +16,10 @@ import {
   Menu,
   X,
   ShieldCheck,
+  Settings2,
+  Archive,
+  ArchiveRestore,
+  Trash2,
 } from "lucide-react";
 import "./style.css";
 import "./portal-entry.css";
@@ -305,15 +309,38 @@ function App() {
               onChange={(e) => setCaseId(e.target.value)}
             >
               <option value="">Select a case</option>
-              {cases.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
-              ))}
+              {cases
+                .filter((c) => !c.archived)
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              {cases.some((c) => c.archived) && (
+                <optgroup label="Archived">
+                  {cases
+                    .filter((c) => c.archived)
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.title}
+                      </option>
+                    ))}
+                </optgroup>
+              )}
             </select>
+            {active?.archived ? <span className="tag">Archived</span> : null}
             <span className="subtle">
               {active?.client || "No case selected"}
             </span>
+            {!client && active && (
+              <button
+                className="manage-case"
+                onClick={() => setDialog("managecase")}
+                aria-label="Manage case"
+              >
+                <Settings2 size={15} /> <span>Manage</span>
+              </button>
+            )}
           </div>
           {error && (
             <div className="alert" role="alert">
@@ -699,9 +726,13 @@ function App() {
             <h2 id="dialog-title">
               {dialog === "case"
                 ? "Create a case"
-                : dialog === "invite"
-                  ? "Invite a member"
-                  : "Draft an injury finding"}
+                : dialog === "managecase"
+                  ? "Manage case"
+                  : dialog === "deletecase"
+                    ? "Delete this case?"
+                    : dialog === "invite"
+                      ? "Invite a member"
+                      : "Draft an injury finding"}
             </h2>
             {error && (
               <p role="alert" className="alert">
@@ -719,6 +750,15 @@ function App() {
                     await loadCases();
                     setCaseId(c.id);
                     go("atlas");
+                  } else if (dialog === "managecase") {
+                    await api(`/cases/${caseId}/update`, d);
+                    await loadCases();
+                    setNotice("Case updated.");
+                  } else if (dialog === "deletecase") {
+                    await api(`/cases/${caseId}/delete`, d);
+                    setCaseId("");
+                    await loadCases();
+                    setNotice("Case deleted.");
                   } else if (dialog === "invite") {
                     await api("/invitations", {
                       ...d,
@@ -734,18 +774,80 @@ function App() {
                 });
               }}
             >
-              {dialog === "case" ? (
+              {dialog === "case" || dialog === "managecase" ? (
                 <>
                   <Field
                     name="title"
                     label="Case title"
                     placeholder="Homer Cortez Injury Reconstruction"
+                    defaultValue={dialog === "managecase" ? active?.title : undefined}
                   />
-                  <Field name="client" label="Client / subject" />
+                  <Field
+                    name="client"
+                    label="Client / subject"
+                    defaultValue={dialog === "managecase" ? active?.client : undefined}
+                  />
                   <label>
                     Incident notes
-                    <textarea name="incident" maxLength={4000} />
+                    <textarea
+                      name="incident"
+                      maxLength={4000}
+                      defaultValue={dialog === "managecase" ? active?.incident : undefined}
+                    />
                   </label>
+                  {dialog === "managecase" && active && (
+                    <div className="dialog-actions">
+                      <button
+                        type="button"
+                        disabled={busy}
+                        onClick={() =>
+                          run(async () => {
+                            await api(`/cases/${caseId}/archive`, {
+                              archived: !active.archived,
+                            });
+                            await loadCases();
+                            setNotice(
+                              active.archived ? "Case restored." : "Case archived.",
+                            );
+                            setDialog("");
+                          })
+                        }
+                      >
+                        {active.archived ? (
+                          <ArchiveRestore size={15} />
+                        ) : (
+                          <Archive size={15} />
+                        )}{" "}
+                        {active.archived ? "Restore case" : "Archive case"}
+                      </button>
+                      {member.role === "owner" && (
+                        <button
+                          type="button"
+                          className="danger"
+                          disabled={busy}
+                          onClick={() => {
+                            setError("");
+                            setDialog("deletecase");
+                          }}
+                        >
+                          <Trash2 size={15} /> Delete case
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : dialog === "deletecase" ? (
+                <>
+                  <p>
+                    This permanently removes <b>{active?.title}</b>, its
+                    findings, member access, and every uploaded evidence file.
+                    Archive the case instead if you may need it again.
+                  </p>
+                  <Field
+                    name="confirmTitle"
+                    label="Type the case title to confirm"
+                    placeholder={active?.title}
+                  />
                 </>
               ) : dialog === "invite" ? (
                 <>
@@ -817,12 +919,17 @@ function App() {
                   </label>
                 </>
               )}
-              <button className="primary wide" disabled={busy}>
+              <button
+                className={`primary wide ${dialog === "deletecase" ? "danger" : ""}`}
+                disabled={busy}
+              >
                 {busy
                   ? "Saving…"
                   : dialog === "invite"
                     ? "Send invitation"
-                    : "Save"}
+                    : dialog === "deletecase"
+                      ? "Delete permanently"
+                      : "Save"}
               </button>
             </form>
           </section>

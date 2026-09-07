@@ -911,3 +911,69 @@ textarea {
     min-height: 50px;
   }
 }
+
+/* Case management */
+.case-strip .manage-case {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  font-size: 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.case-strip .tag {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8c6a2d;
+  background: #f4ecd9;
+  border-radius: 999px;
+  padding: 3px 8px;
+}
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 14px;
+}
+.dialog-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+button.danger {
+  color: #8c332d;
+  border-color: #d9b1ad;
+}
+.primary.danger {
+  background: #8c332d;
+  border-color: #8c332d;
+  color: white;
+}
+.primary.danger:hover {
+  background: #74271f;
+}
+@media (max-width: 767px) {
+  .case-strip .manage-case span {
+    display: none;
+  }
+  .case-strip .manage-case {
+    padding: 7px 9px;
+  }
+}
+@media (max-width: 767px) {
+  .case-strip {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .case-strip select {
+    flex: 1 1 140px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .case-strip .subtle {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}

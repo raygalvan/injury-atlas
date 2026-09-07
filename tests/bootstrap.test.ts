@@ -40,7 +40,7 @@ test("administrator bootstrap creates, promotes and preserves case ownership; el
     const first = db.prepare("SELECT * FROM users").get() as User;
     assert.equal(first.email, "admin@example.test");
     assert.equal(first.role, "owner");
-    db.prepare("INSERT INTO cases VALUES(?,?,?,?,?,?)").run(
+    db.prepare("INSERT INTO cases(id,firm_id,title,client,incident,created) VALUES(?,?,?,?,?,?)").run(
       "case",
       first.firm_id,
       "Test case",
