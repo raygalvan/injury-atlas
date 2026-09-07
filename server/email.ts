@@ -11,10 +11,10 @@ export async function sendLink(email: string, url: string) {
       Destination: { ToAddresses: [email] },
       Content: {
         Simple: {
-          Subject: { Data: "Your Injury Atlas access link" },
+          Subject: { Data: "Your injury.bot access link" },
           Body: {
             Text: {
-              Data: `Open your private Injury Atlas workspace. This link expires in 15 minutes and works once.\n\n${url}\n\nIf you did not request access, ignore this email.`,
+              Data: `Open your private injury.bot workspace. This link expires in 15 minutes and works once.\n\n${url}\n\nIf you did not request access, ignore this email.`,
             },
           },
         },
