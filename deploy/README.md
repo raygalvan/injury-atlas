@@ -57,12 +57,14 @@ Merge a PR into main to deploy automatically, or manually run **Deploy AWS** on 
 
 The deployment account never edits Docker images, runtime volume mounts, legacy repositories or another application's services.
 
-After the first successful release, bootstrap the owner from the instance:
+After the first successful release, register the Super admin from the instance. This uses the existing highest-privilege `owner` role for the pilot workspace:
 
 ```bash
 cd /opt/injury-atlas/current
 sudo -u injury-atlas env DATA_DIR=/var/lib/injury-atlas /usr/bin/node --import tsx server/bootstrap.ts YOUR-EMAIL "YOUR-NAME"
 ```
+
+The command creates the account or promotes and reactivates an existing account while preserving its ID, firm, and case relationships. Promotion invalidates previous sessions and links so the new privileges require a fresh email sign-in. Repeating it for an active owner preserves that owner’s sessions.
 
 Then request your access link from the public sign-in page. Bootstrap does not send email. Application invitations send email only when an authenticated member submits the invitation form.
 

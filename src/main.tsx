@@ -18,14 +18,15 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import "./style.css";
+import "./portal-entry.css";
 import { api } from "./api";
 import { Field, Empty } from "./ui";
 import { Atlas } from "./Atlas";
 import { Login } from "./Login";
 import type { Member, Case, Evidence, Finding } from "./domain";
 const navigation = [
+  ["dashboard", "Command center", LayoutDashboard],
   ["atlas", "Human Atlas", Box],
-  ["dashboard", "Dashboard", LayoutDashboard],
   ["cases", "Cases", FolderOpen],
   ["evidence", "Evidence", Files],
   ["injuries", "Injury findings", Activity],
@@ -33,10 +34,14 @@ const navigation = [
   ["exhibits", "Exhibits", FileOutput],
   ["agents", "Agents", Bot],
 ] as const;
+const viewPath = (view: string) => (view === "dashboard" ? "/" : `/${view}`);
+const pathView = () =>
+  navigation.find(([id]) => viewPath(id) === location.pathname)?.[0] ||
+  "dashboard";
 function App() {
   const [member, setMember] = useState<Member | null>(null),
     [loading, setLoading] = useState(true),
-    [view, setView] = useState("atlas"),
+    [view, setView] = useState<string>(pathView),
     [cases, setCases] = useState<Case[]>([]),
     [caseId, setCaseId] = useState(""),
     [evidence, setEvidence] = useState<Evidence[]>([]),
@@ -81,7 +86,16 @@ function App() {
   useEffect(() => {
     if (member) {
       loadCases().catch((e) => setError(e.message));
-      if (member.role === "client") setView("evidence");
+      if (member.role === "client") {
+        setView("evidence");
+        history.replaceState(null, "", "/client");
+      } else if (
+        location.pathname.includes("sign-in") ||
+        location.pathname === "/client"
+      ) {
+        setView("dashboard");
+        history.replaceState(null, "", "/");
+      }
     }
   }, [member]);
   useEffect(() => {
@@ -89,6 +103,14 @@ function App() {
     setFindings([]);
     loadDetails().catch((e) => setError(e.message));
   }, [caseId, member]);
+  useEffect(() => {
+    const back = () => {
+      setView(member?.role === "client" ? "evidence" : pathView());
+      setMobile(false);
+    };
+    addEventListener("popstate", back);
+    return () => removeEventListener("popstate", back);
+  }, [member]);
   async function run(fn: () => Promise<void>) {
     setBusy(true);
     setError("");
@@ -101,7 +123,7 @@ function App() {
       setBusy(false);
     }
   }
-  if (loading) return <div className="loading">Opening Injury Atlas…</div>;
+  if (loading) return <div className="loading">Opening injury.bot…</div>;
   if (!member)
     return (
       <Login
@@ -112,6 +134,7 @@ function App() {
     );
   const go = (v: string) => {
     setView(v);
+    history.pushState(null, "", client ? "/client" : viewPath(v));
     setMobile(false);
     setError("");
     setNotice("");
@@ -125,14 +148,20 @@ function App() {
   };
   return (
     <div className="app">
+      <header className="site-header">
+        <a className="site-brand" href={client ? "/client" : "/"}>
+          injury<span>.bot</span>
+        </a>
+        <div className="site-header-side">
+          <span className="pilot-badge">Private pilot</span>
+          <span>{client ? "Client portal" : "Injury command center"}</span>
+        </div>
+      </header>
       <aside className={mobile ? "rail open" : "rail"}>
         <div className="brand">
-          <span className="brand-icon">
-            <Box />
-          </span>
           <div>
-            injury<span>atlas</span>
-            <small>INJURY EVIDENCE WORKSPACE</small>
+            {client ? "Your case workspace" : "Injury workspace"}
+            <small>PRIVATE PILOT</small>
           </div>
           <button
             className="close mobile"
@@ -151,6 +180,7 @@ function App() {
             <button
               key={id}
               className={view === id ? "nav active" : "nav"}
+              aria-current={view === id ? "page" : undefined}
               onClick={() => go(id)}
             >
               <Icon size={19} />
@@ -170,13 +200,21 @@ function App() {
             <span>{member.name.slice(0, 1)}</span>
             <div>
               <b>{member.name}</b>
-              <small>{member.role}</small>
+              <small>
+                {member.role === "owner" ? "Super admin" : member.role}
+              </small>
             </div>
             <button
               title="Sign out"
               onClick={() =>
                 run(async () => {
                   await api("/auth/logout", {});
+                  history.replaceState(
+                    null,
+                    "",
+                    client ? "/client/sign-in" : "/sign-in",
+                  );
+                  setView("dashboard");
                   setMember(null);
                   setCases([]);
                   setEvidence([]);
@@ -189,6 +227,30 @@ function App() {
           </div>
         </div>
       </aside>
+      {!client && (
+        <nav className="mobile-nav" aria-label="Quick navigation">
+          {[
+            ["dashboard", "Home", LayoutDashboard],
+            ["injuries", "Review", ShieldCheck],
+            ["atlas", "Atlas", Box],
+            ["cases", "Cases", FolderOpen],
+            ["evidence", "Evidence", Files],
+          ].map(([id, label, Icon]) => {
+            const Symbol = Icon as typeof Box;
+            return (
+              <button
+                key={String(id)}
+                className={`mobile-tab ${view === id ? "active" : ""} ${id === "atlas" ? "mobile-tab-primary" : ""}`}
+                aria-current={view === id ? "page" : undefined}
+                onClick={() => go(String(id))}
+              >
+                <Symbol size={22} />
+                <span>{String(label)}</span>
+              </button>
+            );
+          })}
+        </nav>
+      )}
       <main>
         <header>
           <button
@@ -224,7 +286,9 @@ function App() {
               <h1>
                 {client
                   ? "Your case evidence"
-                  : navigation.find((n) => n[0] === view)?.[1]}
+                  : view === "dashboard"
+                    ? `Welcome, ${member.name.split(" ")[0]}.`
+                    : navigation.find((n) => n[0] === view)?.[1]}
               </h1>
             </div>
             {!client && (
@@ -350,6 +414,70 @@ function App() {
                   </div>
                 ))}
               </div>
+              <section className="card command-review">
+                <div className="section-heading">
+                  <div>
+                    <p className="eyebrow">LAWYER REVIEW</p>
+                    <h2>Decisions waiting</h2>
+                  </div>
+                  <button onClick={() => go("injuries")}>
+                    Open review queue
+                  </button>
+                </div>
+                <p>
+                  {active
+                    ? `Source findings for ${active.title}. Source approval does not approve anatomical placement or rendering.`
+                    : "Select or create a case to begin reviewing documented injuries."}
+                </p>
+                {findings
+                  .filter((f) => f.attorneyReviewStatus === "pending")
+                  .map((f) => (
+                    <div className="command-row" key={f.id}>
+                      <div>
+                        <strong>{f.anatomicalStructure}</strong>
+                        <p>{f.citation}</p>
+                      </div>
+                      <button onClick={() => go("injuries")}>Review</button>
+                    </div>
+                  ))}
+                {active &&
+                  !findings.some(
+                    (f) => f.attorneyReviewStatus === "pending",
+                  ) && (
+                    <p>No source findings are awaiting review in this case.</p>
+                  )}
+              </section>
+              <section className="card command-review">
+                <div className="section-heading">
+                  <div>
+                    <p className="eyebrow">CASE WORKSPACE</p>
+                    <h2>Active cases</h2>
+                  </div>
+                  <button onClick={() => go("cases")}>All cases</button>
+                </div>
+                {cases.map((c) => (
+                  <div className="command-row" key={c.id}>
+                    <div>
+                      <strong>{c.title}</strong>
+                      <p>{c.client}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setCaseId(c.id);
+                        go("atlas");
+                      }}
+                    >
+                      Open atlas
+                    </button>
+                  </div>
+                ))}
+                {!cases.length && (
+                  <p>
+                    Create your first case, then upload evidence and open Human
+                    Atlas.
+                  </p>
+                )}
+              </section>
             </>
           )}
           {view === "cases" && (

@@ -73,6 +73,20 @@ export function createApp(
       atlasReady: existsSync(".atlas-build/index.html"),
     }),
   );
+  app.get("/api/auth/preferences", (req, res) => {
+    let email = "";
+    try {
+      const parsed = z
+        .string()
+        .email()
+        .max(254)
+        .safeParse(decodeURIComponent(cookie(req, "injurybot_login_email")));
+      if (parsed.success) email = parsed.data;
+    } catch {
+      /* Invalid preference cookies never affect authentication. */
+    }
+    res.json({ email });
+  });
   app.post("/api/auth/request", async (req, res) => {
     const parsed = z
       .string()
@@ -87,14 +101,29 @@ export function createApp(
       return res
         .status(429)
         .json({ error: "Please wait before requesting another link" });
+    res.cookie("injurybot_login_email", parsed.data, {
+      httpOnly: true,
+      secure: !!options.production,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 365 * 86400000,
+    });
     const user = db
       .prepare("SELECT * FROM users WHERE email=? AND active=1")
       .get(parsed.data) as User | undefined;
-    if (user) {
+    const portal = req.body.portal;
+    const matchesPortal =
+      portal === "client"
+        ? user?.role === "client"
+        : portal === "firm"
+          ? user?.role !== "client"
+          : true;
+    if (user && matchesPortal) {
       const raw = issueLink(db, user.id);
       if (raw) {
         try {
-          await options.send(user.email, `${origin}/sign-in#token=${raw}`);
+          const entry = user.role === "client" ? "/client/sign-in" : "/sign-in";
+          await options.send(user.email, `${origin}${entry}#token=${raw}`);
         } catch {
           db.prepare("DELETE FROM links WHERE hash=?").run(hash(raw));
           console.error(
@@ -233,7 +262,8 @@ export function createApp(
         .status(429)
         .json({ error: "Too many invitations. Please wait 15 minutes." });
     try {
-      await options.send(data.email, `${origin}/sign-in#token=${raw}`);
+      const entry = data.role === "client" ? "/client/sign-in" : "/sign-in";
+      await options.send(data.email, `${origin}${entry}#token=${raw}`);
     } catch {
       db.prepare("DELETE FROM links WHERE hash=?").run(hash(raw));
       return res.status(503).json({

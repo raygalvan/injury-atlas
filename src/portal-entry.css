@@ -1,0 +1,142 @@
+/* Firm and client entry surfaces */
+.portal-entry {
+  min-height: 100dvh;
+  padding: clamp(28px, 6vw, 72px) max(20px, 6vw);
+  background:
+    radial-gradient(
+      circle at 12% 8%,
+      rgba(181, 138, 62, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(145deg, #173a35 0%, #1f4b43 38%, #f2eee5 38%, #faf8f2 100%);
+}
+.entry-brand {
+  display: inline-block;
+  margin-bottom: 28px;
+  color: white;
+  font:
+    700 25px Georgia,
+    serif;
+  text-decoration: none;
+}
+.entry-brand span {
+  color: #d9b66d;
+}
+.entry-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+  width: min(980px, 100%);
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(20, 46, 42, 0.22);
+  border-radius: 20px;
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 28px 80px rgba(12, 30, 27, 0.24);
+}
+.entry-intro {
+  padding: clamp(30px, 5vw, 58px);
+  background: #e8e1d2;
+  border-right: 1px solid #d4ccbc;
+}
+.entry-intro h1 {
+  margin: 10px 0 20px;
+  font:
+    500 clamp(34px, 4vw, 54px)/1.05 Georgia,
+    serif;
+  letter-spacing: -0.035em;
+}
+.entry-intro p:last-child {
+  color: #475852;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.entry-form-panel {
+  display: grid;
+  align-content: center;
+  padding: clamp(30px, 5vw, 58px);
+  background: linear-gradient(180deg, #fffdf8, #f7f3ea);
+}
+.entry-form {
+  display: grid;
+  gap: 18px;
+}
+.entry-form h2 {
+  margin: 0;
+  font:
+    500 28px Georgia,
+    serif;
+}
+.entry-form p {
+  margin: 0;
+  color: #68756f;
+  line-height: 1.55;
+}
+.entry-form label {
+  display: grid;
+  gap: 7px;
+  color: #263d38;
+  font-size: 13px;
+  font-weight: 800;
+}
+.entry-form input {
+  min-height: 50px;
+  padding: 11px 13px;
+  border: 1px solid #bdb7aa;
+  border-radius: 9px;
+  background: white;
+}
+.entry-form .primary-button {
+  width: 100%;
+  min-height: 50px;
+}
+.entry-fine {
+  font-size: 12px;
+}
+.entry-error {
+  padding: 11px 13px;
+  border: 1px solid #d9b1ad;
+  border-radius: 8px;
+  background: #f6e5e2;
+  color: #8c332d;
+}
+.entry-switch {
+  width: min(980px, 100%);
+  margin: 18px auto 0;
+  color: #5e6e68;
+  text-align: right;
+}
+.entry-switch a {
+  color: #173a35;
+  font-weight: 800;
+}
+.client-entry .entry-intro {
+  background: linear-gradient(155deg, #e9dfca, #f4efe4);
+}
+
+@media (max-width: 720px) {
+  .portal-entry {
+    padding: 22px 14px 38px;
+    background: linear-gradient(165deg, #173a35 0 180px, #f4f1e9 180px);
+  }
+  .entry-brand {
+    margin: 0 6px 22px;
+  }
+  .entry-card {
+    grid-template-columns: 1fr;
+    border-radius: 15px;
+  }
+  .entry-intro {
+    padding: 26px 22px;
+    border-right: 0;
+    border-bottom: 1px solid #d4ccbc;
+  }
+  .entry-intro h1 {
+    font-size: 36px;
+  }
+  .entry-form-panel {
+    padding: 26px 22px;
+  }
+  .entry-switch {
+    text-align: center;
+  }
+}
