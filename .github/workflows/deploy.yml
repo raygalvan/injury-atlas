@@ -12,6 +12,57 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
+      - name: Check deployment settings and wait for SSH
+        timeout-minutes: 17
+        env:
+          AWS_HOST: ${{ secrets.AWS_HOST }}
+          AWS_DEPLOY_USER: ${{ secrets.AWS_DEPLOY_USER }}
+          AWS_DEPLOY_KEY: ${{ secrets.AWS_DEPLOY_KEY }}
+          AWS_HOST_FINGERPRINT: ${{ secrets.AWS_HOST_FINGERPRINT }}
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          python3 -u - <<'PY'
+          import ipaddress
+          import os
+          import socket
+          import sys
+          import time
+          import urllib.request
+
+          required = ("AWS_HOST", "AWS_DEPLOY_USER", "AWS_DEPLOY_KEY",
+                      "AWS_HOST_FINGERPRINT", "APP_URL")
+          missing = [name for name in required if not os.environ.get(name, "").strip()]
+          if missing:
+              sys.exit("Missing production environment settings: " + ", ".join(missing))
+
+          with urllib.request.urlopen("https://checkip.amazonaws.com", timeout=15) as response:
+              runner_ip = str(ipaddress.IPv4Address(response.read(128).decode().strip()))
+          instruction = (
+              f"Runner SSH source: {runner_ip}/32\n"
+              "If needed, add an EC2 inbound SSH (TCP 22) rule for this exact source.\n"
+              "Keep the EC2 Instance Connect rule. Remove this temporary runner rule "
+              "after the deployment finishes, fails, or is cancelled.\n"
+              "Each new workflow run may use a different IP.\n"
+          )
+          print(instruction, flush=True)
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+              summary.write("### Deployment SSH access\n\n" + instruction + "\n")
+
+          deadline = time.monotonic() + 900
+          while True:
+              try:
+                  with socket.create_connection((os.environ["AWS_HOST"], 22), timeout=3):
+                      pass
+                  print("TCP port 22 is reachable. SSH authentication and host fingerprint "
+                        "will be verified by the deployment steps.", flush=True)
+                  break
+              except OSError:
+                  if time.monotonic() >= deadline:
+                      sys.exit("Timed out waiting for SSH. Check the instance security group, "
+                               "public IP and SSH service, then start a new workflow run.")
+                  print("Waiting for SSH access; checking again in 10 seconds.", flush=True)
+                  time.sleep(10)
+          PY
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
