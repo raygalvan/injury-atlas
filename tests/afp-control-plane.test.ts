@@ -94,8 +94,8 @@ test("AFP registries enforce governance, preserve durable state and never activa
         assert.equal((await call(who, route, {})).status, 403);
     }
     const manifest = await (await call("admin", "/manifest")).json();
-    assert.equal(manifest.productionExecutable, false);
-    assert.equal(manifest.runtime.mcpConnected, false);
+    assert.equal(manifest.activation, false);
+    assert.equal(manifest.schemaVersion, "injury.bot.afp/0.1");
     for (const id of [
       "authentication",
       "tenant-boundaries",

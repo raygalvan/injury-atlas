@@ -1,3 +1,9 @@
+import {
+  AFP_SCHEMA,
+  AFP_VERSION,
+  RENDERING_CONTRACT,
+} from "../../shared/afp-manifest";
+import { manifestTemplate } from "./manifest";
 import { readFileSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
@@ -63,7 +69,14 @@ export function readControlPlane(db: Store): AfpControlPlane {
     } as AfpPolicy;
   });
   return {
-    schemaVersion: "injury.bot.afp-draft/1",
+    schemaVersion: "injury.bot.afp-control-plane/1",
+    manifestSchemaVersion: AFP_SCHEMA,
+    sdkBoundary: {
+      version: AFP_VERSION,
+      contract: RENDERING_CONTRACT,
+      implemented: true,
+      executable: false,
+    },
     application: {
       name: "injury.bot",
       role: "Reference Implementation / Pilot",
@@ -85,7 +98,7 @@ export function readControlPlane(db: Store): AfpControlPlane {
         .filter((p) => p.locked)
         .every((p) => p.level === "Protected"),
       label:
-        "Core policy locks enforced; AFP extension enforcement not connected",
+        "Core policies locked; recipe-inspection SDK permissions enforced; arbitrary execution unavailable",
     },
     externalResources: {
       provisionable: false,
@@ -97,28 +110,6 @@ export function readControlPlane(db: Store): AfpControlPlane {
       dynamicAttachment: false,
       provisioning: false,
     },
-  };
-}
-export function manifestDraft(db: Store) {
-  const c = readControlPlane(db);
-  return {
-    schemaVersion: c.schemaVersion,
-    kind: "AFP manifest draft",
-    productionExecutable: false,
-    application: c.application,
-    architecture: {
-      mcp: "Intelligence/orchestration",
-      sdk: "Trusted application interface",
-      manifest: "Developer customization rules",
-      extensionPoints: "Supported attachment surfaces",
-      featurePackage: "Individualized customization",
-      resourceLayer: "Optional external database/storage/compute",
-      base: "Maintained shared injury.bot application",
-    },
-    runtime: c.runtime,
-    extensionPoints: c.extensionPoints,
-    policies: c.policies,
-    resources: c.resources,
   };
 }
 function saveHistory(db: Store, target: string, body: unknown, actor: string) {
@@ -142,8 +133,8 @@ export function controlPlaneRoutes(
   app.get("/api/settings/afp/manifest", staff, admin, (_req, res) =>
     res
       .set("Cache-Control", "no-store")
-      .attachment("afp.manifest.draft.json")
-      .json(manifestDraft(db)),
+      .attachment("afp.manifest.v0.1.json")
+      .json(manifestTemplate(res.locals.user, readControlPlane(db).policies)),
   );
   app.post("/api/settings/afp/readiness/:id", staff, admin, (req, res) => {
     const v = z

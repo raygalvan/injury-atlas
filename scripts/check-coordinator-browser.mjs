@@ -264,6 +264,22 @@ try {
   await page.getByText("AFP control-plane record saved.",{exact:true}).waitFor();
   await tab("AFP Features").click();
   await page.getByRole("heading",{name:"No AFP-created features yet",exact:true}).waitFor();
+  await page.getByRole("button",{name:"New manifest draft",exact:true}).click();
+  await page.getByRole("button",{name:"Validate manifest",exact:true}).click();
+  await page.getByRole("status").filter({hasText:"Compatible"}).waitFor();
+  const manifestText=await page.getByLabel("Manifest JSON",{exact:true}).inputValue();
+  await page.getByLabel("Manifest JSON",{exact:true}).fill(JSON.stringify({...JSON.parse(manifestText),activation:true},null,2));
+  await page.getByRole("button",{name:"Validate manifest",exact:true}).click();
+  await page.getByText("activation_unavailable",{exact:true}).waitFor();
+  await page.getByLabel("Manifest JSON",{exact:true}).fill(manifestText);
+  await page.getByRole("button",{name:"Save manifest draft",exact:true}).click();
+  await page.getByRole("button",{name:"Inspect manifest",exact:true}).waitFor();
+  await page.reload();
+  await page.getByRole("button",{name:"Inspect manifest",exact:true}).click();
+  assert.equal(JSON.parse(await page.getByLabel("Manifest JSON",{exact:true}).inputValue()).schemaVersion,"injury.bot.afp/0.1");
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.locator(".afp-manifest-inspector").screenshot({path:"artifacts/production/afp-manifest-mobile.png"});
+
   await tab("Overview").click();
   assert.ok(await page.locator(".afp-control-header").evaluate(el=>el.scrollHeight<=el.clientHeight+1));
   await page.evaluate(()=>window.scrollTo(0,0));
@@ -300,6 +316,7 @@ try {
   assert.equal(JSON.parse(afpRead).direction.priorities,"Preview before activation.");
   assert.equal(JSON.parse(afpRead).controlPlane.readiness.find(r=>r.id==="extension-registry").status,"Verified");
   assert.equal(JSON.parse(afpRead).controlPlane.runtime.provisioning,false);
+  assert.equal(JSON.parse(afpRead).controlPlane.sdkBoundary.implemented,true);
   await page.screenshot({path:"artifacts/production/afp-voice-memory.png",fullPage:true});
   assert.deepEqual(errors, []);
   console.log(

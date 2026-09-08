@@ -1,3 +1,4 @@
+import { AfpManifestInspector } from "./AfpManifestInspector";
 import { useEffect, useState, useRef } from "react";
 import { api } from "./api";
 import { AfpMemoryDecisions } from "./AfpMemoryDecisions";
@@ -202,8 +203,7 @@ export function AfpManagement() {
                   value={data.readiness.find((r) => r.id === "sdk")!.status}
                 />
                 <span>
-                  AFP SDK ·{" "}
-                  {data.runtime.sdkConnected ? "Connected" : "Not connected"}
+                  AFP SDK Boundary · Implemented v{data.sdkBoundary.version}
                 </span>
               </article>
             </div>
@@ -235,13 +235,14 @@ export function AfpManagement() {
                 </button>
               </article>
               <article>
-                <h3>Manifest draft</h3>
+                <h3>AFP Manifest · Implemented v0.1</h3>
                 <p>
-                  The current registry and policies export as structured draft
-                  definitions. This file cannot deploy or attach features.
+                  The experimental injury.bot-specific schema, validator and one
+                  SDK contract are implemented. Executable Runtime: Not
+                  implemented.
                 </p>
                 <a href="/api/settings/afp/manifest" download>
-                  Download manifest draft
+                  Download manifest v0.1
                 </a>
               </article>
             </div>
@@ -423,6 +424,11 @@ export function AfpManagement() {
                   <p className="eyebrow">{p.type}</p>
                   <p>{p.description}</p>
                   <p>{p.customizationAllowed}</p>
+                  <p className="afp-reference">
+                    {p.sdkContract
+                      ? `Trusted SDK contract · ${p.sdkContract}`
+                      : "Candidate only · no SDK contract"}
+                  </p>
                   <dl>
                     <dt>Stable ID</dt>
                     <dd>{p.id}</dd>
@@ -461,10 +467,12 @@ export function AfpManagement() {
           >
             <h3>Permissions</h3>
             <p>
-              These are developer customization rules for the future manifest.
-              Saving an Allowed policy does not install code, grant credentials
-              or provision a resource. Core locks are enforced on this policy
-              API.
+              These developer rules are consulted by the manifest validator and
+              SDK. The only allowed SDK permission is rendering.recipe.inspect.
+              Authentication, tenant boundaries, provenance, audit, database,
+              shell and filesystem access are unreachable. Saving an Allowed
+              policy does not install code, grant credentials or provision a
+              resource. Core locks are enforced on this policy API.
             </p>
             <div className="afp-registry">
               {data.policies.map((p) => (
@@ -546,6 +554,7 @@ export function AfpManagement() {
             hidden={view !== "features"}
           >
             <h3>AFP Features</h3>
+            <AfpManifestInspector />
             {!data.featureCount ? (
               <div className="afp-empty">
                 <p className="eyebrow">

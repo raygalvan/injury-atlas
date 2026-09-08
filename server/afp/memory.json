@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "updated": "2026-09-08",
   "vision": "Make injury.bot an AFP-friendly pilot where people can shape their own application through an agent. Preserve the maintained base application while supporting isolated personal variations, approved extensions and upstream updates. Develop AFP as a separate platform and compatibility standard, using injury.bot and law.bot as pilots without derailing their primary products.",
   "principles": [
@@ -51,12 +51,19 @@
       "id": "afp-control-plane",
       "title": "AFP control plane and governed journal",
       "status": "Implemented in this release",
-      "detail": "Seven management views expose structured readiness, candidate extension points, customization policy, resources and feature metadata. Persistent journal reviews and registry edits retain revisions and audit history. Runtime attachment, MCP, SDK and resource provisioning remain future work.",
+      "detail": "Seven management views expose structured readiness, candidate extension points, customization policy, resources and feature metadata. Persistent journal reviews and registry edits retain revisions and audit history. Runtime attachment, MCP and resource provisioning remain future work. The internal read-only SDK is documented in the v0.1 checkpoint below.",
       "evidence": "server/afp/control-plane.ts; server/afp/management.ts; shared/afp.ts; src/AfpManagement.tsx; tests/afp-control-plane.test.ts; scripts/check-coordinator-browser.mjs"
+    },
+    {
+      "id": "afp-sdk-v01",
+      "title": "Experimental manifest and read-only SDK v0.1",
+      "status": "Implemented in this release",
+      "detail": "injury.bot.afp/0.1 validation and a trusted rendering-pipeline recipe preflight enforce Private/Firm ownership, current permissions, exact release compatibility and audit. Preflight uses the production recipe schema and does not render, queue jobs, read evidence or activate extensions.",
+      "evidence": "shared/afp-manifest.ts; server/afp/manifest.ts; server/afp/sdk.ts; server/rendering/recipe.ts; tests/afp-sdk.test.ts"
     }
   ],
   "gaps": [
-    "Validate and standardize the draft AFP manifest and implement a trusted SDK boundary; declarative candidate extension points are now registered.",
+    "Implement isolated preview execution, capability tokens and scoped artifact return around the existing v0.1 manifest/SDK contract; external protocol interoperability remains unproven.",
     "Build an isolated customization runtime and data ownership contract, including optional separate databases and graphics compute.",
     "Add a coding agent with reproducible bug reports, tests, preview, authorized activation and rollback.",
     "Implement upstream update reconciliation and conflict review without losing personal customizations.",
@@ -75,8 +82,8 @@
     }
   ],
   "protocolAssumptions": [
-    "AFP MCP supplies intelligence/orchestration; AFP SDK is the trusted application interface. Neither is connected yet.",
-    "The application manifest declares developer rules and capabilities; the current injury.bot.afp-draft/1 export is a local draft, not a finalized AFP protocol.",
+    "AFP MCP supplies intelligence/orchestration and remains unconnected. The internal AFP SDK now enforces one non-executable recipe-inspection contract; it does not execute extension code.",
+    "The experimental injury.bot.afp/0.1 manifest schema and validator are internal and injury.bot-specific. They are not a finalized external standard. Exact application release compatibility requires explicit revision after an update.",
     "Feature packages describe individualized customization; optional resource infrastructure must preserve ownership, tenancy, evidence provenance, audit and review gates."
   ]
 }
