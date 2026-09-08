@@ -51,7 +51,7 @@
       "id": "afp-control-plane",
       "title": "AFP control plane and governed journal",
       "status": "Implemented in this release",
-      "detail": "Seven management views expose structured readiness, candidate extension points, customization policy, resources and feature metadata. Persistent journal reviews and registry edits retain revisions and audit history. Runtime attachment, MCP, SDK and resource provisioning remain future work.",
+      "detail": "Seven management views expose structured readiness, candidate extension points, customization policy, resources and feature metadata. Persistent journal reviews and registry edits retain revisions and audit history. Runtime attachment, MCP and resource provisioning remain future work. The internal read-only SDK is documented in the v0.1 checkpoint below.",
       "evidence": "server/afp/control-plane.ts; server/afp/management.ts; shared/afp.ts; src/AfpManagement.tsx; tests/afp-control-plane.test.ts; scripts/check-coordinator-browser.mjs"
     },
     {
