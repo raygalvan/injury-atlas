@@ -256,6 +256,7 @@ try {
   await page
     .getByText("Waiting for Injury Creation Agent", { exact: true })
     .waitFor();
+  delete process.env.ANTHROPIC_API_KEY;
   const libraryJob = claimLibraryJob(db);
   assert(libraryJob);
   let libraryCalls = 0;
