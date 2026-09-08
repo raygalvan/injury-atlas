@@ -19,3 +19,5 @@ Tool-first, attorney-facing injury evidence and reconstruction workspace. Human 
 - AFP Management adds editable direction, journal records, review metadata and registry revisions in persistent SQLite. Do not overwrite these runtime records with release defaults. Notes made by the coordinator are proposals, not proof of implementation.
 - AFP knowledge is super-admin product context. Never put case evidence, personal medical details, private firm data or credentials in the shared AFP memory.
 - No AFP coding, fork provisioning or upstream reconciliation runtime exists yet. Do not represent the memory/settings interface as delivering those capabilities.
+
+- AFP v0.1 is an internal manifest validator and read-only rendering recipe preflight (`server/afp/sdk.ts`). Preserve exact compatibility, fresh policy/ownership checks and audit. Do not expose DB/shell/filesystem access or infer arbitrary code execution from SDK availability.

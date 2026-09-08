@@ -154,3 +154,9 @@ export const extensionPoints: ExtensionPoint[] = [
     ["external-services", "dedicated-runtime"],
   ),
 ];
+
+const rendering = extensionPoints.find(p=>p.id === "rendering-pipeline")!;
+rendering.sdkContract = "injury.bot.rendering.preflight/0.1";
+rendering.status = "Implemented";
+rendering.customizationAllowed = "Implemented read-only recipe inspection contract. No rendering, job creation, evidence access or dynamic code attachment.";
+rendering.reference += "; server/afp/sdk.ts; server/rendering/recipe.ts";

@@ -16,6 +16,7 @@ const policy = (
   revision: 1,
 });
 export const afpPolicies: AfpPolicy[] = [
+  policy("rendering-preflight", "Rendering recipe inspection", "Allowed", "The SDK may validate caller-supplied recipe values against the production schema. No evidence reads, rendering jobs or core mutations are permitted.", "server/afp/sdk.ts; server/rendering/recipe.ts"),
   policy(
     "ui-additions",
     "UI additions",

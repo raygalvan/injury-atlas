@@ -3,27 +3,8 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { Store, User } from "./store";
 import { audit } from "./store";
-export const recipeSchema = z
-  .object({
-    kind: z.enum(["abrasion", "subarachnoid", "fracture"]),
-    parentId: z.string().regex(/^FJ\d+$/),
-    center: z.tuple([
-      z.number().finite().min(-2).max(2),
-      z.number().finite().min(-2).max(3),
-      z.number().finite().min(-2).max(2),
-    ]),
-    normal: z
-      .tuple([
-        z.number().finite().min(-1).max(1),
-        z.number().finite().min(-1).max(1),
-        z.number().finite().min(-1).max(1),
-      ])
-      .refine((v) => Math.hypot(...v) > 0.9 && Math.hypot(...v) < 1.1),
-    widthMm: z.number().positive().max(250),
-    heightMm: z.number().positive().max(250),
-    depthMm: z.number().min(0).max(10),
-  })
-  .refine((r) => (r.kind === "abrasion" ? r.depthMm === 0 : r.depthMm > 0));
+import { recipeSchema } from "./rendering/recipe";
+export { recipeSchema } from "./rendering/recipe";
 export const productionSchema = z
   .object({
     name: z.string().trim().min(1).max(160),

@@ -1,3 +1,4 @@
+import { ensureSdk, sdkRoutes } from "./sdk";
 import {
   ensureControlPlane,
   readControlPlane,
@@ -31,6 +32,7 @@ const journalSelect =
   "SELECT e.*,g.reviewed_by,g.reviewed_at FROM afp_entries e LEFT JOIN afp_entry_governance g ON g.id=e.id";
 export function ensureAfp(db: Store) {
   ensureControlPlane(db);
+  ensureSdk(db);
   db.exec(
     "CREATE TABLE IF NOT EXISTS afp_direction(id INTEGER PRIMARY KEY CHECK(id=1),vision TEXT NOT NULL,priorities TEXT NOT NULL,revision INTEGER NOT NULL,updated INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS afp_entries(id TEXT PRIMARY KEY,kind TEXT NOT NULL,title TEXT NOT NULL,content TEXT NOT NULL,status TEXT NOT NULL,evidence TEXT NOT NULL,source TEXT NOT NULL,actor TEXT NOT NULL,created INTEGER NOT NULL,updated INTEGER NOT NULL,revision INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS afp_history(id TEXT PRIMARY KEY,target TEXT NOT NULL,body TEXT NOT NULL,actor TEXT NOT NULL,created INTEGER NOT NULL);",
   );
@@ -189,7 +191,7 @@ export function afpContext(db: Store, u: User) {
     JSON.stringify(data.direction.vision) +
     "\nCurrent priorities: " +
     JSON.stringify(data.direction.priorities) +
-    "\nThe target architecture is Base Application + Isolated Extensions; a customization does not require cloning the entire app. AFP MCP is intelligence/orchestration, AFP SDK is the trusted application interface, the manifest contains developer rules, extension points define attachment surfaces, feature packages carry individualized changes and the resource layer can eventually provide separate infrastructure. Readiness, policies, resource definitions and feature records are authoritative planning data, not permission to execute. read_afp_memory now includes controlPlane: use its statuses, evidence, dependencies, policy levels, resources and features when advising. For a private GPU renderer, discuss rendering-pipeline as a candidate boundary, scope the returned artifacts to the requesting user/case, preserve evidence and review gates, and evaluate gpu-compute and dedicated-runtime policy. GPU provisioning, isolated runtime and dynamic attachment are not connected. Check the current registry before claiming availability; never treat a draft feature or manifest as executable.\nCurrent AFP state: " +
+    "\nThe target architecture is Base Application + Isolated Extensions; a customization does not require cloning the entire app. AFP MCP is intelligence/orchestration, AFP SDK is the trusted application interface, the manifest contains developer rules, extension points define attachment surfaces, feature packages carry individualized changes and the resource layer can eventually provide separate infrastructure. Readiness, policies, resource definitions and feature records are authoritative planning data, not permission to execute. read_afp_memory now includes controlPlane: use its statuses, evidence, dependencies, policy levels, resources and features when advising. For a private GPU renderer, discuss rendering-pipeline as a candidate boundary, scope the returned artifacts to the requesting user/case, preserve evidence and review gates, and evaluate gpu-compute and dedicated-runtime policy. Manifest injury.bot.afp/0.1 and its validator now exist. Internal SDK v0.1 enforces one rendering-pipeline recipe-inspection contract with Private/Firm ownership, current policies, exact application-version compatibility and audit. Preflight checks supplied numeric recipe constraints only, not geometry or clinical correctness. It does not render, queue jobs or read evidence. Community/Official scopes cannot be installed. Arbitrary AFP code execution, MCP orchestration, GPU provisioning, isolated runtime and dynamic attachment are not connected. Check the current registry before claiming availability; never treat a draft feature or manifest as executable.\nCurrent AFP state: " +
     JSON.stringify({
       overall: data.controlPlane.overall,
       readiness: data.controlPlane.readiness.map((r) => ({
@@ -201,6 +203,7 @@ export function afpContext(db: Store, u: User) {
         level: p.level,
       })),
       runtime: data.controlPlane.runtime,
+        sdkBoundary: data.controlPlane.sdkBoundary,
       featureCount: data.controlPlane.featureCount,
     }) +
     "\n"
@@ -284,6 +287,7 @@ export function afpRoutes(
     next();
   };
   controlPlaneRoutes(app, db, staff, admin);
+  sdkRoutes(app, db, staff);
   app.get("/api/settings/afp", staff, admin, (req, res) => {
     const page = z.coerce
       .number()

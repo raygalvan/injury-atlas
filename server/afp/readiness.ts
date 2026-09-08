@@ -23,10 +23,10 @@ export const afpReadiness: ReadinessItem[] = [
   item(
     "manifest",
     "AFP Manifest",
-    "Foundation",
-    "A versioned injury.bot draft export describes registered boundaries and policies. There is no standardized AFP negotiation or runtime manifest enforcement.",
+    "Implemented",
+    "Experimental injury.bot.afp/0.1 has a strict machine-readable schema and validator for ownership, permissions, resources and exact application compatibility. It is injury.bot-specific, not an industry standard.",
     "server/afp/control-plane.ts; shared/afp.ts",
-    "Specify a minimal manifest schema and enforce one trusted SDK operation.",
+    "Exercise a second contract only after validating this first boundary.",
   ),
   item(
     "protected-core",
@@ -181,11 +181,11 @@ export const afpReadiness: ReadinessItem[] = [
   ),
   item(
     "sdk",
-    "AFP SDK Integration",
-    "Planned",
-    "Typed draft definitions exist; a trusted AFP SDK application interface is not installed.",
-    "shared/afp.ts",
-    "Implement one capability-scoped read/preview operation.",
+    "AFP SDK Boundary",
+    "Implemented",
+    "Internal SDK v0.1 exposes only manifest management and read-only production recipe preflight. No arbitrary code, renderer execution, filesystem, SQL or external connection is exposed.",
+    "server/afp/sdk.ts; tests/afp-sdk.test.ts",
+    "Design an isolated preview runtime and artifact boundary before any execution.",
     ["manifest", "protected-core"],
   ),
 ];

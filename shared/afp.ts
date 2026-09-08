@@ -37,6 +37,7 @@ export type ExtensionPoint = {
   resourcePolicy: string[];
   reference: string;
   dynamicAttachment: false;
+  sdkContract?: string;
 };
 export const policyLevels = [
   "Allowed",
@@ -102,7 +103,14 @@ export type AfpFeature = {
   updated: number;
 };
 export type AfpControlPlane = {
-  schemaVersion: "injury.bot.afp-draft/1";
+  schemaVersion: "injury.bot.afp-control-plane/1";
+  manifestSchemaVersion: "injury.bot.afp/0.1";
+  sdkBoundary: {
+    version: "0.1.0";
+    contract: "injury.bot.rendering.preflight/0.1";
+    implemented: true;
+    executable: false;
+  };
   application: {
     name: "injury.bot";
     role: "Reference Implementation / Pilot";
