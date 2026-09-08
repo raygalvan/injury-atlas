@@ -16,7 +16,20 @@ const policy = (
   revision: 1,
 });
 export const afpPolicies: AfpPolicy[] = [
-  policy("rendering-preflight", "Rendering recipe inspection", "Allowed", "The SDK may validate caller-supplied recipe values against the production schema. No evidence reads, rendering jobs or core mutations are permitted.", "server/afp/sdk.ts; server/rendering/recipe.ts"),
+  policy(
+    "assistant-presentation",
+    "Private Coordinator label",
+    "Allowed",
+    "The trusted SDK may store only the authenticated user's plain-text tab label. Disabling restores the default. No shared UI or executable customization.",
+    "server/afp/presentation.ts",
+  ),
+  policy(
+    "rendering-preflight",
+    "Rendering recipe inspection",
+    "Allowed",
+    "The SDK may validate caller-supplied recipe values against the production schema. No evidence reads, rendering jobs or core mutations are permitted.",
+    "server/afp/sdk.ts; server/rendering/recipe.ts",
+  ),
   policy(
     "ui-additions",
     "UI additions",

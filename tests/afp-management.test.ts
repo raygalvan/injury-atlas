@@ -30,7 +30,7 @@ test("AFP memory persists, guards all routes and tools, keeps revisions and reac
     for(const who of ["owner","atty","client"]) {
       for(const route of ["/settings/afp","/settings/afp/memory.md","/settings/afp/history/direction"]) assert.equal((await call(who,route)).status,403);
       for(const route of ["/settings/afp/direction","/settings/afp/entries","/settings/afp/entries/anything"]) assert.equal((await call(who,route,{})).status,403);
-      assert.ok(!enabledTools(db,users[who]).some(t=>t.name.includes("afp")));
+      assert.ok(!enabledTools(db,users[who]).some(t=>["read_afp_memory","record_afp_note"].includes(t.name)));
       assert.ok(!coordinatorInstructions(db,users[who],undefined).includes("AFP direction"));
       await assert.rejects(executeCoordinatorTool(db,users[who],"read_afp_memory",{},"forbidden"));
     }
@@ -97,7 +97,7 @@ test("existing agent configuration gains AFP tools once without resetting model 
     const migrated=readSettings(db,"platform");
     assert.equal(migrated.agents.coordinator.enabled,false);
     assert.equal(migrated.agents.coordinator.model,"chosen-model");
-    assert.deepEqual(migrated.agents.coordinator.skills,["find_cases","read_afp_memory","record_afp_note"]);
+    assert.deepEqual(migrated.agents.coordinator.skills,["find_cases","read_afp_memory","record_afp_note","set_private_afp_ui_preference"]);
     ensureAi(db);
     assert.deepEqual(readSettings(db,"platform"),migrated);
   } finally{db.close();}

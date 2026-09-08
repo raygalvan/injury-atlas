@@ -22,6 +22,7 @@ export const agentRoster = [
       "read_connections",
       "read_afp_memory",
       "record_afp_note",
+      "set_private_afp_ui_preference",
     ],
   },
   {
@@ -70,6 +71,7 @@ export type AssistantCard = {
 };
 export const skillLabels: Record<string, string> = {
   read_afp_memory: "Discuss AFP progress (super admin)",
+  set_private_afp_ui_preference: "Change my private Coordinator text-tab label",
   record_afp_note: "Record AFP proposals (super admin)",
   find_cases: "Find client cases",
   create_case: "Create a client case",

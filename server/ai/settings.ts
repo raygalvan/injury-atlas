@@ -29,19 +29,74 @@ export function ensureAi(db: Store) {
     CREATE TABLE IF NOT EXISTS assistant_voice_sessions(id TEXT PRIMARY KEY,user_id TEXT NOT NULL,firm_id TEXT NOT NULL,case_id TEXT,expires INTEGER NOT NULL);`);
   ensureAfp(db);
   db.exec("CREATE TABLE IF NOT EXISTS afp_migrations(id TEXT PRIMARY KEY)");
-  if (!db.prepare("SELECT id FROM afp_migrations WHERE id='coordinator-tools-v1'").get()) {
+  if (
+    !db
+      .prepare("SELECT id FROM afp_migrations WHERE id='coordinator-tools-v1'")
+      .get()
+  ) {
     db.exec("BEGIN IMMEDIATE");
     try {
-      for (const row of db.prepare("SELECT scope,body FROM ai_settings").all()) {
+      for (const row of db
+        .prepare("SELECT scope,body FROM ai_settings")
+        .all()) {
         const settings = JSON.parse(String(row.body));
         if (settings.agents?.coordinator) {
-          settings.agents.coordinator.skills = [...new Set([...settings.agents.coordinator.skills, "read_afp_memory", "record_afp_note"])];
-          db.prepare("UPDATE ai_settings SET body=? WHERE scope=?").run(JSON.stringify(settings),row.scope);
+          settings.agents.coordinator.skills = [
+            ...new Set([
+              ...settings.agents.coordinator.skills,
+              "read_afp_memory",
+              "record_afp_note",
+            ]),
+          ];
+          db.prepare("UPDATE ai_settings SET body=? WHERE scope=?").run(
+            JSON.stringify(settings),
+            row.scope,
+          );
         }
       }
-      db.prepare("INSERT INTO afp_migrations VALUES('coordinator-tools-v1')").run();
+      db.prepare(
+        "INSERT INTO afp_migrations VALUES('coordinator-tools-v1')",
+      ).run();
       db.exec("COMMIT");
-    } catch(e) {db.exec("ROLLBACK"); throw e;}
+    } catch (e) {
+      db.exec("ROLLBACK");
+      throw e;
+    }
+  }
+  if (
+    !db
+      .prepare(
+        "SELECT id FROM afp_migrations WHERE id='private-presentation-tool-v1'",
+      )
+      .get()
+  ) {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      for (const row of db
+        .prepare("SELECT scope,body FROM ai_settings")
+        .all()) {
+        const settings = JSON.parse(String(row.body));
+        if (settings.agents?.coordinator) {
+          settings.agents.coordinator.skills = [
+            ...new Set([
+              ...settings.agents.coordinator.skills,
+              "set_private_afp_ui_preference",
+            ]),
+          ];
+          db.prepare("UPDATE ai_settings SET body=? WHERE scope=?").run(
+            JSON.stringify(settings),
+            row.scope,
+          );
+        }
+      }
+      db.prepare(
+        "INSERT INTO afp_migrations VALUES('private-presentation-tool-v1')",
+      ).run();
+      db.exec("COMMIT");
+    } catch (e) {
+      db.exec("ROLLBACK");
+      throw e;
+    }
   }
 }
 export function defaults(): AiSettings {
@@ -263,7 +318,9 @@ export function reserveRun(
       Date.now(),
       user.firm_id,
       since,
-      testingUser(db, user.id) ? Number.MAX_SAFE_INTEGER : settings.dailyRunLimit,
+      testingUser(db, user.id)
+        ? Number.MAX_SAFE_INTEGER
+        : settings.dailyRunLimit,
     );
   if (!r.changes)
     throw new AiError(

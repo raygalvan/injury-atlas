@@ -58,6 +58,9 @@ globalThis.fetch = async (url, options) => {
   assert.equal(String(url), "https://api.openai.com/v1/responses");
   const b = JSON.parse(options.body);
   assert.match(b.instructions, /Hello Ray/);
+  if(JSON.stringify(b.input).includes("Change Text Chat to My Text for me") && !b.input.some(i=>i.type === "function_call_output")) {
+    return Response.json({output:[{type:"function_call",name:"set_private_afp_ui_preference",call_id:"browser-text-preference",arguments:JSON.stringify({action:"set",textTabLabel:"My Text"})}]});
+  }
   return Response.json({
     output: [
       {
@@ -111,6 +114,9 @@ try {
   await page.screenshot({
     path: "artifacts/production/coordinator-mobile-text.png",
   });
+  await page.getByRole("textbox",{name:"Message",exact:true}).fill("Change Text Chat to My Text for me");
+  await page.getByRole("button",{name:"Send",exact:true}).click();
+  await page.getByRole("button",{name:"My Text",exact:true}).waitFor();
   await page.getByRole("button", { name: "Voice", exact: true }).click();
   await page.locator(".as-orb").waitFor();
   await page.screenshot({
@@ -218,6 +224,21 @@ try {
   assert.equal(results.length,1);
   assert.equal(JSON.parse(results[0].item.output).id, record[0].id);
   await page.screenshot({path:"artifacts/production/coordinator-voice-library-receipt.png",fullPage:true});
+  await page.evaluate(()=>window.__voiceEvent({type:"response.done",response:{id:"voice-pref",status:"completed",output:[{type:"function_call",status:"completed",name:"set_private_afp_ui_preference",call_id:"browser-voice-preference",arguments:JSON.stringify({action:"set",textTabLabel:"Text"})}]}}));
+  await page.getByRole("button",{name:"Text",exact:true}).waitFor();
+  await page.screenshot({path:"artifacts/production/afp-private-label-desktop.png",fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  await page.screenshot({path:"artifacts/production/afp-private-label-mobile.png",fullPage:true});
+  for(const [id,firm] of [["peer","synthetic"],["other-firm","another"]]) {
+    db.prepare("INSERT INTO users VALUES(?,?,?,?,?,1)").run(id,id+"@example.test",id,"attorney",firm);
+    const isolated=await browser.newContext({viewport:{width:390,height:844}});
+    await isolated.addCookies([{name:"atlas_session",value:consumeLink(db,issueLink(db,id)),domain:"127.0.0.1",path:"/"}]);
+    const otherPage=await isolated.newPage();await otherPage.route("**/api/assistant/realtime-session",route=>route.fulfill({status:503,contentType:"application/json",body:JSON.stringify({error:"Voice disabled in this isolation check"})}));await otherPage.goto("http://127.0.0.1:3198/coordinator");
+    await otherPage.getByRole("button",{name:"Text Chat",exact:true}).waitFor();
+    assert.equal(await otherPage.getByRole("button",{name:"Text",exact:true}).count(),0);
+    await isolated.close();
+  }
+  assert.ok(db.prepare("SELECT body FROM afp_preference_audit").all().some(r=>JSON.parse(r.body).source === "voice coordinator"));
   await page.evaluate(() => {
     const event={type:"response.done",response:{id:"synthetic-afp",status:"completed",output:[{type:"function_call",status:"completed",name:"record_afp_note",call_id:"browser-afp",arguments:JSON.stringify({kind:"recommendation",title:"Private feature previews",content:"Preview extensions and their costs before activation."})}]}};
     window.__voiceEvent(event);window.__voiceEvent(event);
@@ -263,7 +284,16 @@ try {
   await page.getByRole("button",{name:"Save readiness review",exact:true}).click();
   await page.getByText("AFP control-plane record saved.",{exact:true}).waitFor();
   await tab("AFP Features").click();
-  await page.getByRole("heading",{name:"No AFP-created features yet",exact:true}).waitFor();
+  await page.getByRole("heading",{name:"No additional feature definitions",exact:true}).waitFor();
+  await page.locator(".afp-private-preference").getByText("Text / Text Chat",{exact:true}).waitFor();
+  await page.locator(".afp-private-preference").screenshot({path:"artifacts/production/afp-private-feature-mobile.png"});
+  await page.getByRole("button",{name:"Disable private preference",exact:true}).click();
+  await page.locator(".afp-private-preference").getByText("Default / Text Chat",{exact:true}).waitFor();
+  await page.getByRole("button",{name:"Remove private preference",exact:true}).click();
+  await page.getByRole("button",{name:"View preference history",exact:true}).click();
+  await page.locator(".afp-private-preference li").first().waitFor();
+  const checkPage=await context.newPage();await checkPage.goto("http://127.0.0.1:3198/coordinator");
+  await checkPage.getByRole("button",{name:"Text Chat",exact:true}).waitFor();await checkPage.close();
   await page.getByRole("button",{name:"New manifest draft",exact:true}).click();
   await page.getByRole("button",{name:"Validate manifest",exact:true}).click();
   await page.getByRole("status").filter({hasText:"Compatible"}).waitFor();

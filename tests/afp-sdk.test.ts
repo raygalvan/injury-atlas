@@ -131,6 +131,9 @@ test("AFP SDK v0.1 enforces schema, tenancy, policy, revisions, resources and no
         "inspectRenderingRecipe",
         "listManifests",
         "saveManifest",
+        "readPrivatePresentation",
+        "setPrivatePresentation",
+        "privatePresentationHistory",
       ].sort(),
     );
     assert.equal(

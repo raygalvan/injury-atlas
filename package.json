@@ -13,7 +13,8 @@
     "build:atlas": "node scripts/build-atlas.mjs",
     "start": "node --import tsx server/index.ts",
     "test": "node --import tsx --test tests/*.test.ts",
-    "bootstrap": "node --import tsx server/bootstrap.ts"
+    "bootstrap": "node --import tsx server/bootstrap.ts",
+    "afp:context": "node --import tsx scripts/afp-context.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.124.0",

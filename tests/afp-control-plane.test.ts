@@ -60,7 +60,7 @@ test("AFP registries enforce governance, preserve durable state and never activa
   try {
     const c = readControlPlane(db);
     assert.equal(c.readiness.length, 19);
-    assert.equal(c.extensionPoints.length, 11);
+    assert.equal(c.extensionPoints.length, 12);
     assert.equal(c.features.length, 0);
     assert.equal(new Set(c.readiness.map((r) => r.id)).size, 19);
     for (const r of c.readiness)

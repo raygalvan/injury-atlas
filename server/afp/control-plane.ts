@@ -74,6 +74,8 @@ export function readControlPlane(db: Store): AfpControlPlane {
     sdkBoundary: {
       version: AFP_VERSION,
       contract: RENDERING_CONTRACT,
+      contracts: [RENDERING_CONTRACT, "injury.bot.assistant.presentation/0.1"],
+      privatePresentation: true,
       implemented: true,
       executable: false,
     },
@@ -98,7 +100,7 @@ export function readControlPlane(db: Store): AfpControlPlane {
         .filter((p) => p.locked)
         .every((p) => p.level === "Protected"),
       label:
-        "Core policies locked; recipe-inspection SDK permissions enforced; arbitrary execution unavailable",
+        "Core policies locked; recipe-inspection and private presentation SDK permissions enforced; arbitrary execution unavailable",
     },
     externalResources: {
       provisionable: false,

@@ -1,3 +1,4 @@
+import { developmentContext } from "./development-context";
 import { ensureSdk, sdkRoutes } from "./sdk";
 import {
   ensureControlPlane,
@@ -191,7 +192,7 @@ export function afpContext(db: Store, u: User) {
     JSON.stringify(data.direction.vision) +
     "\nCurrent priorities: " +
     JSON.stringify(data.direction.priorities) +
-    "\nThe target architecture is Base Application + Isolated Extensions; a customization does not require cloning the entire app. AFP MCP is intelligence/orchestration, AFP SDK is the trusted application interface, the manifest contains developer rules, extension points define attachment surfaces, feature packages carry individualized changes and the resource layer can eventually provide separate infrastructure. Readiness, policies, resource definitions and feature records are authoritative planning data, not permission to execute. read_afp_memory now includes controlPlane: use its statuses, evidence, dependencies, policy levels, resources and features when advising. For a private GPU renderer, discuss rendering-pipeline as a candidate boundary, scope the returned artifacts to the requesting user/case, preserve evidence and review gates, and evaluate gpu-compute and dedicated-runtime policy. Manifest injury.bot.afp/0.1 and its validator now exist. Internal SDK v0.1 enforces one rendering-pipeline recipe-inspection contract with Private/Firm ownership, current policies, exact application-version compatibility and audit. Preflight checks supplied numeric recipe constraints only, not geometry or clinical correctness. It does not render, queue jobs or read evidence. Community/Official scopes cannot be installed. Arbitrary AFP code execution, MCP orchestration, GPU provisioning, isolated runtime and dynamic attachment are not connected. Check the current registry before claiming availability; never treat a draft feature or manifest as executable.\nCurrent AFP state: " +
+    "\nThe target architecture is Base Application + Isolated Extensions; a customization does not require cloning the entire app. AFP MCP is intelligence/orchestration, AFP SDK is the trusted application interface, the manifest contains developer rules, extension points define attachment surfaces, feature packages carry individualized changes and the resource layer can eventually provide separate infrastructure. Readiness, policies, resource definitions and feature records are authoritative planning data, not permission to execute. read_afp_memory now includes controlPlane: use its statuses, evidence, dependencies, policy levels, resources and features when advising. For a private GPU renderer, discuss rendering-pipeline as a candidate boundary, scope the returned artifacts to the requesting user/case, preserve evidence and review gates, and evaluate gpu-compute and dedicated-runtime policy. Manifest injury.bot.afp/0.1 and its validator now exist. Internal SDK v0.1 enforces a rendering-pipeline recipe-inspection contract with Private/Firm ownership, current policies, exact application-version compatibility and audit. A second assistant-presentation contract permits only a private plain-text Coordinator tab label via set_private_afp_ui_preference, using authenticated ownership and the same manifest/policy/compatibility checks. Disabling/removing restores Text Chat. It is declarative configuration, not code execution. Coding agents can read product-only journal proposals at the super-admin development-context endpoint or npm run afp:context; proposals remain unapproved until reviewed. Preflight checks supplied numeric recipe constraints only, not geometry or clinical correctness. It does not render, queue jobs or read evidence. Community/Official scopes cannot be installed. Arbitrary AFP code execution, MCP orchestration, GPU provisioning, isolated runtime and dynamic attachment are not connected. Check the current registry before claiming availability; never treat a draft feature or manifest as executable.\nCurrent AFP state: " +
     JSON.stringify({
       overall: data.controlPlane.overall,
       readiness: data.controlPlane.readiness.map((r) => ({
@@ -203,7 +204,7 @@ export function afpContext(db: Store, u: User) {
         level: p.level,
       })),
       runtime: data.controlPlane.runtime,
-        sdkBoundary: data.controlPlane.sdkBoundary,
+      sdkBoundary: data.controlPlane.sdkBoundary,
       featureCount: data.controlPlane.featureCount,
     }) +
     "\n"
@@ -288,6 +289,15 @@ export function afpRoutes(
   };
   controlPlaneRoutes(app, db, staff, admin);
   sdkRoutes(app, db, staff);
+  app.get(
+    "/api/settings/afp/development-context",
+    staff,
+    admin,
+    (_req, res) => {
+      requireAdmin(db, res.locals.user);
+      res.set("Cache-Control", "no-store").json(developmentContext(db));
+    },
+  );
   app.get("/api/settings/afp", staff, admin, (req, res) => {
     const page = z.coerce
       .number()
@@ -330,11 +340,9 @@ export function afpRoutes(
         .run(value.vision, value.priorities, Date.now(), value.revision);
       if (!r.changes) {
         db.exec("ROLLBACK");
-        return res
-          .status(409)
-          .json({
-            error: "AFP direction changed. Refresh before saving your edits.",
-          });
+        return res.status(409).json({
+          error: "AFP direction changed. Refresh before saving your edits.",
+        });
       }
       history(
         db,
@@ -376,11 +384,9 @@ export function afpRoutes(
         );
       if (!r.changes) {
         db.exec("ROLLBACK");
-        return res
-          .status(409)
-          .json({
-            error: "This AFP record changed. Refresh before saving your edits.",
-          });
+        return res.status(409).json({
+          error: "This AFP record changed. Refresh before saving your edits.",
+        });
       }
       db.prepare(
         "INSERT INTO afp_entry_governance(id,reviewed_by,reviewed_at,actor,source) SELECT id,?,?,actor,source FROM afp_entries WHERE id=? ON CONFLICT(id) DO UPDATE SET reviewed_by=excluded.reviewed_by,reviewed_at=excluded.reviewed_at",

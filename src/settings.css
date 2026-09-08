@@ -628,3 +628,10 @@ tr.is-near td {
 .afp-manifest-inspector label { display:grid; gap:8px; margin-top:16px; }
 .afp-manifest-inspector textarea { width:100%; min-width:0; padding:12px; box-sizing:border-box; font:12px/1.5 monospace; resize:vertical; border:1px solid #cbd3ce; border-radius:8px; }
 .afp-manifest-inspector article { overflow-wrap:anywhere; border-top:1px solid #d9dfda; padding:12px 0; }
+
+.afp-private-preference {border:1px solid var(--line, #d9ded8);border-radius:12px;padding:18px;margin-bottom:24px;overflow-wrap:anywhere;}
+.afp-private-preference dl {display:grid;grid-template-columns:minmax(100px,180px) minmax(0,1fr);gap:8px 16px;}
+.afp-private-preference dd {margin:0;}
+.afp-private-preference .actions {display:flex;flex-wrap:wrap;gap:10px;}
+.afp-private-preference button {min-height:44px;}
+@media(max-width:600px){.afp-private-preference dl{grid-template-columns:minmax(0,1fr);} .afp-private-preference dd{margin-bottom:8px;}}
