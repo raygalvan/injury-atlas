@@ -40,3 +40,11 @@ New geometry records carry a SHA-256 signature of the atlas catalogue and every 
 ## Panel restoration
 
 The original Client Injuries / Apply Injuries layout and CSS from the pre-production panel are restored. Find/Describe, the catalogue checklist, missing-injury card, queued rows, isolation and mobile controls remain. The panel receives actual catalogue records and durable job stages from the host. Server acknowledgements and failures are shown in place without a redirect into a technical form.
+
+## AI library authoring and unknown client facts
+
+All staff can start a private library definition with one generic injury name. The same Injury Creation Agent researches the definition and medical references in a separate case-free context. Revisions create new private entries; case submissions queue only the generic name and keep the private case record intact. No description, bibliography, geometry type or clinical form is required. Platform administrators still review and approve shared publication.
+
+`injury_library_jobs` persists the research queue and notification outbox independently of browser sessions. Entries show queued/running, failed/retry, or ready-for-review status. A definition cannot be approved while generation is incomplete. Only actual provider web-search citations to permitted medical sources populate its references; missing citations cause a retryable research failure, never a request for the attorney to write a bibliography. Completion emails link to the authorized library entry. Existing library records remain intact. No EC2 configuration change is required.
+
+The case agent accepts null/omitted unknown client effects, impact citations, evidence IDs, source citations and measurement citations as empty values. Required anatomy and medical output remain validated. A regression fixture mirrors the null response observed in the live patellar-fracture request, and the geometry/browser proof uses that response shape end to end. Tests use a synthetic provider and never send email.

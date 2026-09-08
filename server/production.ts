@@ -72,6 +72,13 @@ export function ensureProduction(db: Store) {
  CREATE TABLE IF NOT EXISTS injury_artifacts(id TEXT PRIMARY KEY,production_id TEXT NOT NULL REFERENCES injury_production(id),evidence_id TEXT NOT NULL REFERENCES evidence(id),kind TEXT NOT NULL,UNIQUE(production_id,kind));
  CREATE TABLE IF NOT EXISTS injury_publications(id TEXT PRIMARY KEY,production_id TEXT,creator TEXT NOT NULL,firm_id TEXT NOT NULL,name TEXT NOT NULL,description TEXT NOT NULL,medical_references TEXT NOT NULL,kind TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'submitted',reviewer TEXT,review_note TEXT NOT NULL DEFAULT '',created INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS injury_notifications(id TEXT PRIMARY KEY,production_id TEXT NOT NULL REFERENCES injury_production(id),state TEXT NOT NULL DEFAULT 'pending',attempts INTEGER NOT NULL DEFAULT 0,next_attempt INTEGER NOT NULL DEFAULT 0);`);
+  db.exec(`CREATE TABLE IF NOT EXISTS injury_library_jobs(
+    publication_id TEXT PRIMARY KEY REFERENCES injury_publications(id),
+    request TEXT NOT NULL,state TEXT NOT NULL DEFAULT 'queued',
+    stage TEXT NOT NULL DEFAULT 'Waiting for Injury Creation Agent',
+    error TEXT NOT NULL DEFAULT '',updated INTEGER NOT NULL,
+    notification TEXT NOT NULL DEFAULT 'none',notification_attempts INTEGER NOT NULL DEFAULT 0,
+    next_notification INTEGER NOT NULL DEFAULT 0);`);
   db.exec(
     "CREATE TABLE IF NOT EXISTS platform_admins(user_id TEXT PRIMARY KEY REFERENCES users(id))",
   );

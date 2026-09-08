@@ -1,3 +1,8 @@
+import {
+  claimLibraryJob,
+  processLibraryDefinition,
+  notifyLibraryNext,
+} from "./library-agent";
 import { runInjuryAgent } from "./injury-agent";
 import { signatureFor } from "./anatomy-compatibility";
 import { rasterImage } from "./raster-image";
@@ -21,7 +26,7 @@ import {
   type EvidenceStorage,
 } from "./evidence-storage";
 import { injuryDocuments } from "./injury-documents";
-import { sendProductionComplete } from "./email";
+import { sendProductionComplete, sendLibraryComplete } from "./email";
 const sha = (b: Buffer) => createHash("sha256").update(b).digest("hex");
 export async function saveArtifact(
   db: Store,
@@ -455,7 +460,11 @@ export async function processProduction(
     }
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Production failed";
+      error instanceof z.ZodError || error instanceof SyntaxError
+        ? "The agent returned an incomplete response. Retry production; no additional medical fields are required."
+        : error instanceof Error
+          ? error.message
+          : "Production failed";
     db.prepare(
       "UPDATE injury_production SET state='failed',stage='Needs attention',error=?,updated=? WHERE id=?",
     ).run(
@@ -548,10 +557,21 @@ if (
         sendProductionComplete,
         process.env.APP_URL || "http://localhost:5173",
       );
+      await notifyLibraryNext(
+        db,
+        sendLibraryComplete,
+        process.env.APP_URL || "http://localhost:5173",
+      );
       const job = claimJob(db);
       if (job) {
         const watchdog = setTimeout(() => process.exit(1), 18 * 60000);
         await processProduction(db, storage, job.id);
+        clearTimeout(watchdog);
+      }
+      const libraryJob = claimLibraryJob(db);
+      if (libraryJob) {
+        const watchdog = setTimeout(() => process.exit(1), 8 * 60000);
+        await processLibraryDefinition(db, libraryJob.publication_id);
         clearTimeout(watchdog);
       }
     } finally {

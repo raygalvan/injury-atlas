@@ -1342,6 +1342,18 @@ button.danger {
   overflow: auto;
   padding: 28px !important;
 }
+.production-form.card {
+  width: 100% !important;
+  max-width: 850px;
+  max-height: none;
+  overflow: visible;
+  margin-bottom: 18px;
+}
+.production-library .card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 24px;
+}
 .production-form label {
   display: flex;
   flex-direction: column;

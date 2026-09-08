@@ -24,6 +24,12 @@ export async function sendLink(email: string, url: string) {
 }
 
 export async function sendProductionComplete(email: string, url: string) {
+  return sendCompletion(email, url, false);
+}
+export async function sendLibraryComplete(email: string, url: string) {
+  return sendCompletion(email, url, true);
+}
+async function sendCompletion(email: string, url: string, library: boolean) {
   if (process.env.NODE_ENV !== "production")
     throw new Error("Completion emails are disabled outside production");
   if (!process.env.SES_FROM_EMAIL)
@@ -36,10 +42,16 @@ export async function sendProductionComplete(email: string, url: string) {
       Destination: { ToAddresses: [email] },
       Content: {
         Simple: {
-          Subject: { Data: "Your injury.bot files are ready for review" },
+          Subject: {
+            Data: library
+              ? "Your injury.bot library definition is ready for review"
+              : "Your injury.bot files are ready for review",
+          },
           Body: {
             Text: {
-              Data: `Your injury production request is complete. The generated files are saved in your private case Evidence library. Sign in to review them and approve any atlas placement.\n\n${url}\n\nThis link does not grant access to anyone outside your authorized workspace.`,
+              Data: library
+                ? `The Injury Creation Agent has prepared your generic medical definition and cited references. Sign in to review the result in your injury library. It remains private until approved for sharing.\n\n${url}\n\nThis link requires access to your authorized workspace.`
+                : `Your injury production request is complete. The generated files are saved in your private case Evidence library. Sign in to review them and approve any atlas placement.\n\n${url}\n\nThis link does not grant access to anyone outside your authorized workspace.`,
             },
           },
         },

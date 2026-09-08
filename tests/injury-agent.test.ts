@@ -26,10 +26,10 @@ const result = {
   medicalDescription:
     "Attorney describes a broken kneecap. No source records were supplied.",
   generalDefinition: "A fracture of the patella.",
-  clientImpact: "",
-  impactCitation: "",
-  evidenceId: "",
-  citation: "",
+  clientImpact: null,
+  impactCitation: null,
+  evidenceId: null,
+  citation: null,
   demandNarrative:
     "The described injury requires review against the medical records.",
   uncertainties: ["Side and fracture pattern are unspecified."],
@@ -43,10 +43,10 @@ const result = {
     widthMm: null,
     heightMm: null,
     depthMm: null,
-    measurementCitation: "",
+    measurementCitation: null,
   },
 };
-test("one plain-language request produces a complete registered plan without physician fields", async () => {
+test("null client facts from the live AI response produce a registered plan without physician fields", async () => {
   const db = openStore(":memory:");
   ensureInjuryTables(db);
   ensureProduction(db);
@@ -88,7 +88,13 @@ test("one plain-language request produces a complete registered plan without phy
   const plan = await runInjuryAgent(db, {} as any, r, () => {}, client, atlas);
   assert.equal(plan.body.recipe!.parentId, "FJ3275");
   assert.equal(plan.body.recipe!.kind, "fracture");
-  assert.equal(plan.body.evidenceId, "");
+  for (const key of [
+    "clientImpact",
+    "impactCitation",
+    "evidenceId",
+    "citation",
+  ] as const)
+    assert.equal(plan.body[key], "");
   assert(plan.body.agentNotes!.includes("Side is unspecified"));
   assert(plan.body.measurementBasis.includes("illustrative"));
   assert.deepEqual(plan.body.recipe!.normal, [0, 1, 0]);
