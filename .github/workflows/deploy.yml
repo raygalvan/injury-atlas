@@ -17,6 +17,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      actions: write
     env:
       AWS_REGION: us-east-2
       AWS_DEPLOY_SECURITY_GROUP_ID: ${{ vars.AWS_DEPLOY_SECURITY_GROUP_ID }}
@@ -77,6 +78,10 @@ jobs:
           test -n "$APP_URL"
           curl --fail --silent --show-error "$APP_URL/api/health" > health.json
           node -e 'const h=require("./health.json");if(!h.ok||!h.atlasReady||!h.productionWorkerReady||h.release!==process.env.RELEASE_SHA)process.exit(1);console.log("Injury Creation Agent configured:",h.injuryAgentConfigured===true)'
+      - name: Start owner development worker after verified deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run afp-development.yml --ref main
       - name: Remove temporary runner SSH access
         if: ${{ always() && steps.aws.outcome == 'success' && steps.access.outcome != 'skipped' }}
         run: python3 deploy/runner-access.py close
