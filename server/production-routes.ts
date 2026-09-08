@@ -38,7 +38,7 @@ export function productionRoutes(
     res.json({
       parts,
       platformAdmin: isPlatformAdmin(db, res.locals.user),
-      renderers: ["abrasion", "subarachnoid", "fracture"],
+      injuryAgentConfigured: !!process.env.ANTHROPIC_API_KEY,
     });
   });
   app.get("/api/cases/:caseId/production", staff, (req, res) =>
@@ -231,7 +231,7 @@ export function productionRoutes(
         images.push(await storage.get(String(a.file)));
       const ai = db
         .prepare(
-          "SELECT e.file FROM evidence e JOIN injury_artifacts a ON a.evidence_id=e.id WHERE a.production_id=? AND a.kind='ai-draft'",
+          "SELECT e.file FROM evidence e JOIN injury_artifacts a ON a.evidence_id=e.id WHERE a.production_id=? AND a.kind IN ('ai-draft','agent-plan')",
         )
         .get(r.id);
       const demand = ai

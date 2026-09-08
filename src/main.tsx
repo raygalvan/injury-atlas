@@ -53,6 +53,7 @@ function App() {
     [evidence, setEvidence] = useState<Evidence[]>([]),
     [findings, setFindings] = useState<Finding[]>([]),
     [productions, setProductions] = useState<ProductionRecord[]>([]),
+    [injuryAgentReady, setInjuryAgentReady] = useState<boolean | null>(null),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [dialog, setDialog] = useState(""),
@@ -125,6 +126,10 @@ function App() {
     loadDetails().catch((e) => setError(e.message));
   }, [caseId, member]);
   useEffect(() => {
+    if (view === "agents")
+      api("/production-capabilities")
+        .then((d) => setInjuryAgentReady(d.injuryAgentConfigured))
+        .catch(() => setInjuryAgentReady(false));
     if (member && caseId) loadDetails().catch((e) => setError(e.message));
   }, [view]);
   useEffect(() => {
@@ -809,18 +814,34 @@ function App() {
           {view === "agents" && (
             <>
               <p className="intro">
-                The Coordinator will direct the specialist team. Agent execution
-                is not enabled in this foundation.
+                Describe the injury in ordinary language. The Injury Creation
+                Agent handles evidence reading, medical documentation, anatomy
+                selection and geometric production in the background.
               </p>
+              <article className="card">
+                <Bot />
+                <h2>Injury Creation Agent</h2>
+                <span className="badge">
+                  {injuryAgentReady === null
+                    ? "Checking connection"
+                    : injuryAgentReady
+                      ? "Assigned to injury creation"
+                      : "AI connection required"}
+                </span>
+                <p>
+                  Reads available case evidence, prepares the injury
+                  explanation, builds a registered illustration and delivers the
+                  files to Evidence. You review and apply the result.
+                </p>
+                <button onClick={() => go("atlas")}>
+                  Open injury application panel
+                </button>
+              </article>
               <div className="case-grid">
                 {[
                   "Case Coordinator",
-                  "Medical Evidence",
-                  "Anatomy Placement",
-                  "Injury Rendering",
                   "Evidence Reconciliation",
                   "Reconstruction",
-                  "Exhibit",
                 ].map((n) => (
                   <article className="card" key={n}>
                     <Bot />

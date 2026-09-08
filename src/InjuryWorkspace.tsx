@@ -35,7 +35,7 @@ const blank: ProductionInput = {
   citation: "",
   measurementBasis: "",
   recipe: null,
-  useAI: false,
+  useAI: true,
 };
 export function InjuryWorkspace({
   caseId,
@@ -295,6 +295,14 @@ export function InjuryWorkspace({
                 )}
                 <p>{current.body.description}</p>
                 <dl>
+                  {current.body.agentNotes && (
+                    <>
+                      <dt>Agent review notes</dt>
+                      <dd style={{ whiteSpace: "pre-wrap" }}>
+                        {current.body.agentNotes}
+                      </dd>
+                    </>
+                  )}
                   <dt>Medical explanation</dt>
                   <dd>{current.body.medicalDescription || "Not supplied"}</dd>
                   <dt>Medical references</dt>
@@ -473,8 +481,8 @@ export function InjuryWorkspace({
                       setSubmitFor(current.id);
                       setPub({
                         name: current.body.name,
-                        description: "",
-                        medicalReferences: "",
+                        description: current.body.generalDefinition || "",
+                        medicalReferences: current.body.generalReferences || "",
                         kind: current.body.recipe?.kind || "documentation",
                       });
                     }}
@@ -610,15 +618,15 @@ export function InjuryWorkspace({
             onSubmit={(e) => {
               e.preventDefault();
               void run(async () => {
-                const r = await api(
-                  `/cases/${caseId}/production${editId ? `/${editId}/update` : ""}`,
-                  draft,
-                );
+                const r = await api(`/cases/${caseId}/injuries/generate`, {
+                  name: draft.description.trim().slice(0, 160),
+                  description: draft.description,
+                });
                 setSelected(r.id);
                 setDraft(null);
                 setTab("private");
                 setNotice(
-                  "Draft saved. Start production when the details are ready.",
+                  "Injury Creation Agent assigned. Results will appear in Evidence and you will be notified by email.",
                 );
               });
             }}
@@ -630,292 +638,21 @@ export function InjuryWorkspace({
               </button>
             </div>
             <label>
-              Injury name
-              <input
-                required
-                maxLength={160}
-                value={draft.name}
-                onChange={(e) => set("name", e.target.value)}
-              />
-            </label>
-            <label>
-              What is documented?
+              Describe the injury
               <textarea
                 required
                 value={draft.description}
                 onChange={(e) => set("description", e.target.value)}
-                placeholder="Describe the injury, including known location and uncertainty."
+                placeholder="For example: broken kneecap"
               />
             </label>
-            <div className="production-fields">
-              <label>
-                Source evidence
-                <select
-                  value={draft.evidenceId}
-                  onChange={(e) => set("evidenceId", e.target.value)}
-                >
-                  <option value="">Choose evidence later</option>
-                  {evidence.map((e) => (
-                    <option key={e.id} value={e.id}>
-                      {e.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Page, image or timestamp citation
-                <input
-                  value={draft.citation}
-                  onChange={(e) => set("citation", e.target.value)}
-                />
-              </label>
-            </div>
-            <label>
-              Medical explanation
-              <textarea
-                value={draft.medicalDescription}
-                onChange={(e) => set("medicalDescription", e.target.value)}
-              />
-            </label>
-            <label>
-              Medical references
-              <textarea
-                value={draft.medicalReferences}
-                onChange={(e) => set("medicalReferences", e.target.value)}
-              />
-            </label>
-            <div className="production-fields">
-              <label>
-                Effects on this client
-                <textarea
-                  value={draft.clientImpact}
-                  onChange={(e) => set("clientImpact", e.target.value)}
-                />
-              </label>
-              <label>
-                Source supporting those effects
-                <textarea
-                  required={!!draft.clientImpact}
-                  value={draft.impactCitation}
-                  onChange={(e) => set("impactCitation", e.target.value)}
-                />
-              </label>
-            </div>
-            <label className="production-check">
-              <input
-                type="checkbox"
-                checked={draft.useAI}
-                onChange={(e) => set("useAI", e.target.checked)}
-              />{" "}
-              Draft medical description and demand narrative with AI from the
-              supplied material
-            </label>
-            <label>
-              Production method
-              <select
-                aria-label="Production method"
-                value={draft.recipe?.kind || "documentation"}
-                onChange={(e) =>
-                  set(
-                    "recipe",
-                    e.target.value === "documentation"
-                      ? null
-                      : {
-                          kind: e.target.value,
-                          parentId: "",
-                          center: [0, 0, 0],
-                          normal: [0, 0, 1],
-                          widthMm: 20,
-                          heightMm: 20,
-                          depthMm: e.target.value === "abrasion" ? 0 : 1,
-                        },
-                  )
-                }
-              >
-                <option value="documentation">Documentation only</option>
-                <option value="abrasion">Surface abrasion illustration</option>
-                <option value="subarachnoid">
-                  Subarachnoid surface blood layer
-                </option>
-                <option value="fracture">Individual rib fracture</option>
-              </select>
-            </label>
-            {draft.recipe && (
-              <fieldset>
-                <legend>Measured reference anatomy placement</legend>
-                <p>
-                  Values are illustrative defaults until you replace and
-                  document them. Atlas coordinates are in meters; injury
-                  dimensions are in millimeters. These are reference anatomy
-                  measurements, not patient-specific geometry.
-                </p>
-                <label>
-                  Filter anatomy
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </label>
-                <label>
-                  Target structure
-                  <select
-                    aria-label="Target structure"
-                    required
-                    value={draft.recipe.parentId}
-                    onChange={(e) => {
-                      const part = parts.find((p) => p.id === e.target.value)!;
-                      set("recipe", {
-                        ...draft.recipe,
-                        parentId: part.id,
-                        center: [
-                          (part.bounds[0][0] + part.bounds[1][0]) / 2,
-                          (part.bounds[0][1] + part.bounds[1][1]) / 2,
-                          part.bounds[1][2],
-                        ],
-                      });
-                    }}
-                  >
-                    <option value="">Select a structure</option>
-                    {eligible
-                      .filter(
-                        (p) =>
-                          p.name.toLowerCase().includes(search.toLowerCase()) ||
-                          p.id === draft.recipe?.parentId,
-                      )
-                      .map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name} ({p.id})
-                        </option>
-                      ))}
-                  </select>
-                </label>
-                {draft.recipe.parentId && (
-                  <>
-                    <p>
-                      <strong>
-                        Click the injury location on the anatomy below.
-                      </strong>{" "}
-                      Drag to rotate and scroll or pinch to zoom. Your click
-                      records a surface point and direction.
-                    </p>
-                    <iframe
-                      ref={placementFrame}
-                      key={draft.recipe.parentId}
-                      title="Choose injury placement on actual anatomy"
-                      style={{
-                        width: "100%",
-                        height: 420,
-                        border: "1px solid #ccd3c8",
-                        borderRadius: 10,
-                      }}
-                      src={`/atlas-engine/index.html?embed=injurybot&parentOrigin=${encodeURIComponent(location.origin)}&caseId=${caseId}&caseTitle=Injury%20placement&placement=${draft.recipe.parentId}`}
-                    />
-                  </>
-                )}
-                <details>
-                  <summary>Exact position and direction</summary>
-                  <div className="production-fields">
-                    {(
-                      ["X coordinate", "Y coordinate", "Z coordinate"] as const
-                    ).map((label, i) => (
-                      <label key={label}>
-                        {label}
-                        <input
-                          type="number"
-                          step="0.0001"
-                          required
-                          value={draft.recipe!.center[i]}
-                          onChange={(e) => {
-                            const center = [...draft.recipe!.center];
-                            center[i] = Number(e.target.value);
-                            set("recipe", { ...draft.recipe, center });
-                          }}
-                        />
-                      </label>
-                    ))}
-                  </div>
-                  <label>
-                    {draft.recipe.kind === "fracture"
-                      ? "Fracture plane normal"
-                      : "Surface direction"}
-                    <select
-                      value={draft.recipe.normal.join(",")}
-                      onChange={(e) =>
-                        set("recipe", {
-                          ...draft.recipe,
-                          normal: e.target.value.split(",").map(Number),
-                        })
-                      }
-                    >
-                      {![
-                        "0,0,1",
-                        "0,0,-1",
-                        "1,0,0",
-                        "-1,0,0",
-                        "0,1,0",
-                        "0,-1,0",
-                      ].includes(draft.recipe.normal.join(",")) && (
-                        <option value={draft.recipe.normal.join(",")}>
-                          Picked surface direction
-                        </option>
-                      )}
-                      {[
-                        ["0,0,1", "Anterior"],
-                        ["0,0,-1", "Posterior"],
-                        ["1,0,0", "Left"],
-                        ["-1,0,0", "Right"],
-                        ["0,1,0", "Superior"],
-                        ["0,-1,0", "Inferior"],
-                      ].map(([v, l]) => (
-                        <option key={v} value={v}>
-                          {l}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </details>
-                <div className="production-fields">
-                  {(["widthMm", "heightMm", "depthMm"] as const).map((key) => (
-                    <label key={key}>
-                      {key === "depthMm"
-                        ? draft.recipe?.kind === "fracture"
-                          ? "Fracture gap (mm)"
-                          : "Layer thickness (mm)"
-                        : key === "widthMm"
-                          ? "Width (mm)"
-                          : "Height (mm)"}
-                      <input
-                        type="number"
-                        step="0.1"
-                        min={key === "depthMm" ? 0 : 0.1}
-                        max={key === "depthMm" ? 10 : 250}
-                        disabled={
-                          key === "depthMm" && draft.recipe?.kind === "abrasion"
-                        }
-                        value={draft.recipe![key]}
-                        onChange={(e) =>
-                          set("recipe", {
-                            ...draft.recipe,
-                            [key]: Number(e.target.value),
-                          })
-                        }
-                      />
-                    </label>
-                  ))}
-                </div>
-                <label>
-                  Measurement source and illustrative assumptions
-                  <textarea
-                    required
-                    value={draft.measurementBasis}
-                    onChange={(e) => set("measurementBasis", e.target.value)}
-                    placeholder="Cite documented dimensions. Identify any illustrative dimensions or placement estimates explicitly."
-                  />
-                </label>
-              </fieldset>
-            )}
+            <p>
+              The Injury Creation Agent reads available case evidence, prepares
+              the medical explanation, and builds the anatomical illustration.
+              You review the result. You can leave while it works.
+            </p>
             <button disabled={busy} type="submit">
-              Save injury draft
+              Send to Injury Creation Agent
             </button>
             {error && (
               <p role="alert" className="error">
@@ -984,19 +721,6 @@ export function InjuryWorkspace({
                   setPub({ ...pub, medicalReferences: e.target.value })
                 }
               />
-            </label>
-            <label>
-              Rendering capability
-              <select
-                value={pub.kind}
-                onChange={(e) => setPub({ ...pub, kind: e.target.value })}
-              >
-                {["documentation", "abrasion", "subarachnoid", "fracture"].map(
-                  (k) => (
-                    <option key={k}>{k}</option>
-                  ),
-                )}
-              </select>
             </label>
             <div className="production-actions">
               <button disabled={busy}>Submit for review</button>

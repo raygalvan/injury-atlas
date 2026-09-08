@@ -36,6 +36,10 @@ export const productionSchema = z
     measurementBasis: z.string().max(2000).default(""),
     recipe: recipeSchema.nullable().default(null),
     useAI: z.boolean().default(false),
+    agentManaged: z.boolean().optional(),
+    agentNotes: z.string().max(8000).optional(),
+    generalDefinition: z.string().max(8000).optional(),
+    generalReferences: z.string().max(8000).optional(),
   })
   .refine((d) => !d.clientImpact || !!d.impactCitation, {
     message: "Client impact needs a source citation",

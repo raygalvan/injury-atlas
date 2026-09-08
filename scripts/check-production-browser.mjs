@@ -108,6 +108,65 @@ try {
       "UPDATE injury_production SET applied=1,source_review=1,placement_review=1,render_review=1 WHERE id=?",
     ).run(r.id);
   }
+  const knee = createProduction(
+    db,
+    u,
+    "synthetic-case",
+    productionSchema.parse({
+      name: "broken kneecap",
+      description: "broken kneecap",
+      agentManaged: true,
+      useAI: true,
+    }),
+  );
+  let agentCalls = 0;
+  await processProduction(db, storage, knee.id, undefined, {
+    messages: {
+      create: async () => {
+        agentCalls++;
+        return {
+          content:
+            agentCalls === 1
+              ? [
+                  {
+                    type: "text",
+                    text: JSON.stringify({
+                      name: "Patellar fracture",
+                      medicalDescription:
+                        "Synthetic attorney-described kneecap fracture; no case evidence.",
+                      generalDefinition: "A fracture of the patella.",
+                      clientImpact: "",
+                      impactCitation: "",
+                      evidenceId: "",
+                      citation: "",
+                      demandNarrative: "Synthetic documentation only.",
+                      uncertainties: ["Side and fracture pattern are unknown."],
+                      placement: {
+                        method: "fracture",
+                        structureId: "FJ3275",
+                        anchorId: null,
+                        laterality: "unknown",
+                        orientation: "transverse",
+                        surface: "anterior",
+                        widthMm: null,
+                        heightMm: null,
+                        depthMm: null,
+                        measurementCitation: "",
+                      },
+                    }),
+                  },
+                ]
+              : [],
+        };
+      },
+    },
+  });
+  const kneeResult = productionRecord(db, knee.id);
+  assert.equal(kneeResult.state, "complete", kneeResult.error);
+  assert.equal(kneeResult.body.recipe.parentId, "FJ3275");
+  assert(kneeResult.assets.some((a) => a.kind === "geometry"));
+  assert.equal(kneeResult.source_review, 0);
+  assert.equal(kneeResult.applied, 0);
   browser = await chromium.launch({
     args: [
       "--no-sandbox",
@@ -148,20 +207,18 @@ try {
     .getByRole("button", { name: "Create injury", exact: true })
     .click();
   await page
-    .getByLabel("Injury name", { exact: true })
-    .fill("Synthetic placement test");
-  await page
-    .getByLabel("Production method", { exact: true })
-    .selectOption("fracture");
-  await page
-    .getByLabel("Target structure", { exact: true })
-    .selectOption("FJ3229");
-  const placement = page.frameLocator(
-    'iframe[title="Choose injury placement on actual anatomy"]',
+    .getByLabel("Describe the injury", { exact: true })
+    .fill("broken kneecap");
+  assert.equal(
+    await page.getByLabel("Production method", { exact: true }).count(),
+    0,
   );
-  await placement.locator(".loading").waitFor({ state: "hidden" });
+  assert.equal(
+    await page.getByLabel("Target structure", { exact: true }).count(),
+    0,
+  );
   await page.screenshot({
-    path: "artifacts/production/placement.png",
+    path: "artifacts/production/plain-language-create.png",
     fullPage: true,
   });
   await page.getByRole("button", { name: "Close", exact: true }).click();
@@ -181,28 +238,79 @@ try {
   const frame = page.frameLocator("iframe");
   await frame.locator('[data-production-count="3"]').waitFor();
   await frame
-    .getByRole("button", { name: "Left second rib", exact: true })
+    .getByRole("button", { name: "Synthetic fracture proof", exact: true })
     .click();
   await page.screenshot({
     path: "artifacts/production/fracture-applied.png",
     fullPage: true,
   });
   await frame
-    .getByRole("button", { name: "Left superior frontal gyrus", exact: true })
+    .getByRole("button", { name: "Synthetic subarachnoid proof", exact: true })
     .click();
   await page.screenshot({
     path: "artifacts/production/brain-applied.png",
     fullPage: true,
   });
-  await frame.getByRole("button", { name: "Skin", exact: true }).click();
+  await frame
+    .getByRole("button", { name: "Synthetic abrasion proof", exact: true })
+    .click();
   await frame.getByRole("button", { name: "back view", exact: true }).click();
   await page.screenshot({
     path: "artifacts/production/abrasion-applied.png",
     fullPage: true,
   });
+  await frame.getByRole("tab", { name: "Apply Injuries", exact: true }).click();
+  await frame.getByRole("tab", { name: /Find matching/ }).waitFor();
+  await frame.getByPlaceholder("Filter the catalogue…").fill("patellar");
+  assert.equal(await frame.locator(".injury-pick").count(), 1);
+  await page.screenshot({
+    path: "artifacts/production/restored-apply-desktop.png",
+    fullPage: true,
+  });
+  await frame.getByRole("tab", { name: /Describe client's/ }).click();
+  await frame
+    .getByLabel("Describe the client's injuries", { exact: true })
+    .fill("A fractured femur");
+  await frame
+    .getByRole("button", { name: "Find matching injuries", exact: true })
+    .click();
+  await frame
+    .getByRole("button", { name: "Create & apply with AI", exact: true })
+    .waitFor();
+  await page.screenshot({
+    path: "artifacts/production/restored-describe-desktop.png",
+    fullPage: true,
+  });
+  // No provider call: missing configuration must report failure in the panel,
+  // preserve the description, and never redirect into a medical input form.
+  await frame
+    .getByRole("button", { name: "Create & apply with AI", exact: true })
+    .click();
+  await frame.getByRole("alert").waitFor();
+  assert(page.url().includes("/atlas"));
+  assert.equal(
+    await frame
+      .getByLabel("Describe the client's injuries", { exact: true })
+      .inputValue(),
+    "A fractured femur",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await frame
+    .getByRole("button", { name: "Open atlas layers", exact: true })
+    .click();
+  await page.screenshot({
+    path: "artifacts/production/restored-panel-mobile.png",
+    fullPage: true,
+  });
+  assert.equal(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth > innerWidth,
+    ),
+    false,
+  );
   assert.deepEqual(errors, []);
   console.log(
-    "Verified desktop/mobile production, all three actual rendered outputs, placement viewer, and registered atlas applications.",
+    "Verified desktop/mobile production, all three actual rendered outputs, restored Find/Describe panel, error feedback, and registered atlas applications.",
   );
 } finally {
   await browser?.close();

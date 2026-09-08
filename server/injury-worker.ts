@@ -1,3 +1,4 @@
+import { runInjuryAgent } from "./injury-agent";
 import { signatureFor } from "./anatomy-compatibility";
 import { rasterImage } from "./raster-image";
 import { Resvg } from "@resvg/resvg-js";
@@ -173,6 +174,7 @@ export async function processProduction(
   storage: EvidenceStorage,
   id: string,
   generateOverride?: () => Promise<any>,
+  agentClient?: any,
 ) {
   let r = productionRecord(db, id)!;
   const stage = (text: string) =>
@@ -182,6 +184,28 @@ export async function processProduction(
   try {
     let d = productionSchema.parse(r.body),
       demand = "";
+    if (d.agentManaged) {
+      const saved = db
+        .prepare(
+          "SELECT e.file FROM evidence e JOIN injury_artifacts a ON a.evidence_id=e.id WHERE a.production_id=? AND a.kind='agent-plan'",
+        )
+        .get(id);
+      const plan = saved
+        ? JSON.parse((await storage.get(String(saved.file))).toString())
+        : await runInjuryAgent(db, storage, r, stage, agentClient);
+      if (!saved)
+        await saveArtifact(
+          db,
+          storage,
+          r,
+          "agent-plan",
+          `${plan.body.name} — Injury Creation Agent plan.json`,
+          "application/json",
+          Buffer.from(JSON.stringify(plan)),
+        );
+      d = productionSchema.parse(plan.body);
+      demand = plan.demandNarrative;
+    }
     const cached = db
       .prepare(
         "SELECT e.file FROM evidence e JOIN injury_artifacts a ON a.evidence_id=e.id WHERE a.production_id=? AND a.kind='ai-draft'",
@@ -193,7 +217,7 @@ export async function processProduction(
       );
       d = { ...d, medicalDescription: content.medicalDescription };
       demand = content.demandNarrative;
-    } else if (d.useAI) {
+    } else if (d.useAI && !d.agentManaged) {
       stage("Drafting AI description");
       const client = new Anthropic({ timeout: 90000, maxRetries: 1 });
       const response = await client.messages.create({
@@ -264,14 +288,8 @@ export async function processProduction(
           );
         if (d.recipe.kind === "abrasion" && part.system !== "integumentary")
           throw new Error("Abrasion requires body surface anatomy");
-        if (
-          d.recipe.kind === "fracture" &&
-          (part.system !== "skeletal" ||
-            !part.name.toLowerCase().includes("rib"))
-        )
-          throw new Error(
-            "The current fracture generator supports individual ribs. Other fractures need an authored template.",
-          );
+        if (d.recipe.kind === "fracture" && part.system !== "skeletal")
+          throw new Error("The fracture model must target a bone structure.");
         if (
           d.recipe.kind === "subarachnoid" &&
           (part.system !== "nervous" ||

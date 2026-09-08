@@ -6,205 +6,168 @@ import path from "node:path";
 import { openStore, issueLink, consumeLink } from "../server/store";
 import { createApp } from "../server/app";
 import {
-  ensureInjuryTables,
   matchByKeywords,
   matchInjuries,
-  SEED_LIBRARY,
   listLibrary,
 } from "../server/injuries";
-
-test("injury library, case applications, matching and generation queue", async () => {
-  const dataDir = mkdtempSync(path.join(tmpdir(), "atlas-injuries-"));
-  const db = openStore(":memory:");
+test("only workflow injuries enter the catalogue; plain requests queue the Injury Creation Agent", async () => {
+  const dataDir = mkdtempSync(path.join(tmpdir(), "injury-panel-")),
+    db = openStore(":memory:");
   for (const [id, role] of [
     ["owner", "owner"],
     ["client", "client"],
   ])
     db.prepare("INSERT INTO users VALUES(?,?,?,?,?,1)").run(
       id,
-      `${id}@example.test`,
+      id + "@example.test",
       id,
       role,
       "firm",
     );
   const app = createApp(db, {
-    dataDir,
-    origin: "http://localhost",
-    send: async () => {},
-  });
-  const server = app.listen(0, "127.0.0.1");
+      dataDir,
+      origin: "http://localhost",
+      send: async () => {
+        throw Error("No test emails");
+      },
+    }),
+    server = app.listen(0, "127.0.0.1");
   await new Promise<void>((r) => server.once("listening", r));
-  const base = `http://127.0.0.1:${(server.address() as { port: number }).port}`;
-  const cookie = (id: string) =>
-    "atlas_session=" + consumeLink(db, issueLink(db, id)!);
+  const base = `http://127.0.0.1:${(server.address() as any).port}`,
+    cookie = (id: string) =>
+      "atlas_session=" + consumeLink(db, issueLink(db, id)!);
   const owner = cookie("owner"),
     client = cookie("client");
-  const call = (session: string, url: string, body?: unknown) =>
+  const call = (c: string, url: string, body?: any) =>
     fetch(base + url, {
-      method: body !== undefined ? "POST" : "GET",
+      method: body === undefined ? "GET" : "POST",
       headers: {
-        cookie: session,
+        cookie: c,
         origin: "http://localhost",
         "content-type": "application/json",
       },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : JSON.stringify(body),
     });
+  const priorKey = process.env.ANTHROPIC_API_KEY;
+  delete process.env.ANTHROPIC_API_KEY;
   try {
-    // Seeded library mirrors the engine's reference groups and is idempotent.
-    const library = await (await call(owner, "/api/injuries")).json();
-    assert.equal(library.length, SEED_LIBRARY.length);
-    assert.equal(listLibrary(db).length, SEED_LIBRARY.length);
+    assert.deepEqual(await (await call(owner, "/api/injuries")).json(), []);
+    assert.deepEqual(listLibrary(db), []);
     assert.equal((await call(client, "/api/injuries")).status, 403);
-
     const c = await (
       await call(owner, "/api/cases", {
-        title: "Homer Cortez",
-        client: "Homer Cortez",
+        title: "Synthetic workflow",
+        client: "Fictional subject",
         incident: "",
       })
     ).json();
+    const initial = await (
+      await call(owner, `/api/cases/${c.id}/injuries`)
+    ).json();
     db.prepare("INSERT INTO grants VALUES(?,?)").run("client", c.id);
-    assert.deepEqual(
-      await (await call(owner, `/api/cases/${c.id}/injuries`)).json(),
-      { applied: [], generated: [], productionInjuries: [] },
-    );
-
-    // Applying replaces the set; unknown ids are dropped; hidden persists.
-    let state = await (
-      await call(owner, `/api/cases/${c.id}/injuries/apply`, {
-        injuries: [
-          { id: "brain-hemorrhage" },
-          { id: "left-ribs-2-4", hidden: true },
-          { id: "made-up" },
-        ],
-      })
-    ).json();
-    assert.deepEqual(
-      state.applied.map((a: { id: string; hidden: boolean }) => [
-        a.id,
-        a.hidden,
-      ]),
-      [
-        ["brain-hemorrhage", false],
-        ["left-ribs-2-4", true],
-      ],
-    );
-    state = await (
-      await call(owner, `/api/cases/${c.id}/injuries/apply`, {
-        injuries: [{ id: "left-ribs-2-4", hidden: false }],
-      })
-    ).json();
-    assert.deepEqual(
-      state.applied.map((a: { id: string }) => a.id),
-      ["left-ribs-2-4"],
-    );
+    assert.deepEqual(initial.catalogue, []);
+    assert.deepEqual(initial.applied, []);
     assert.equal(
       (
-        await call(client, `/api/cases/${c.id}/injuries/apply`, {
-          injuries: [],
-        })
-      ).status,
-      403,
-    );
-    // Internal applied injury state remains attorney-only.
-    assert.equal(
-      (await call(client, `/api/cases/${c.id}/injuries`)).status,
-      403,
-    );
-
-    // Matching without a key uses keywords and reports the same shape Claude would.
-    const match = await (
-      await call(owner, `/api/cases/${c.id}/injuries/match`, {
-        description:
-          "Left frontal skull fracture with subarachnoid bleed; two fractured ribs on the left; broken femur.",
-      })
-    ).json();
-    assert.deepEqual([...match.matches].sort(), [
-      "brain-hemorrhage",
-      "left-ribs-2-4",
-      "skull-fracture",
-    ]);
-    assert.equal(match.unmatched, "Femur fracture");
-    assert.equal(match.method, "keywords");
-    assert.equal(
-      (
-        await call(owner, `/api/cases/${c.id}/injuries/match`, {
-          description: "",
+        await call(owner, `/api/cases/${c.id}/injuries/apply`, {
+          injuries: [{ id: "skull-fracture", hidden: false }],
         })
       ).status,
       400,
     );
-
-    // Generation is queued as a library row tied to the case, without an engine id.
+    const match = await (
+      await call(owner, `/api/cases/${c.id}/injuries/match`, {
+        description: "broken knee cap",
+      })
+    ).json();
+    assert.deepEqual(match.matches, []);
+    assert.equal(match.unmatched, "broken knee cap");
+    assert.equal(
+      (
+        await call(owner, `/api/cases/${c.id}/injuries/generate`, {
+          name: "broken knee cap",
+          description: "broken knee cap",
+        })
+      ).status,
+      503,
+    );
+    process.env.ANTHROPIC_API_KEY = "synthetic-no-network";
     const queued = await call(owner, `/api/cases/${c.id}/injuries/generate`, {
-      name: "Femur fracture",
-      description: "broken femur",
+      name: "broken knee cap",
+      description: "broken knee cap",
     });
     assert.equal(queued.status, 202);
     const q = await queued.json();
-    assert.equal(q.status, "queued");
-    state = await (await call(owner, `/api/cases/${c.id}/injuries`)).json();
-    assert.deepEqual(state.generated, []);
+    const record = db
+      .prepare("SELECT * FROM injury_production WHERE id=?")
+      .get(q.id)!;
+    assert.equal(record.state, "queued");
+    assert.equal(JSON.parse(String(record.body)).agentManaged, true);
+    assert.equal(JSON.parse(String(record.body)).recipe, null);
+    const state = await (
+      await call(owner, `/api/cases/${c.id}/injuries`)
+    ).json();
+    assert.equal(state.generated[0].id, q.id);
+    assert.equal(state.generated[0].status, "queued");
+    assert.deepEqual(state.catalogue, []);
     assert.equal(
-      (await (await call(owner, `/api/cases/${c.id}/production`)).json())[0]
-        .state,
-      "draft",
-    );
-    assert.ok(q.workspaceUrl.includes(q.id));
-    assert.equal(
-      listLibrary(db).length,
-      SEED_LIBRARY.length,
-      "generated rows stay out of the applicable library until placed",
-    );
-    assert.ok(
-      db
-        .prepare("SELECT 1 FROM audit WHERE action='injury.generation-queued'")
-        .get(),
+      (
+        await call(client, `/api/cases/${c.id}/injuries/generate`, {
+          name: "test",
+          description: "test",
+        })
+      ).status,
+      403,
     );
   } finally {
+    if (priorKey === undefined) delete process.env.ANTHROPIC_API_KEY;
+    else process.env.ANTHROPIC_API_KEY = priorKey;
     await new Promise<void>((r) => server.close(() => r()));
     db.close();
     rmSync(dataDir, { recursive: true, force: true });
   }
 });
-
-test("keyword matcher handles rib laterality and Claude failures fall back", async () => {
-  const db = openStore(":memory:");
-  ensureInjuryTables(db);
-  const library = listLibrary(db);
-  const ribs = matchByKeywords("several broken ribs", library);
-  assert.ok(
-    ribs.matches.includes("left-ribs-2-4") &&
-      ribs.matches.includes("right-ribs-2-5"),
-  );
-  const lower = matchByKeywords("right ribs 8 and 9 fractured", library);
-  assert.deepEqual(lower.matches, ["right-ribs-8-10"]);
-  const fake = {
+test("matching uses actual library entries and never substitutes test anatomy", async () => {
+  const library = [
+    {
+      id: "authored-patella",
+      name: "Patella fracture",
+      shortName: "Patellar fracture",
+      section: "Injury library",
+      laterality: "unspecified",
+    },
+  ] as any;
+  assert.deepEqual(matchByKeywords("broken kneecap", library).matches, [
+    "authored-patella",
+  ]);
+  const failing = {
     messages: {
       create: async () => {
-        throw new Error("synthetic outage");
+        throw Error("synthetic provider failure");
       },
     },
-  } as never;
-  const result = await matchInjuries("skull fracture", library, fake);
-  assert.equal(result.method, "keywords");
-  assert.deepEqual(result.matches, ["skull-fracture"]);
-  const canned = {
+  } as any;
+  assert.deepEqual(
+    (await matchInjuries("broken knee cap", library, failing)).matches,
+    ["authored-patella"],
+  );
+  const fake = {
     messages: {
       create: async () => ({
         content: [
           {
             type: "text",
-            text: 'Sure: {"matches":["skull-fracture","nope"],"unmatched":["Femur fracture"]}',
+            text: JSON.stringify({
+              matches: ["authored-patella", "skull-fracture"],
+              unmatched: [],
+            }),
           },
         ],
       }),
     },
-  } as never;
-  const parsed = await matchInjuries("anything", library, canned);
-  assert.deepEqual(parsed, {
-    matches: ["skull-fracture"],
-    unmatched: "Femur fracture",
-    method: "claude",
-  });
+  } as any;
+  assert.deepEqual(
+    (await matchInjuries("broken kneecap", library, fake)).matches,
+    ["authored-patella"],
+  );
 });

@@ -36,29 +36,15 @@ export function Atlas({
         { version: PROTOCOL, ...message },
         window.location.origin,
       );
-    async function receive(e: MessageEvent) {
-      if (
-        e.source !== frame.current?.contentWindow ||
-        e.origin !== window.location.origin ||
-        e.data?.version !== PROTOCOL
-      )
-        return;
-      const d = e.data;
-      if (d.type === "human-atlas:ready") {
-        setReady(true);
-        if (!caseRecord) return;
-        // Applied and generated injuries are persisted per case; the viewer
-        // renders them and reports changes back.
-        let injuries = {
-          applied: [],
-          generated: [] as unknown[],
-          productionInjuries: [] as unknown[],
-        };
-        try {
-          injuries = await api(`/cases/${caseRecord.id}/injuries`);
-        } catch {
-          /* The viewer still opens with reference anatomy. */
-        }
+    let active = true,
+      viewerReady = false,
+      refreshing = false;
+    async function refresh() {
+      if (!active || !viewerReady || !caseRecord || refreshing) return;
+      refreshing = true;
+      try {
+        const injuries = await api(`/cases/${caseRecord.id}/injuries`);
+        if (!active) return;
         setAppliedCount(injuries.productionInjuries.length);
         post({
           type: "injurybot:atlas:init",
@@ -71,8 +57,29 @@ export function Atlas({
             appliedInjuries: injuries.applied,
             generatedInjuries: injuries.generated,
             productionInjuries: injuries.productionInjuries,
+            catalogue: injuries.catalogue,
           },
         });
+      } catch {
+        /* Preserve the last confirmed case context on transient failure. */
+      } finally {
+        refreshing = false;
+      }
+    }
+    const refreshTimer = window.setInterval(refresh, 5000);
+    async function receive(e: MessageEvent) {
+      if (
+        e.source !== frame.current?.contentWindow ||
+        e.origin !== window.location.origin ||
+        e.data?.version !== PROTOCOL
+      )
+        return;
+      const d = e.data;
+      if (d.type === "human-atlas:ready") {
+        setReady(true);
+        if (!caseRecord) return;
+        viewerReady = true;
+        await refresh();
       }
       if (d.caseId !== caseRecord?.id) return;
       if (d.type === "human-atlas:open-injury-workspace" && caseRecord)
@@ -92,6 +99,21 @@ export function Atlas({
           ),
         );
       }
+      if (d.type === "human-atlas:production-clear" && caseRecord) {
+        try {
+          const state = await api(`/cases/${caseRecord.id}/injuries`);
+          for (const p of state.productionInjuries)
+            await api(
+              `/cases/${caseRecord.id}/production/${encodeURIComponent(p.id)}/review`,
+              { decision: "remove" },
+            );
+          await refresh();
+        } catch {
+          setSelection(
+            "Clearing injuries could not be saved. Please reload and try again.",
+          );
+        }
+      }
       if (d.type === "human-atlas:selection" && typeof d.label === "string")
         setSelection(d.label);
       if (
@@ -101,7 +123,9 @@ export function Atlas({
         setAppliedCount(d.injuries.length);
         api(`/cases/${caseRecord!.id}/injuries/apply`, {
           injuries: d.injuries,
-        }).catch(() => {});
+        })
+          .then(refresh)
+          .catch((e) => setSelection(e.message));
       }
       if (
         d.type === "human-atlas:match-request" &&
@@ -133,14 +157,30 @@ export function Atlas({
               description: String(d.description ?? ""),
             },
           );
-          window.location.assign(queued.workspaceUrl);
-        } catch {
-          /* Reported in the viewer as not queued. */
+          post({
+            type: "injurybot:atlas:generation",
+            caseId: caseRecord!.id,
+            injury: queued,
+          });
+          await refresh();
+        } catch (error) {
+          post({
+            type: "injurybot:atlas:generation",
+            caseId: caseRecord!.id,
+            injury: {
+              id: `request-${Date.now()}`,
+              name: d.name,
+              status: "failed",
+              stage: (error as Error).message,
+            },
+          });
         }
       }
     }
     window.addEventListener("message", receive);
     return () => {
+      active = false;
+      clearInterval(refreshTimer);
       clearTimeout(timer);
       window.removeEventListener("message", receive);
     };
