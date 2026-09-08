@@ -155,8 +155,25 @@ export const extensionPoints: ExtensionPoint[] = [
   ),
 ];
 
-const rendering = extensionPoints.find(p=>p.id === "rendering-pipeline")!;
+const rendering = extensionPoints.find((p) => p.id === "rendering-pipeline")!;
 rendering.sdkContract = "injury.bot.rendering.preflight/0.1";
 rendering.status = "Implemented";
-rendering.customizationAllowed = "Implemented read-only recipe inspection contract. No rendering, job creation, evidence access or dynamic code attachment.";
+rendering.customizationAllowed =
+  "Implemented read-only recipe inspection contract. No rendering, job creation, evidence access or dynamic code attachment.";
 rendering.reference += "; server/afp/sdk.ts; server/rendering/recipe.ts";
+
+extensionPoints.push({
+  ...point(
+    "assistant-presentation",
+    "Coordinator Presentation",
+    "Declarative preference",
+    "Private text-tab label, read through the authenticated SDK.",
+    ["private plain-text label"],
+    ["authentication", "firm and user ownership", "audit", "shared UI"],
+    "server/afp/presentation.ts; src/assistant/assistant-console.tsx",
+  ),
+  sdkContract: "injury.bot.assistant.presentation/0.1",
+  status: "Implemented",
+  customizationAllowed:
+    "Only a private text-tab label, 1–24 ASCII letters/spaces. No code, styling, markup or resource escalation.",
+});

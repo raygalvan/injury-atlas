@@ -109,6 +109,14 @@ export function AfpMemoryDecisions() {
         >
           Download AFP memory
         </a>
+        <a
+          className="secondary-button"
+          href="/api/settings/afp/development-context"
+          target="_blank"
+          rel="noreferrer"
+        >
+          AFP development context
+        </a>
         <button
           disabled={busy}
           onClick={() =>

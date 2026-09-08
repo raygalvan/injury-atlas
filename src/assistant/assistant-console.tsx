@@ -1,5 +1,6 @@
 "use client";
 
+import { DEFAULT_TEXT_LABEL } from "../../shared/afp-manifest";
 import type { AssistantCard } from "../../shared/ai";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -58,6 +59,21 @@ export function AssistantConsole({
   caseId,
   onMinimize,
 }: Props) {
+  const [textTabLabel, setTextTabLabel] = useState(DEFAULT_TEXT_LABEL);
+  const refreshPresentation = useCallback(async () => {
+    try {
+      const res = await fetch("/api/afp/preferences/presentation", {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      if (res.ok) setTextTabLabel(data.textTabLabel);
+    } catch {
+      /* Preserve the last host-confirmed presentation during network interruption. */
+    }
+  }, []);
+  useEffect(() => {
+    void refreshPresentation();
+  }, [refreshPresentation]);
   const [mode, setMode] = useState<ConsoleMode>(
     voiceConfigured ? "voice" : "text",
   );
@@ -65,8 +81,15 @@ export function AssistantConsole({
     ...initialMessages,
     { id: "greeting", role: "assistant", modality: "text", content: greeting },
   ]);
-  const topic = new URLSearchParams(location.search).get("topic") === "afp" ? "afp" : undefined;
-  const [draft, setDraft] = useState(topic ? "What should we improve next to make injury.bot more AFP friendly?" : "");
+  const topic =
+    new URLSearchParams(location.search).get("topic") === "afp"
+      ? "afp"
+      : undefined;
+  const [draft, setDraft] = useState(
+    topic
+      ? "What should we improve next to make injury.bot more AFP friendly?"
+      : "",
+  );
   const [sending, setSending] = useState(false);
   const [voiceState, setVoiceState] = useState<OrbState>("idle");
   const [voiceNote, setVoiceNote] = useState<string | null>(null);
@@ -194,6 +217,8 @@ export function AssistantConsole({
               callId,
               sessionId: voiceSessionId.current,
             });
+            if (name === "set_private_afp_ui_preference")
+              await refreshPresentation();
             if (result.card)
               append({
                 id: localId(),
@@ -262,6 +287,7 @@ export function AssistantConsole({
         assistant: { id: string; content: string };
         tools: { id: string; content: string; card: AssistantCard | null }[];
       }>("/api/assistant/messages", { text, caseId, topic });
+      await refreshPresentation();
       for (const tool of result.tools) {
         if (tool.card)
           append({
@@ -339,19 +365,19 @@ export function AssistantConsole({
       >
         <button
           type="button"
+          className={mode === "text" ? "is-active" : ""}
+          onClick={() => selectMode("text")}
+          aria-pressed={mode === "text"}
+        >
+          {textTabLabel}
+        </button>
+        <button
+          type="button"
           className={mode === "voice" ? "is-active" : ""}
           onClick={() => selectMode("voice")}
           aria-pressed={mode === "voice"}
         >
           Voice
-        </button>
-        <button
-          type="button"
-          className={mode === "text" ? "is-active" : ""}
-          onClick={() => selectMode("text")}
-          aria-pressed={mode === "text"}
-        >
-          Text chat
         </button>
       </div>
 

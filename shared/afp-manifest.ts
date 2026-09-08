@@ -2,6 +2,23 @@ import { z } from "zod";
 export const AFP_SCHEMA = "injury.bot.afp/0.1" as const;
 export const AFP_VERSION = "0.1.0" as const;
 export const RENDERING_CONTRACT = "injury.bot.rendering.preflight/0.1" as const;
+export const PRESENTATION_CONTRACT =
+  "injury.bot.assistant.presentation/0.1" as const;
+export const PRESENTATION_FEATURE = "private-coordinator-text-label" as const;
+export const DEFAULT_TEXT_LABEL = "Text Chat";
+export const textTabLabelSchema = z
+  .string()
+  .min(1)
+  .max(24)
+  .regex(/^[A-Za-z]+(?: [A-Za-z]+)*(?![\s\S])/);
+export const preferenceRequestSchema = z.discriminatedUnion("action", [
+  z.strictObject({
+    action: z.literal("set"),
+    textTabLabel: textTabLabelSchema,
+  }),
+  z.strictObject({ action: z.literal("disable") }),
+  z.strictObject({ action: z.literal("remove") }),
+]);
 export const protectedBoundaries = [
   "authentication",
   "tenant-boundaries",
@@ -12,7 +29,7 @@ export const protectedBoundaries = [
   "shell-access",
 ] as const;
 const id = z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,119}$/);
-export const manifestSchema = z.strictObject({
+const renderingManifestSchema = z.strictObject({
   schemaVersion: z.literal(AFP_SCHEMA),
   protocolVersion: z.literal(AFP_VERSION),
   experimental: z.literal(true),
@@ -55,6 +72,27 @@ export const manifestSchema = z.strictObject({
   }),
   activation: z.literal(false),
 });
+const presentationManifestSchema = renderingManifestSchema.extend({
+  extensionId: z.literal(PRESENTATION_FEATURE),
+  extensionPoints: z.tuple([
+    z.strictObject({
+      id: z.literal("assistant-presentation"),
+      contract: z.literal(PRESENTATION_CONTRACT),
+    }),
+  ]),
+  requestedPermissions: z.tuple([
+    z.literal("assistant.presentation.private.write"),
+  ]),
+  ownership: z.strictObject({
+    scope: z.literal("Private"),
+    ownerId: id,
+    firmId: id,
+  }),
+});
+export const manifestSchema = z.union([
+  renderingManifestSchema,
+  presentationManifestSchema,
+]);
 export type AfpManifest = z.infer<typeof manifestSchema>;
 export type Evaluation = {
   result: "Compatible" | "Incompatible" | "Requires Review";

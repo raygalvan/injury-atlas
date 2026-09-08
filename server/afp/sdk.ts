@@ -1,3 +1,8 @@
+import {
+  ensurePresentation,
+  presentationCapability,
+  type PreferenceSource,
+} from "./presentation";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import type express from "express";
@@ -8,6 +13,7 @@ import {
   applicationVersion,
   digest,
   manifestTemplate,
+  presentationManifest,
   manifestJsonSchema,
   validateManifest,
 } from "./manifest";
@@ -15,12 +21,15 @@ import {
   AFP_SCHEMA,
   AFP_VERSION,
   RENDERING_CONTRACT,
+  PRESENTATION_CONTRACT,
+  preferenceRequestSchema,
   preflightRequestSchema,
   preflightResponseSchema,
   type AfpManifest,
   type ManifestRecord,
 } from "../../shared/afp-manifest";
 export function ensureSdk(db: Store) {
+  ensurePresentation(db);
   db.exec(`CREATE TABLE IF NOT EXISTS afp_manifests(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,firm_id TEXT NOT NULL,scope TEXT NOT NULL,revision INTEGER NOT NULL,body TEXT NOT NULL,digest TEXT NOT NULL,created INTEGER NOT NULL,updated INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS afp_sdk_audit(id TEXT PRIMARY KEY,actor TEXT NOT NULL,manifest_id TEXT,body TEXT NOT NULL,created INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS afp_manifest_revisions(manifest_id TEXT NOT NULL,revision INTEGER NOT NULL,body TEXT NOT NULL,actor TEXT NOT NULL,created INTEGER NOT NULL,PRIMARY KEY(manifest_id,revision));`);
@@ -64,7 +73,7 @@ export function createAfpSdk(db: Store, actorId: string) {
     // Never retain input, recipe, parser messages, client identifiers or credentials.
     const body = {
       action,
-      extensionPoint: m ? "rendering-pipeline" : null,
+      extensionPoint: m?.extensionPoints[0].id ?? null,
       extensionId: m?.extensionId ?? null,
       schemaVersion: m?.schemaVersion ?? "unrecognized",
       definitionVersion: m?.definitionVersion ?? null,
@@ -141,8 +150,17 @@ export function createAfpSdk(db: Store, actorId: string) {
     reason: string,
     status = 400,
   ) {
-    const reference = z.string().uuid().safeParse((input as any)?.manifestId ?? (input as any)?.id);
-    const auditId = log(action, input, "Incompatible", [reason], reference.success ? reference.data : null);
+    const reference = z
+      .string()
+      .uuid()
+      .safeParse((input as any)?.manifestId ?? (input as any)?.id);
+    const auditId = log(
+      action,
+      input,
+      "Incompatible",
+      [reason],
+      reference.success ? reference.data : null,
+    );
     return {
       status,
       body: {
@@ -154,6 +172,15 @@ export function createAfpSdk(db: Store, actorId: string) {
     };
   }
   return Object.freeze({
+    readPrivatePresentation() {
+      return presentationCapability(db, actorId).read();
+    },
+    privatePresentationHistory() {
+      return presentationCapability(db, actorId).history();
+    },
+    setPrivatePresentation(input: unknown, source: PreferenceSource) {
+      return presentationCapability(db, actorId).set(input, source);
+    },
     describe() {
       const u = actor();
       if (!permitted(u))
@@ -167,6 +194,11 @@ export function createAfpSdk(db: Store, actorId: string) {
           experimental: true,
           activationAvailable: false,
           template: manifestTemplate(u!, readControlPlane(db).policies),
+          presentation: {
+            contract: PRESENTATION_CONTRACT,
+            template: presentationManifest(u!, readControlPlane(db).policies),
+            requestSchema: z.toJSONSchema(preferenceRequestSchema),
+          },
           jsonSchema: manifestJsonSchema,
           requestSchema: z.toJSONSchema(useRequest),
           responseSchema: z.toJSONSchema(preflightResponseSchema),
@@ -339,6 +371,15 @@ export function createAfpSdk(db: Store, actorId: string) {
       if (v.result !== "Compatible") return { status: 422, body: v };
       if (!m.requestedResources.includes(p.data.request.resourceClass))
         return rejected("rendering-preflight", null, "undeclared_resource");
+      if (
+        m.extensionPoints[0].id !== "rendering-pipeline" ||
+        m.requestedPermissions[0] !== "rendering.recipe.inspect"
+      )
+        return rejected(
+          "rendering-preflight",
+          null,
+          "wrong_extension_contract",
+        );
       const accepted = recipeSchema.safeParse(p.data.request.recipe).success;
       const output = {
         contract: RENDERING_CONTRACT,
@@ -372,6 +413,15 @@ export function sdkRoutes(
   const sdk = (res: express.Response) => createAfpSdk(db, res.locals.user.id);
   const send = (res: express.Response, r: { status: number; body: unknown }) =>
     res.set("Cache-Control", "no-store").status(r.status).json(r.body);
+  app.get("/api/afp/preferences/presentation", staff, (_req, res) =>
+    send(res, sdk(res).readPrivatePresentation()),
+  );
+  app.get("/api/afp/preferences/presentation/history", staff, (_req, res) =>
+    send(res, sdk(res).privatePresentationHistory()),
+  );
+  app.post("/api/afp/preferences/presentation", staff, (req, res) =>
+    send(res, sdk(res).setPrivatePresentation(req.body, "settings")),
+  );
   app.get("/api/afp/contract", staff, (_req, res) =>
     send(res, sdk(res).describe()),
   );

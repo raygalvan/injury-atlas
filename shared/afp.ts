@@ -108,6 +108,8 @@ export type AfpControlPlane = {
   sdkBoundary: {
     version: "0.1.0";
     contract: "injury.bot.rendering.preflight/0.1";
+    contracts: string[];
+    privatePresentation: true;
     implemented: true;
     executable: false;
   };

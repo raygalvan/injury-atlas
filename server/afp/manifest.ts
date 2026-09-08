@@ -6,6 +6,8 @@ import {
   AFP_SCHEMA,
   AFP_VERSION,
   RENDERING_CONTRACT,
+  PRESENTATION_CONTRACT,
+  PRESENTATION_FEATURE,
   protectedBoundaries,
   type AfpManifest,
 } from "../../shared/afp-manifest";
@@ -16,7 +18,9 @@ export function applicationVersion() {
     const sha = JSON.parse(readFileSync("dist/release.json", "utf8")).commit;
     if (/^[a-f0-9]{40}$/.test(sha)) return sha;
   } catch {}
-  return process.env.NODE_ENV === "production" ? "unavailable" : "0.1.0+development";
+  return process.env.NODE_ENV === "production"
+    ? "unavailable"
+    : "0.1.0+development";
 }
 export const manifestJsonSchema = {
   ...z.toJSONSchema(manifestSchema),
@@ -59,6 +63,21 @@ export function manifestTemplate(
     activation: false,
   };
 }
+export function presentationManifest(
+  actor: User,
+  policies: AfpPolicy[],
+  version = applicationVersion(),
+): AfpManifest {
+  return {
+    ...manifestTemplate(actor, policies, version),
+    extensionId: PRESENTATION_FEATURE,
+    extensionPoints: [
+      { id: "assistant-presentation", contract: PRESENTATION_CONTRACT },
+    ],
+    requestedPermissions: ["assistant.presentation.private.write"],
+    ownership: { scope: "Private", ownerId: actor.id, firmId: actor.firm_id },
+  };
+}
 export function validateManifest(
   input: unknown,
   actor: User | null,
@@ -69,6 +88,13 @@ export function validateManifest(
   const parsed = manifestSchema.safeParse(input);
   const reasons: string[] = [];
   if (!parsed.success) {
+    const branch =
+      manifestSchema.options[
+        (input as any)?.extensionPoints?.[0]?.id === "assistant-presentation"
+          ? 1
+          : 0
+      ].safeParse(input);
+    const issues = branch.success ? parsed.error.issues : branch.error.issues;
     const codes: Record<string, string> = {
       schemaVersion: "unknown_schema_version",
       protocolVersion: "unknown_protocol_version",
@@ -85,7 +111,7 @@ export function validateManifest(
       result: "Incompatible" as const,
       reasons: [
         ...new Set(
-          parsed.error.issues.map(
+          issues.map(
             (i) => codes[String(i.path[0])] || "invalid_manifest_schema",
           ),
         ),
@@ -94,7 +120,8 @@ export function validateManifest(
     };
   }
   const m = parsed.data;
-  if(version === "unavailable") reasons.push("application_version_unavailable");
+  if (version === "unavailable")
+    reasons.push("application_version_unavailable");
   if (!actor || !actor.active || actor.role === "client")
     reasons.push("actor_not_authorized");
   if (new Set(m.protectedBoundaries).size !== protectedBoundaries.length)
@@ -119,7 +146,13 @@ export function validateManifest(
     m.compatibility.applicationVersion !== version
   )
     reasons.push("incompatible_application_version");
-  const permission = policies.find((p) => p.id === "rendering-preflight");
+  const permission = policies.find(
+    (p) =>
+      p.id ===
+      (m.extensionPoints[0].id === "assistant-presentation"
+        ? "assistant-presentation"
+        : "rendering-preflight"),
+  );
   if (!permission || permission.level === "Protected")
     reasons.push("permission_protected");
   // A manifest cannot redefine these locks, even if other customization rules are Allowed.

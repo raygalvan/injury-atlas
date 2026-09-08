@@ -60,6 +60,13 @@
       "status": "Implemented in this release",
       "detail": "injury.bot.afp/0.1 validation and a trusted rendering-pipeline recipe preflight enforce Private/Firm ownership, current permissions, exact release compatibility and audit. Preflight uses the production recipe schema and does not render, queue jobs, read evidence or activate extensions.",
       "evidence": "shared/afp-manifest.ts; server/afp/manifest.ts; server/afp/sdk.ts; server/rendering/recipe.ts; tests/afp-sdk.test.ts"
+    },
+    {
+      "id": "afp-private-presentation",
+      "title": "Private Coordinator presentation and coding-agent handoff",
+      "status": "Implemented in this release",
+      "detail": "Text and voice share the authenticated AFP SDK for a declarative private text-tab label. Exact build/policy validation, per-user/firm isolation and audit apply. A super-admin product-only context endpoint and read-only operator command expose persistent Coordinator proposals for coding-agent review; no code execution or proposal self-approval is added.",
+      "evidence": "server/afp/presentation.ts; server/afp/development-context.ts; scripts/afp-context.ts; tests/afp-presentation.test.ts; scripts/check-coordinator-browser.mjs; AGENTS.md"
     }
   ],
   "gaps": [
@@ -82,7 +89,7 @@
     }
   ],
   "protocolAssumptions": [
-    "AFP MCP supplies intelligence/orchestration and remains unconnected. The internal AFP SDK now enforces one non-executable recipe-inspection contract; it does not execute extension code.",
+    "AFP MCP supplies intelligence/orchestration and remains unconnected. The internal AFP SDK enforces rendering recipe inspection and private declarative Coordinator presentation contracts; it does not execute extension code.",
     "The experimental injury.bot.afp/0.1 manifest schema and validator are internal and injury.bot-specific. They are not a finalized external standard. Exact application release compatibility requires explicit revision after an update.",
     "Feature packages describe individualized customization; optional resource infrastructure must preserve ownership, tenancy, evidence provenance, audit and review gates."
   ]

@@ -1,3 +1,4 @@
+import { AfpPrivatePreference } from "./AfpPrivatePreference";
 import { AfpManifestInspector } from "./AfpManifestInspector";
 import { useEffect, useState, useRef } from "react";
 import { api } from "./api";
@@ -468,7 +469,8 @@ export function AfpManagement() {
             <h3>Permissions</h3>
             <p>
               These developer rules are consulted by the manifest validator and
-              SDK. The only allowed SDK permission is rendering.recipe.inspect.
+              SDK. The SDK enforces rendering.recipe.inspect and
+              assistant.presentation.private.write through separate contracts.
               Authentication, tenant boundaries, provenance, audit, database,
               shell and filesystem access are unreachable. Saving an Allowed
               policy does not install code, grant credentials or provision a
@@ -554,15 +556,16 @@ export function AfpManagement() {
             hidden={view !== "features"}
           >
             <h3>AFP Features</h3>
+            <AfpPrivatePreference />
             <AfpManifestInspector />
             {!data.featureCount ? (
               <div className="afp-empty">
                 <p className="eyebrow">
                   Ready to catalogue · runtime not connected
                 </p>
-                <h4>No AFP-created features yet</h4>
+                <h4>No additional feature definitions</h4>
                 <p>
-                  Individual customizations will appear here once the
+                  Additional executable customizations will appear here once the
                   customization runtime and MCP are connected. Each feature can
                   declare its owner, scope, base version, extension points,
                   resources, cost, tests, security and rollback plan.
