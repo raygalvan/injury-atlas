@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { build } from "esbuild";
 import {
   readFileSync,
@@ -73,7 +74,19 @@ await build({
   target: "node24",
 });
 cpSync(path.join(source, "LICENSE"), path.join(target, "LICENSE.txt"));
-writeFileSync(path.join(target, "release.json"), JSON.stringify(lock, null, 2));
+const anatomyHash = createHash("sha256").update(
+  readFileSync(path.join(output, "models/atlas.json")),
+);
+for (const chunk of model.chunks)
+  anatomyHash.update(readFileSync(path.join(output, chunk.url)));
+writeFileSync(
+  path.join(target, "release.json"),
+  JSON.stringify(
+    { ...lock, geometrySignature: anatomyHash.digest("hex") },
+    null,
+    2,
+  ),
+);
 console.log(
   `Packaged ${model.parts.length} anatomy structures from ${lock.commit}`,
 );

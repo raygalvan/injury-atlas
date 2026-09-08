@@ -18,7 +18,12 @@ function chunk(type: string, body: Buffer) {
   return Buffer.concat([length, name, body, crc]);
 }
 export function rasterImage(
-  triangles: { pts: number[][]; fill: string }[],
+  triangles: {
+    pts: number[][];
+    fill: string;
+    world?: number[][];
+    appearance?: (p: number[]) => number[];
+  }[],
   minX: number,
   minY: number,
   scale: number,
@@ -57,9 +62,22 @@ export function rasterImage(
           i = y * width + x;
         if (z < depths[i]) continue;
         depths[i] = z;
-        pixels[i * 4] = color[0];
-        pixels[i * 4 + 1] = color[1];
-        pixels[i * 4 + 2] = color[2];
+        const shaded =
+          t.appearance && t.world
+            ? t
+                .appearance(
+                  [0, 1, 2].map(
+                    (axis) =>
+                      u * t.world![0][axis] +
+                      v * t.world![1][axis] +
+                      w * t.world![2][axis],
+                  ),
+                )
+                .map((n) => Math.round(Math.max(0, Math.min(1, n)) * 255))
+            : color;
+        pixels[i * 4] = shaded[0];
+        pixels[i * 4 + 1] = shaded[1];
+        pixels[i * 4 + 2] = shaded[2];
         pixels[i * 4 + 3] = 255;
       }
   }
