@@ -1,3 +1,4 @@
+import { executorRoutes, developmentRoutes } from "./afp/development";
 import { AiError } from "./ai/error";
 import { configureVault } from "./ai/vault";
 import { settingsRoutes } from "./ai/settings-routes";
@@ -80,6 +81,7 @@ export function createApp(
     next();
   });
   app.use(express.json({ limit: "64kb" }));
+  executorRoutes(app, db);
   const cookie = (req: express.Request, name: string) =>
     req.headers.cookie
       ?.split(";")
@@ -251,6 +253,7 @@ export function createApp(
     next();
   };
   settingsRoutes(app, db, staff);
+  developmentRoutes(app, db, staff);
   coordinatorRoutes(app, db, staff);
   const caseSchema = z.object({
     title: z.string().trim().min(1).max(160),

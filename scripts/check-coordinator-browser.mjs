@@ -137,6 +137,7 @@ try {
   const colorTab=colorPage.frameLocator('iframe').getByRole('tab',{name:'Select Injuries',exact:true});
   await colorTab.waitFor();
   await colorPage.waitForFunction(()=>document.querySelector('iframe')?.contentDocument?.querySelector('.apply-tab')?.getAttribute('data-afp-color')==='blue');
+  await colorPage.waitForFunction(()=>{const el=document.querySelector('iframe')?.contentDocument?.querySelector('.apply-tab');return el&&getComputedStyle(el).backgroundColor==='rgb(29, 78, 216)'});
   assert.equal(await colorTab.evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(29, 78, 216)');
   await colorPage.screenshot({path:"artifacts/production/afp-blue-select-desktop.png",fullPage:true});
   await colorPage.setViewportSize({width:390,height:844});

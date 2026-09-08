@@ -97,7 +97,7 @@ test("existing agent configuration gains AFP tools once without resetting model 
     const migrated=readSettings(db,"platform");
     assert.equal(migrated.agents.coordinator.enabled,false);
     assert.equal(migrated.agents.coordinator.model,"chosen-model");
-    assert.deepEqual(migrated.agents.coordinator.skills,["find_cases","read_afp_memory","record_afp_note","set_private_afp_ui_preference","set_private_afp_presentation","inspect_afp_capability"]);
+    assert.deepEqual(migrated.agents.coordinator.skills,["find_cases","execute_development_task","development_task_status","read_afp_memory","record_afp_note","set_private_afp_ui_preference","set_private_afp_presentation","inspect_afp_capability"]);
     ensureAi(db);
     assert.deepEqual(readSettings(db,"platform"),migrated);
   } finally{db.close();}

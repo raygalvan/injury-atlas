@@ -1,3 +1,4 @@
+import { AfpDevelopment } from "./AfpDevelopment";
 import {AfpLabPermissions} from "./AfpLabPermissions";
 import { AfpPrivatePreference } from "./AfpPrivatePreference";
 import { AfpManifestInspector } from "./AfpManifestInspector";
@@ -468,7 +469,7 @@ export function AfpManagement() {
             hidden={view !== "permissions"}
           >
             <h3>Permissions</h3>
-            <AfpLabPermissions/>
+            <AfpDevelopment/><AfpLabPermissions/>
             <details className="afp-developer-policies"><summary>Shared developer policies</summary>
             <p>
               These developer rules are consulted by the manifest validator and
