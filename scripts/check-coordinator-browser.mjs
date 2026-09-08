@@ -169,6 +169,7 @@ try {
   // Only microphone, provider SDP and server events are synthetic; no email is sent.
   config.voice.enabled = true;
   config.agents["library-research"].provider = "openai";
+  config.agents["library-research"].model = config.agents.coordinator.model;
   saveSettings(db, "platform", config, u);
   await context.addInitScript(() => {
     const audio = new AudioContext();
