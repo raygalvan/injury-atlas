@@ -44,8 +44,8 @@ const tool = (
   },
 });
 export const coordinatorTools: FunctionTool[] = [
-  tool("read_afp_memory", "Read current AFP direction, release foundations, gaps and progress notes before discussing improvements. Super admin only. Page starts at zero; each page contains 20 notes.", { page: {type:"integer",minimum:0} }),
-  tool("record_afp_note", "Save an AFP idea, decision, progress report or recommendation when the super admin asks to remember it. Product development only, no case data. The receipt confirms a proposed note, never implementation or verified progress.", {kind:{type:"string",enum:["idea","decision","progress","recommendation"]},title:string,content:string,evidence:string}, ["kind","title","content"]),
+  tool("read_afp_memory", "Read current AFP direction, readiness, extension points, permissions, resources, features, release foundations, gaps and development notes before recommending improvements. Super admin only. Page starts at zero; each page contains 20 notes.", { page: {type:"integer",minimum:0} }),
+  tool("record_afp_note", "Save an AFP idea, decision, progress report or recommendation when the super admin asks to remember it. Product development only, no case data. The receipt confirms a proposed note, never implementation or verified progress.", {kind:{type:"string",enum:["idea","proposal","decision","experiment","implementation_result","progress","recommendation"]},title:string,content:string,evidence:string}, ["kind","title","content"]),
   tool(
     "find_cases",
     "Find existing client cases before selecting one. Return available matches; never guess an ID.",
@@ -173,7 +173,7 @@ export async function executeCoordinatorTool(
     out = {speech:JSON.stringify(readAfp(db,u,page)),card:{title:"AFP memory",body:"Current direction, foundations, gaps and discussion notes.",href:"/settings#afp"}};
   } else if (name === "record_afp_note") {
     const entry = addAfpEntry(db,u,{...args,status:"proposed"},"coordinator");
-    out = {speech:JSON.stringify({...entry,message:"AFP note saved as proposed. No feature was implemented or verified."}),card:{title:"AFP note saved",body:entry.title,href:"/settings#afp"}};
+    out = {speech:JSON.stringify({...entry,message:entry.status === "proposed" ? "AFP note saved as proposed. No feature was implemented or verified." : "An existing matching AFP record was returned with its human-reviewed status unchanged. The coordinator did not approve or verify it."}),card:{title:"AFP note saved",body:entry.title,href:"/settings#afp"}};
   } else if (name === "find_cases") {
     const q = z
       .string()
