@@ -11,6 +11,10 @@ import {
   productionSchema,
   productionRecord,
 } from "../server/production.ts";
+import {
+  claimLibraryJob,
+  processLibraryDefinition,
+} from "../server/library-agent.ts";
 import { processProduction } from "../server/injury-worker.ts";
 import { createEvidenceStorage } from "../server/evidence-storage.ts";
 const require = createRequire(
@@ -135,10 +139,10 @@ try {
                       medicalDescription:
                         "Synthetic attorney-described kneecap fracture; no case evidence.",
                       generalDefinition: "A fracture of the patella.",
-                      clientImpact: "",
-                      impactCitation: "",
-                      evidenceId: "",
-                      citation: "",
+                      clientImpact: null,
+                      impactCitation: null,
+                      evidenceId: null,
+                      citation: null,
                       demandNarrative: "Synthetic documentation only.",
                       uncertainties: ["Side and fracture pattern are unknown."],
                       placement: {
@@ -151,7 +155,7 @@ try {
                         widthMm: null,
                         heightMm: null,
                         depthMm: null,
-                        measurementCitation: "",
+                        measurementCitation: null,
                       },
                     }),
                   },
@@ -222,6 +226,80 @@ try {
     fullPage: true,
   });
   await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("tab", { name: "Injury library" }).click();
+  await page.getByRole("button", { name: "Add library entry" }).click();
+  const libraryForm = page.getByRole("form", { name: "AI library request" });
+  assert.equal(await libraryForm.locator("input,textarea,select").count(), 1);
+  assert.equal(await page.locator(".modal-backdrop").count(), 0);
+  await page
+    .getByLabel("Injury name", { exact: true })
+    .fill("broken left femur");
+  await page.screenshot({
+    path: "artifacts/production/ai-library-name-desktop.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth > innerWidth,
+    ),
+    false,
+  );
+  await page.screenshot({
+    path: "artifacts/production/ai-library-name-mobile.png",
+    fullPage: true,
+  });
+  process.env.ANTHROPIC_API_KEY = "synthetic-browser-not-a-key";
+  await page
+    .getByRole("button", { name: "Generate with AI", exact: true })
+    .click();
+  await page
+    .getByText("Waiting for Injury Creation Agent", { exact: true })
+    .waitFor();
+  delete process.env.ANTHROPIC_API_KEY;
+  const libraryJob = claimLibraryJob(db);
+  assert(libraryJob);
+  let libraryCalls = 0;
+  await processLibraryDefinition(db, libraryJob.publication_id, {
+    messages: {
+      create: async () => {
+        libraryCalls++;
+        return {
+          content:
+            libraryCalls === 1
+              ? [
+                  {
+                    type: "text",
+                    text: JSON.stringify({ name: "Left femoral fracture" }),
+                  },
+                ]
+              : [
+                  {
+                    type: "text",
+                    text: "Synthetic researched definition of a femoral fracture.",
+                    citations: [
+                      {
+                        type: "web_search_result_location",
+                        url: "https://orthoinfo.aaos.org/en/diseases--conditions/femur-shaft-fractures-broken-thighbone/",
+                      },
+                    ],
+                  },
+                ],
+        };
+      },
+    },
+  });
+  await page.getByText("Ready for library review", { exact: true }).waitFor();
+  await page
+    .getByText("Synthetic researched definition of a femoral fracture.", {
+      exact: true,
+    })
+    .waitFor();
+  await page.screenshot({
+    path: "artifacts/production/ai-library-result-mobile.png",
+    fullPage: true,
+  });
+  await page.getByRole("tab", { name: /Case injuries/ }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   assert.equal(
     await page.evaluate(

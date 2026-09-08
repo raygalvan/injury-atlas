@@ -5,14 +5,22 @@ import { z } from "zod";
 import type { Store } from "./store";
 import type { EvidenceStorage } from "./evidence-storage";
 import { productionSchema, type ProductionRecord } from "./production";
+// Models commonly return null for unknown facts. Preserve unknowns as empty
+// values without relaxing validation of required medical/anatomical output.
+const unknownText = (max: number) =>
+  z
+    .string()
+    .max(max)
+    .nullish()
+    .transform((value) => value ?? "");
 const output = z.object({
   name: z.string().min(1).max(160),
   medicalDescription: z.string().max(8000),
   generalDefinition: z.string().max(8000),
-  clientImpact: z.string().max(8000).default(""),
-  impactCitation: z.string().max(2000).default(""),
-  evidenceId: z.string().max(120).default(""),
-  citation: z.string().max(2000).default(""),
+  clientImpact: unknownText(8000),
+  impactCitation: unknownText(2000),
+  evidenceId: unknownText(120),
+  citation: unknownText(2000),
   demandNarrative: z.string().max(12000),
   uncertainties: z.array(z.string().max(1000)).max(12),
   placement: z.object({
@@ -34,7 +42,7 @@ const output = z.object({
     widthMm: z.number().positive().max(250).nullable().default(null),
     heightMm: z.number().positive().max(250).nullable().default(null),
     depthMm: z.number().min(0).max(10).nullable().default(null),
-    measurementCitation: z.string().max(1000).default(""),
+    measurementCitation: unknownText(1000),
   }),
 });
 export const INJURY_CREATION_AGENT = {

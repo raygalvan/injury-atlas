@@ -1,3 +1,4 @@
+import { libraryRequest, queueLibraryDefinition } from "./library-agent";
 import { anatomyCompatible } from "./anatomy-compatibility";
 import { injuryDocuments } from "./injury-documents";
 import { saveArtifact } from "./injury-worker";
@@ -103,7 +104,7 @@ export function productionRoutes(
     if (r.body.useAI && !process.env.ANTHROPIC_API_KEY)
       return res.status(409).json({
         error:
-          "AI description is not configured. Turn off AI drafting to generate with your own description.",
+          "The Injury Creation Agent is not configured. Ask your administrator to configure the AI key.",
       });
     if (
       Number(
@@ -296,85 +297,111 @@ export function productionRoutes(
       res.type("json").send(bytes);
     },
   );
-  const publication = z.object({
-    name: z.string().trim().min(1).max(160),
-    description: z.string().trim().min(1).max(8000),
-    medicalReferences: z.string().trim().min(1).max(8000),
-    kind: z.enum(["abrasion", "subarachnoid", "fracture", "documentation"]),
-  });
-  app.post("/api/cases/:caseId/production/:id/submit", staff, (req, res) => {
-    const r = get(req);
-    if (!r) return res.sendStatus(404);
-    const d = publication.parse(req.body);
-    db.prepare(
-      "INSERT INTO injury_publications(id,production_id,creator,firm_id,name,description,medical_references,kind,created) VALUES(?,?,?,?,?,?,?,?,?)",
-    ).run(
-      randomUUID(),
-      r.id,
-      res.locals.user.id,
-      r.firm_id,
-      d.name,
-      d.description,
-      d.medicalReferences,
-      d.kind,
-      Date.now(),
-    );
-    audit(db, res.locals.user.id, "injury.library-submitted", r.case_id);
-    res.json({ ok: true });
-  });
+  const canQueueLibrary: express.RequestHandler = (_req, res, next) => {
+    if (!process.env.ANTHROPIC_API_KEY)
+      return res
+        .status(503)
+        .json({
+          error:
+            "The Injury Creation Agent is not configured. Ask your administrator to configure the AI key.",
+        });
+    const count = db
+      .prepare(
+        "SELECT count(*) n FROM injury_library_jobs j JOIN injury_publications p ON p.id=j.publication_id WHERE p.firm_id=? AND j.state IN ('queued','running')",
+      )
+      .get(res.locals.user.firm_id)!;
+    if (Number(count.n) >= 20)
+      return res
+        .status(429)
+        .json({
+          error:
+            "Your firm already has 20 library requests queued. Please wait for one to finish.",
+        });
+    next();
+  };
+  app.post(
+    "/api/cases/:caseId/production/:id/submit",
+    staff,
+    canQueueLibrary,
+    (req, res) => {
+      const r = get(req);
+      if (!r) return res.sendStatus(404);
+      const d = libraryRequest.parse(req.body);
+      // Queue only the generic name; never reuse private narrative, documents or images.
+      res
+        .status(202)
+        .json(queueLibraryDefinition(db, res.locals.user, d.name, r.id));
+    },
+  );
   app.get("/api/injury-library", staff, (_req, res) => {
     const u = res.locals.user as User,
       admin = isPlatformAdmin(db, u);
     res.json(
       db
         .prepare(
-          `SELECT id,name,description,medical_references,kind,status,review_note,created FROM injury_publications WHERE status='approved' OR firm_id=? OR ?=1 ORDER BY created DESC`,
+          `SELECT p.id,p.name,p.description,p.medical_references,p.kind,p.status,p.review_note,p.created,
+      j.state generation_state,j.stage,j.error,j.notification,
+      CASE WHEN p.creator=? OR ?=1 THEN 1 ELSE 0 END can_manage
+      FROM injury_publications p LEFT JOIN injury_library_jobs j ON j.publication_id=p.id
+      WHERE p.status='approved' OR p.firm_id=? OR ?=1 ORDER BY p.created DESC`,
         )
-        .all(u.firm_id, admin ? 1 : 0),
+        .all(u.id, admin ? 1 : 0, u.firm_id, admin ? 1 : 0),
     );
   });
-  app.post("/api/injury-library", staff, (req, res) => {
-    const u = res.locals.user as User;
-    if (!isPlatformAdmin(db, u)) return res.sendStatus(403);
-    const d = publication.parse(req.body);
-    db.prepare(
-      "INSERT INTO injury_publications(id,creator,firm_id,name,description,medical_references,kind,created) VALUES(?,?,?,?,?,?,?,?)",
-    ).run(
-      randomUUID(),
-      u.id,
-      u.firm_id,
-      d.name,
-      d.description,
-      d.medicalReferences,
-      d.kind,
-      Date.now(),
-    );
-    res.status(201).json({ ok: true });
+  app.post("/api/injury-library", staff, canQueueLibrary, (req, res) => {
+    const d = libraryRequest.parse(req.body);
+    res.status(202).json(queueLibraryDefinition(db, res.locals.user, d.name));
   });
-  app.post("/api/injury-library/:id/revise", staff, (req, res) => {
-    const u = res.locals.user as User,
-      previous = db
-        .prepare("SELECT * FROM injury_publications WHERE id=?")
-        .get(String(req.params.id));
-    if (!previous || (!isPlatformAdmin(db, u) && previous.creator !== u.id))
-      return res.sendStatus(404);
-    const d = publication.parse(req.body);
-    db.prepare(
-      "INSERT INTO injury_publications(id,production_id,creator,firm_id,name,description,medical_references,kind,created) VALUES(?,?,?,?,?,?,?,?,?)",
-    ).run(
-      randomUUID(),
-      previous.production_id ?? null,
-      u.id,
-      u.firm_id,
-      d.name,
-      d.description,
-      d.medicalReferences,
-      d.kind,
-      Date.now(),
-    );
-    audit(db, u.id, "injury.library-revised");
-    res.status(201).json({ ok: true });
-  });
+  app.post(
+    "/api/injury-library/:id/revise",
+    staff,
+    canQueueLibrary,
+    (req, res) => {
+      const u = res.locals.user as User,
+        previous = db
+          .prepare("SELECT * FROM injury_publications WHERE id=?")
+          .get(String(req.params.id));
+      if (!previous || (!isPlatformAdmin(db, u) && previous.creator !== u.id))
+        return res.sendStatus(404);
+      const d = libraryRequest.parse(req.body);
+      res
+        .status(202)
+        .json(
+          queueLibraryDefinition(
+            db,
+            u,
+            d.name,
+            previous.production_id as string | null,
+          ),
+        );
+    },
+  );
+  app.post(
+    "/api/injury-library/:id/retry",
+    staff,
+    canQueueLibrary,
+    (req, res) => {
+      const u = res.locals.user as User,
+        previous = db
+          .prepare("SELECT * FROM injury_publications WHERE id=?")
+          .get(String(req.params.id));
+      if (!previous || (!isPlatformAdmin(db, u) && previous.creator !== u.id))
+        return res.sendStatus(404);
+      const changed = db
+        .prepare(
+          "UPDATE injury_library_jobs SET state='queued',stage='Waiting for Injury Creation Agent',error='',updated=? WHERE publication_id=? AND state='failed'",
+        )
+        .run(Date.now(), previous.id);
+      if (!changed.changes)
+        return res
+          .status(409)
+          .json({ error: "This definition is already queued or complete." });
+      db.prepare(
+        "UPDATE injury_publications SET status='generating' WHERE id=?",
+      ).run(previous.id);
+      res.status(202).json({ id: previous.id, status: "generating" });
+    },
+  );
   app.post("/api/injury-library/:id/review", staff, (req, res) => {
     if (!isPlatformAdmin(db, res.locals.user)) return res.sendStatus(403);
     const d = z
@@ -383,6 +410,26 @@ export function productionRoutes(
         note: z.string().max(2000),
       })
       .parse(req.body);
+    const previous = db
+      .prepare(
+        "SELECT p.*,j.state generation_state FROM injury_publications p LEFT JOIN injury_library_jobs j ON j.publication_id=p.id WHERE p.id=?",
+      )
+      .get(String(req.params.id));
+    if (!previous) return res.sendStatus(404);
+    if (
+      ["generating", "failed"].includes(String(previous.status)) ||
+      (d.status === "approved" &&
+        (!previous.description ||
+          !previous.medical_references ||
+          (previous.generation_state &&
+            previous.generation_state !== "complete")))
+    )
+      return res
+        .status(409)
+        .json({
+          error:
+            "Wait for the agent to finish the definition and medical references before review.",
+        });
     const result = db
       .prepare(
         "UPDATE injury_publications SET status=?,reviewer=?,review_note=? WHERE id=?",

@@ -11,6 +11,10 @@ import {
   processProduction,
   notifyNext,
 } from "../server/injury-worker";
+import {
+  claimLibraryJob,
+  processLibraryDefinition,
+} from "../server/library-agent";
 import { createEvidenceStorage } from "../server/evidence-storage";
 
 test("durable production, separate reviews, private files, publication and retrying notifications", async () => {
@@ -157,6 +161,7 @@ test("durable production, separate reviews, private files, publication and retry
       },
       "https://injury.bot",
     );
+    process.env.ANTHROPIC_API_KEY = "synthetic-test-not-a-key";
     await call("lawyer", `${prefix}/${r.id}/submit`, {
       name: "Generic injury",
       description: "No case data",
@@ -180,6 +185,49 @@ test("durable production, separate reviews, private files, publication and retry
       ).status,
       403,
     );
+    assert.equal(
+      (
+        await call("admin", `/injury-library/${entries[0].id}/review`, {
+          status: "approved",
+          note: "",
+        })
+      ).status,
+      409,
+    );
+    const libraryJob = claimLibraryJob(db)!;
+    let libraryCalls = 0;
+    await processLibraryDefinition(db, libraryJob.publication_id, {
+      messages: {
+        create: async (request: any) => {
+          assert(
+            !JSON.stringify(request).includes("Reported activity limitation"),
+          );
+          libraryCalls++;
+          return {
+            content:
+              libraryCalls === 1
+                ? [
+                    {
+                      type: "text",
+                      text: JSON.stringify({ name: "Generic injury" }),
+                    },
+                  ]
+                : [
+                    {
+                      type: "text",
+                      text: "Generic researched definition.",
+                      citations: [
+                        {
+                          type: "web_search_result_location",
+                          url: "https://medlineplus.gov/injuries.html",
+                        },
+                      ],
+                    },
+                  ],
+          };
+        },
+      },
+    });
     assert.equal(
       (
         await call("admin", `/injury-library/${entries[0].id}/review`, {
@@ -225,6 +273,7 @@ test("durable production, separate reviews, private files, publication and retry
     claimJob(db);
     assert.equal(productionRecord(db, fail.id)!.state, "failed");
   } finally {
+    delete process.env.ANTHROPIC_API_KEY;
     await new Promise<void>((r) => server.close(() => r()));
     db.close();
     rmSync(dir, { recursive: true, force: true });

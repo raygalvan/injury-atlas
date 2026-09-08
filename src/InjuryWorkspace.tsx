@@ -14,7 +14,6 @@ import {
 import { api } from "./api";
 import type { Evidence } from "./domain";
 import type { ProductionInput, ProductionRecord } from "../server/production";
-type Part = { id: string; name: string; system: string; bounds: number[][] };
 type Publication = {
   id: string;
   name: string;
@@ -23,6 +22,11 @@ type Publication = {
   kind: string;
   status: string;
   review_note: string;
+  generation_state?: string;
+  stage?: string;
+  error?: string;
+  notification?: string;
+  can_manage: number;
 };
 const blank: ProductionInput = {
   name: "",
@@ -50,9 +54,12 @@ export function InjuryWorkspace({
 }) {
   const [records, setRecords] = useState<ProductionRecord[]>([]),
     [catalog, setCatalog] = useState<Publication[]>([]),
-    [parts, setParts] = useState<Part[]>([]),
     [admin, setAdmin] = useState(false),
-    [tab, setTab] = useState("private"),
+    [tab, setTab] = useState(
+      new URLSearchParams(location.search).has("library")
+        ? "library"
+        : "private",
+    ),
     [selected, setSelected] = useState(""),
     [draft, setDraft] = useState<ProductionInput | null>(null),
     [editId, setEditId] = useState(""),
@@ -61,48 +68,27 @@ export function InjuryWorkspace({
     [notice, setNotice] = useState(""),
     [busy, setBusy] = useState(false),
     [submitFor, setSubmitFor] = useState(""),
-    [pub, setPub] = useState({
-      name: "",
-      description: "",
-      medicalReferences: "",
-      kind: "documentation",
-    });
-  const placementFrame = useRef<HTMLIFrameElement>(null);
+    [pub, setPub] = useState({ name: "" });
   useEffect(() => {
-    const receive = (event: MessageEvent) => {
-      if (
-        event.origin !== location.origin ||
-        event.source !== placementFrame.current?.contentWindow ||
-        event.data?.type !== "human-atlas:selection" ||
-        event.data?.caseId !== caseId
-      )
-        return;
-      const { point, normal, sourceIds } = event.data;
-      if (
-        !Array.isArray(point) ||
-        point.length !== 3 ||
-        !point.every(Number.isFinite) ||
-        !Array.isArray(normal) ||
-        normal.length !== 3 ||
-        !normal.every(Number.isFinite)
-      )
-        return;
-      setDraft((d) =>
-        d?.recipe && sourceIds?.includes(d.recipe.parentId)
-          ? {
-              ...d,
-              recipe: {
-                ...d.recipe,
-                center: point as [number, number, number],
-                normal: normal as [number, number, number],
-              },
-            }
-          : d,
-      );
-    };
-    addEventListener("message", receive);
-    return () => removeEventListener("message", receive);
-  }, [caseId]);
+    if (draft)
+      document
+        .querySelector('[aria-label="AI case injury request"]')
+        ?.scrollIntoView({ block: "center", behavior: "smooth" });
+    else if (submitFor)
+      document
+        .querySelector('[aria-label="AI library request"]')
+        ?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, [!!draft, submitFor]);
+  const focusedLibrary = useRef("");
+  useEffect(() => {
+    const id = new URLSearchParams(location.search).get("library");
+    if (tab !== "library" || !id || focusedLibrary.current === id) return;
+    const entry = document.getElementById(`library-${id}`);
+    if (entry) {
+      entry.scrollIntoView({ block: "start" });
+      focusedLibrary.current = id;
+    }
+  }, [tab, catalog]);
   const load = async () => {
     const [rs, ls] = await Promise.all([
       caseId ? api(`/cases/${caseId}/production`) : Promise.resolve([]),
@@ -139,7 +125,6 @@ export function InjuryWorkspace({
   useEffect(() => {
     api("/production-capabilities")
       .then((d) => {
-        setParts(d.parts);
         setAdmin(d.platformAdmin);
       })
       .catch((e) => setError(e.message));
@@ -163,13 +148,6 @@ export function InjuryWorkspace({
     run(async () => {
       await api(`/cases/${caseId}/production/${r.id}/review`, { decision });
     });
-  const eligible = parts.filter((p) =>
-    draft?.recipe?.kind === "abrasion"
-      ? p.system === "integumentary"
-      : draft?.recipe?.kind === "fracture"
-        ? p.system === "skeletal" && /rib/i.test(p.name)
-        : p.system === "nervous" && /(gyrus|sulcus|cerebr|lobe)/i.test(p.name),
-  );
   const set = (key: keyof ProductionInput, value: any) =>
     setDraft((d) => (d ? { ...d, [key]: value } : d));
   return (
@@ -205,6 +183,59 @@ export function InjuryWorkspace({
           </p>
         </div>
       </div>
+      {draft && (
+        <div>
+          <form
+            className="card production-form"
+            aria-label="AI case injury request"
+            onSubmit={(e) => {
+              e.preventDefault();
+              void run(async () => {
+                const r = await api(`/cases/${caseId}/injuries/generate`, {
+                  name: draft.description.trim().slice(0, 160),
+                  description: draft.description,
+                });
+                setSelected(r.id);
+                setDraft(null);
+                setTab("private");
+                setNotice(
+                  "Injury Creation Agent assigned. Results will appear in Evidence and you will be notified by email.",
+                );
+              });
+            }}
+          >
+            <div className="section-heading">
+              <h2>{editId ? "Revise injury request" : "Create injury"}</h2>
+              <button type="button" onClick={() => setDraft(null)}>
+                Close
+              </button>
+            </div>
+            <label>
+              Describe the injury
+              <textarea
+                required
+                value={draft.description}
+                onChange={(e) => set("description", e.target.value)}
+                placeholder="For example: broken kneecap"
+              />
+            </label>
+            <p>
+              The Injury Creation Agent reads available case evidence, prepares
+              the medical explanation, and builds the anatomical illustration.
+              You review the result. You can leave while it works.
+            </p>
+            <button disabled={busy} type="submit">
+              Send to Injury Creation Agent
+            </button>
+            {error && (
+              <p role="alert" className="error">
+                {error}
+              </p>
+            )}
+          </form>
+        </div>
+      )}
+
       <div className="production-tabs" role="tablist">
         <button
           role="tab"
@@ -238,8 +269,8 @@ export function InjuryWorkspace({
               <div className="card">
                 <h3>Start with a documented injury</h3>
                 <p>
-                  Create an injury description now. Add evidence, client effects
-                  and measured placement as they become available.
+                  Give the agent an injury name or a short description. It reads
+                  available evidence and prepares the details for your review.
                 </p>
               </div>
             )}
@@ -330,7 +361,7 @@ export function InjuryWorkspace({
                           setEditId(current.id);
                         }}
                       >
-                        Edit details
+                        Revise request
                       </button>
                     )}
                   {["draft", "failed"].includes(current.state) && (
@@ -477,15 +508,19 @@ export function InjuryWorkspace({
                     </>
                   )}
                   <button
-                    onClick={() => {
-                      setSubmitFor(current.id);
-                      setPub({
-                        name: current.body.name,
-                        description: current.body.generalDefinition || "",
-                        medicalReferences: current.body.generalReferences || "",
-                        kind: current.body.recipe?.kind || "documentation",
-                      });
-                    }}
+                    disabled={busy || current.state !== "complete"}
+                    onClick={() =>
+                      run(async () => {
+                        await api(
+                          `/cases/${caseId}/production/${current.id}/submit`,
+                          { name: current.body.name },
+                        );
+                        setTab("library");
+                        setNotice(
+                          "The agent is preparing a separate generic definition and medical references. Your private case injury is retained.",
+                        );
+                      })
+                    }
                   >
                     <Send size={15} /> Submit generic template
                   </button>
@@ -515,29 +550,101 @@ export function InjuryWorkspace({
                 until review. Each application gets its own case measurements.
               </p>
             </div>
-            {admin && (
-              <button
-                onClick={() => {
-                  setSubmitFor("admin");
-                  setPub({
-                    name: "",
-                    description: "",
-                    medicalReferences: "",
-                    kind: "documentation",
-                  });
-                }}
-              >
-                Add library entry
-              </button>
-            )}
+            <button
+              onClick={() => {
+                setSubmitFor("new");
+                setPub({ name: "" });
+              }}
+            >
+              Add library entry
+            </button>
           </div>
+          {!!submitFor && (
+            <form
+              className="card production-form"
+              aria-label="AI library request"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void run(async () => {
+                  await api(
+                    submitFor.startsWith("library:")
+                      ? `/injury-library/${submitFor.slice(8)}/revise`
+                      : "/injury-library",
+                    { name: pub.name },
+                  );
+                  setSubmitFor("");
+                  setNotice(
+                    "Injury Creation Agent assigned. You can leave; we will email you when the definition and references are ready for review.",
+                  );
+                });
+              }}
+            >
+              <h3>
+                {submitFor.startsWith("library:")
+                  ? "Revise with AI"
+                  : "Add an injury to the library"}
+              </h3>
+              <label>
+                Injury name
+                <input
+                  required
+                  maxLength={160}
+                  value={pub.name}
+                  onChange={(e) => setPub({ name: e.target.value })}
+                  placeholder="For example: broken left femur"
+                />
+              </label>
+              <p>
+                The Injury Creation Agent writes the medical definition and
+                researches cited references. You review the finished result. No
+                client information is needed.
+              </p>
+              <div className="production-actions">
+                <button disabled={busy} type="submit">
+                  {busy ? "Assigning agent…" : "Generate with AI"}
+                </button>
+                <button type="button" onClick={() => setSubmitFor("")}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          )}
           <div className="production-library">
             {catalog.map((p) => (
-              <article className="card" key={p.id}>
-                <span className="badge">{p.status}</span>
+              <article className="card" key={p.id} id={`library-${p.id}`}>
+                <span className="badge">
+                  {p.status === "submitted" ? "Ready for review" : p.status}
+                </span>
                 <h3>{p.name}</h3>
-                <p>{p.description}</p>
-                <p className="fine">References: {p.medical_references}</p>
+                {p.stage && <p role="status">{p.stage}</p>}
+                {p.error && (
+                  <p className="error" role="alert">
+                    {p.error}
+                  </p>
+                )}
+                {p.description && (
+                  <p style={{ whiteSpace: "pre-wrap" }}>{p.description}</p>
+                )}
+                {p.medical_references && (
+                  <p className="fine" style={{ whiteSpace: "pre-wrap" }}>
+                    References: {p.medical_references}
+                  </p>
+                )}
+                {p.notification === "sent" && (
+                  <p className="fine">Completion email sent</p>
+                )}
+                {p.generation_state === "failed" && !!p.can_manage && (
+                  <button
+                    disabled={busy}
+                    onClick={() =>
+                      run(async () => {
+                        await api(`/injury-library/${p.id}/retry`, {});
+                      })
+                    }
+                  >
+                    Retry research
+                  </button>
+                )}
                 {p.review_note && <p>Review: {p.review_note}</p>}
                 {p.status === "approved" && (
                   <button
@@ -546,28 +653,24 @@ export function InjuryWorkspace({
                       setDraft({
                         ...blank,
                         name: p.name,
+                        description: p.name,
                         medicalDescription: p.description,
                         medicalReferences: p.medical_references,
                       });
                       setEditId("");
                       setNotice(
-                        "Add your client’s documented injury and placement. The library does not establish client facts.",
+                        "The agent will read the case evidence for this injury. Add a short description only if you want to clarify the request.",
                       );
                     }}
                   >
                     Use in this case
                   </button>
                 )}
-                {admin && (
+                {!!p.can_manage && (
                   <button
                     onClick={() => {
                       setSubmitFor(`library:${p.id}`);
-                      setPub({
-                        name: p.name,
-                        description: p.description,
-                        medicalReferences: p.medical_references,
-                        kind: p.kind,
-                      });
+                      setPub({ name: p.name });
                     }}
                   >
                     Revise definition
@@ -578,7 +681,11 @@ export function InjuryWorkspace({
                     {["approved", "rejected", "retired"].map((status) => (
                       <button
                         key={status}
-                        disabled={busy || p.status === status}
+                        disabled={
+                          busy ||
+                          p.status === status ||
+                          ["generating", "failed"].includes(p.status)
+                        }
                         onClick={() =>
                           run(async () => {
                             await api(`/injury-library/${p.id}/review`, {
@@ -610,127 +717,6 @@ export function InjuryWorkspace({
             </p>
           )}
         </>
-      )}
-      {draft && (
-        <div className="modal-backdrop">
-          <form
-            className="modal production-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void run(async () => {
-                const r = await api(`/cases/${caseId}/injuries/generate`, {
-                  name: draft.description.trim().slice(0, 160),
-                  description: draft.description,
-                });
-                setSelected(r.id);
-                setDraft(null);
-                setTab("private");
-                setNotice(
-                  "Injury Creation Agent assigned. Results will appear in Evidence and you will be notified by email.",
-                );
-              });
-            }}
-          >
-            <div className="section-heading">
-              <h2>{editId ? "Edit injury" : "Create injury"}</h2>
-              <button type="button" onClick={() => setDraft(null)}>
-                Close
-              </button>
-            </div>
-            <label>
-              Describe the injury
-              <textarea
-                required
-                value={draft.description}
-                onChange={(e) => set("description", e.target.value)}
-                placeholder="For example: broken kneecap"
-              />
-            </label>
-            <p>
-              The Injury Creation Agent reads available case evidence, prepares
-              the medical explanation, and builds the anatomical illustration.
-              You review the result. You can leave while it works.
-            </p>
-            <button disabled={busy} type="submit">
-              Send to Injury Creation Agent
-            </button>
-            {error && (
-              <p role="alert" className="error">
-                {error}
-              </p>
-            )}
-          </form>
-        </div>
-      )}
-      {!!submitFor && (
-        <div className="modal-backdrop">
-          <form
-            className="modal production-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void run(async () => {
-                await api(
-                  submitFor.startsWith("library:")
-                    ? `/injury-library/${submitFor.slice(8)}/revise`
-                    : submitFor === "admin"
-                      ? "/injury-library"
-                      : `/cases/${caseId}/production/${submitFor}/submit`,
-                  pub,
-                );
-                setSubmitFor("");
-                setTab("library");
-                setNotice(
-                  "Submitted for shared-library review. Your private case injury is retained.",
-                );
-              });
-            }}
-          >
-            <h2>
-              {submitFor === "admin"
-                ? "Create library definition"
-                : "Submit a reusable definition"}
-            </h2>
-            <p>
-              Write a generic medical definition. Do not include names, case
-              facts, client effects, source records or identifying images.
-            </p>
-            <label>
-              Generic name
-              <input
-                required
-                value={pub.name}
-                onChange={(e) => setPub({ ...pub, name: e.target.value })}
-              />
-            </label>
-            <label>
-              Generic medical description
-              <textarea
-                required
-                value={pub.description}
-                onChange={(e) =>
-                  setPub({ ...pub, description: e.target.value })
-                }
-              />
-            </label>
-            <label>
-              Medical references
-              <textarea
-                required
-                value={pub.medicalReferences}
-                onChange={(e) =>
-                  setPub({ ...pub, medicalReferences: e.target.value })
-                }
-              />
-            </label>
-            <div className="production-actions">
-              <button disabled={busy}>Submit for review</button>
-              <button type="button" onClick={() => setSubmitFor("")}>
-                Cancel
-              </button>
-            </div>
-            {error && <p role="alert">{error}</p>}
-          </form>
-        </div>
       )}
     </section>
   );
