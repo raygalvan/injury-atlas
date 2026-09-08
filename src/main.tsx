@@ -1,3 +1,4 @@
+import { InjuryWorkspace } from "./InjuryWorkspace";
 import React, { useEffect, useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -33,7 +34,7 @@ const navigation = [
   ["atlas", "Human Atlas", Box],
   ["cases", "Cases", FolderOpen],
   ["evidence", "Evidence", Files],
-  ["injuries", "Injury findings", Activity],
+  ["injuries", "Injury workspace", Activity],
   ["reconstruction", "Reconstruction", Clapperboard],
   ["exhibits", "Exhibits", FileOutput],
   ["agents", "Agents", Bot],
@@ -65,7 +66,14 @@ function App() {
     const cs = await api("/cases");
     setCases(cs);
     setCaseId((prev) =>
-      cs.some((c: Case) => c.id === prev) ? prev : cs[0]?.id || "",
+      cs.some((c: Case) => c.id === prev)
+        ? prev
+        : cs.find(
+            (c: Case) =>
+              c.id === new URLSearchParams(location.search).get("case"),
+          )?.id ||
+          cs[0]?.id ||
+          "",
     );
   };
   const loadDetails = async () => {
@@ -91,6 +99,7 @@ function App() {
   }, []);
   useEffect(() => {
     if (member) {
+      setView(pathView());
       loadCases().catch((e) => setError(e.message));
       if (member.role === "client") {
         setView("evidence");
@@ -625,8 +634,20 @@ function App() {
               )}
             </>
           )}
+          {view === "injuries" && !client && (
+            <InjuryWorkspace
+              key={caseId}
+              caseId={caseId}
+              evidence={evidence}
+              onRefresh={() => {
+                void loadDetails();
+              }}
+              onAtlas={() => go("atlas")}
+            />
+          )}
           {view === "injuries" && (
-            <>
+            <details className="card">
+              <summary>Existing evidence findings</summary>
               <div className="section-heading">
                 <div>
                   <h2>Documented injury findings</h2>
@@ -694,7 +715,7 @@ function App() {
                   text="Upload evidence, then draft a finding with a specific page, image, or timestamp citation."
                 />
               )}
-            </>
+            </details>
           )}
           {view === "reconstruction" && (
             <Empty
@@ -807,19 +828,25 @@ function App() {
                     name="title"
                     label="Case title"
                     placeholder="Homer Cortez Injury Reconstruction"
-                    defaultValue={dialog === "managecase" ? active?.title : undefined}
+                    defaultValue={
+                      dialog === "managecase" ? active?.title : undefined
+                    }
                   />
                   <Field
                     name="client"
                     label="Client / subject"
-                    defaultValue={dialog === "managecase" ? active?.client : undefined}
+                    defaultValue={
+                      dialog === "managecase" ? active?.client : undefined
+                    }
                   />
                   <label>
                     Incident notes
                     <textarea
                       name="incident"
                       maxLength={4000}
-                      defaultValue={dialog === "managecase" ? active?.incident : undefined}
+                      defaultValue={
+                        dialog === "managecase" ? active?.incident : undefined
+                      }
                     />
                   </label>
                   {dialog === "managecase" && active && (
@@ -834,7 +861,9 @@ function App() {
                             });
                             await loadCases();
                             setNotice(
-                              active.archived ? "Case restored." : "Case archived.",
+                              active.archived
+                                ? "Case restored."
+                                : "Case archived.",
                             );
                             setDialog("");
                           })

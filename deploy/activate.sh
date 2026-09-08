@@ -12,7 +12,7 @@ ln -sfn "$RELEASE_DIR" /opt/injury-atlas/current.next
 mv -Tf /opt/injury-atlas/current.next /opt/injury-atlas/current
 sudo systemctl restart injury-atlas
 for attempt in $(seq 1 15); do
-  if HEALTH_BODY="$(curl -fsS http://127.0.0.1:3100/api/health)" && node -e 'const h=JSON.parse(process.argv[1]);if(!h.ok||!h.atlasReady||h.release!==process.argv[2])process.exit(1)' "$HEALTH_BODY" "$RELEASE_SHA"; then
+  if HEALTH_BODY="$(curl -fsS http://127.0.0.1:3100/api/health)" && node -e 'const h=JSON.parse(process.argv[1]);if(!h.ok||!h.atlasReady||!h.productionWorkerReady||h.release!==process.argv[2])process.exit(1)' "$HEALTH_BODY" "$RELEASE_SHA"; then
     echo "Verified Injury Atlas release $RELEASE_SHA"
     exit 0
   fi

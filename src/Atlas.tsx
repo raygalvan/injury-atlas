@@ -49,13 +49,17 @@ export function Atlas({
         if (!caseRecord) return;
         // Applied and generated injuries are persisted per case; the viewer
         // renders them and reports changes back.
-        let injuries = { applied: [], generated: [] as unknown[] };
+        let injuries = {
+          applied: [],
+          generated: [] as unknown[],
+          productionInjuries: [] as unknown[],
+        };
         try {
           injuries = await api(`/cases/${caseRecord.id}/injuries`);
         } catch {
           /* The viewer still opens with reference anatomy. */
         }
-        setAppliedCount(injuries.applied.length);
+        setAppliedCount(injuries.productionInjuries.length);
         post({
           type: "injurybot:atlas:init",
           case: {
@@ -66,17 +70,43 @@ export function Atlas({
             activeReferenceGroups: [],
             appliedInjuries: injuries.applied,
             generatedInjuries: injuries.generated,
+            productionInjuries: injuries.productionInjuries,
           },
         });
       }
       if (d.caseId !== caseRecord?.id) return;
+      if (d.type === "human-atlas:open-injury-workspace" && caseRecord)
+        window.location.assign(`/injuries?case=${caseRecord.id}`);
+      if (
+        d.type === "human-atlas:production-visibility" &&
+        caseRecord &&
+        typeof d.id === "string" &&
+        typeof d.hidden === "boolean"
+      ) {
+        api(
+          `/cases/${caseRecord.id}/production/${encodeURIComponent(d.id)}/review`,
+          { decision: d.hidden ? "hide" : "show" },
+        ).catch(() =>
+          setSelection(
+            "Visibility could not be saved. Reload the atlas to restore saved state.",
+          ),
+        );
+      }
       if (d.type === "human-atlas:selection" && typeof d.label === "string")
         setSelection(d.label);
-      if (d.type === "human-atlas:injuries-applied" && Array.isArray(d.injuries)) {
+      if (
+        d.type === "human-atlas:injuries-applied" &&
+        Array.isArray(d.injuries)
+      ) {
         setAppliedCount(d.injuries.length);
-        api(`/cases/${caseRecord!.id}/injuries/apply`, { injuries: d.injuries }).catch(() => {});
+        api(`/cases/${caseRecord!.id}/injuries/apply`, {
+          injuries: d.injuries,
+        }).catch(() => {});
       }
-      if (d.type === "human-atlas:match-request" && typeof d.description === "string") {
+      if (
+        d.type === "human-atlas:match-request" &&
+        typeof d.description === "string"
+      ) {
         try {
           const result = await api(`/cases/${caseRecord!.id}/injuries/match`, {
             description: d.description,
@@ -91,13 +121,19 @@ export function Atlas({
           /* The viewer falls back to its own matcher after a timeout. */
         }
       }
-      if (d.type === "human-atlas:generate-request" && typeof d.name === "string") {
+      if (
+        d.type === "human-atlas:generate-request" &&
+        typeof d.name === "string"
+      ) {
         try {
-          const queued = await api(`/cases/${caseRecord!.id}/injuries/generate`, {
-            name: d.name,
-            description: String(d.description ?? ""),
-          });
-          post({ type: "injurybot:atlas:generation", caseId: caseRecord!.id, injury: queued });
+          const queued = await api(
+            `/cases/${caseRecord!.id}/injuries/generate`,
+            {
+              name: d.name,
+              description: String(d.description ?? ""),
+            },
+          );
+          window.location.assign(queued.workspaceUrl);
         } catch {
           /* Reported in the viewer as not queued. */
         }
@@ -169,8 +205,8 @@ export function Atlas({
                 : "Human Atlas is not installed yet"}
             </h2>
             <p>
-              The application needs its pinned anatomy build before the 3D viewer
-              can open.
+              The application needs its pinned anatomy build before the 3D
+              viewer can open.
             </p>
           </div>
         )}
@@ -183,7 +219,7 @@ export function Atlas({
             : "Rotate · Zoom · Isolate anatomical structures"}
         <span>
           {appliedCount
-            ? `${appliedCount} ${appliedCount === 1 ? "injury" : "injuries"} applied · placement pending review`
+            ? `${appliedCount} ${appliedCount === 1 ? "injury" : "injuries"} applied · reviewed illustration`
             : "Reference anatomy · No case injuries rendered"}
         </span>
       </div>

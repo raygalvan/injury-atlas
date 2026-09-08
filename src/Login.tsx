@@ -6,6 +6,19 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
   const client = location.pathname.startsWith("/client");
   const entry = client ? "/client/sign-in" : "/sign-in";
   const [accessToken] = useState(() => {
+    if (location.pathname === "/injuries" && location.search)
+      sessionStorage.setItem(
+        "injury-return",
+        location.pathname + location.search,
+      );
+    const returnTo = new URLSearchParams(location.search).get("returnTo");
+    if (
+      returnTo &&
+      /^\/injuries\?case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?$/.test(
+        returnTo,
+      )
+    )
+      sessionStorage.setItem("injury-return", returnTo);
     const token = new URLSearchParams(location.hash.slice(1)).get("token");
     if (token) history.replaceState(null, "", entry);
     return token;
@@ -82,12 +95,24 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
                 try {
                   if (accessToken) {
                     await api("/auth/consume", { token: accessToken });
+                    const back = sessionStorage.getItem("injury-return");
+                    if (
+                      back &&
+                      /^\/injuries\?case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?$/.test(
+                        back,
+                      )
+                    ) {
+                      history.replaceState(null, "", back);
+                      sessionStorage.removeItem("injury-return");
+                    }
                     await onSuccess();
                   } else {
                     await api("/auth/request", {
                       email,
                       portal: client ? "client" : "firm",
                       remember,
+                      returnTo:
+                        sessionStorage.getItem("injury-return") || undefined,
                     });
                     setSent(true);
                   }

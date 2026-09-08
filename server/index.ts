@@ -1,3 +1,4 @@
+import { fork } from "node:child_process";
 import path from "node:path";
 import { openStore } from "./store";
 import { createApp } from "./app";
@@ -24,3 +25,24 @@ createApp(db, {
 }).listen(Number(process.env.PORT || 3100), "127.0.0.1", () =>
   console.log("Injury Atlas is listening"),
 );
+
+// Separate process keeps geometry and document work off the HTTP event loop.
+// systemd's control group stops both processes during deployments.
+let stopping = false;
+let worker: ReturnType<typeof fork>;
+function startWorker() {
+  worker = fork(path.resolve("server/injury-worker.ts"), [], {
+    execArgv: ["--import", "tsx", "--max-old-space-size=512"],
+    stdio: "inherit",
+  });
+  worker.once("exit", () => {
+    if (!stopping) setTimeout(startWorker, 5000);
+  });
+}
+startWorker();
+for (const signal of ["SIGTERM", "SIGINT"] as const)
+  process.on(signal, () => {
+    stopping = true;
+    worker?.kill(signal);
+    process.exit(0);
+  });

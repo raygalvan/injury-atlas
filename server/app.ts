@@ -1,3 +1,9 @@
+import {
+  ensureProduction,
+  createProduction,
+  productionSchema,
+} from "./production";
+import { productionRoutes } from "./production-routes";
 import express from "express";
 import multer from "multer";
 import { z } from "zod";
@@ -50,6 +56,7 @@ export function createApp(
 ) {
   const app = express();
   ensureInjuryTables(db);
+  ensureProduction(db);
   const origin = new URL(options.origin).origin;
   const files = path.resolve(options.dataDir, "evidence");
   const storage =
@@ -87,6 +94,12 @@ export function createApp(
         ? JSON.parse(readFileSync("dist/release.json", "utf8")).commit
         : "development",
       atlasReady: existsSync(".atlas-build/index.html"),
+      productionWorkerReady:
+        Number(
+          db.prepare("SELECT heartbeat FROM worker_health WHERE id=1").get()
+            ?.heartbeat || 0,
+        ) >
+          Date.now() - 90000 && existsSync(".atlas-build/injury-generator.mjs"),
     }),
   );
   app.get("/api/auth/preferences", (req, res) => {
@@ -146,7 +159,18 @@ export function createApp(
       if (raw) {
         try {
           const entry = user.role === "client" ? "/client/sign-in" : "/sign-in";
-          await options.send(user.email, `${origin}${entry}#token=${raw}`);
+          const returnTo =
+            typeof req.body.returnTo === "string" &&
+            /^\/injuries\?case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?$/.test(
+              req.body.returnTo,
+            ) &&
+            user.role !== "client"
+              ? req.body.returnTo
+              : "";
+          await options.send(
+            user.email,
+            `${origin}${entry}${returnTo ? "?returnTo=" + encodeURIComponent(returnTo) : ""}#token=${raw}`,
+          );
         } catch {
           db.prepare("DELETE FROM links WHERE hash=?").run(hash(raw));
           console.error(
@@ -501,11 +525,29 @@ export function createApp(
     );
     res.json(f);
   });
+  productionRoutes(app, db, storage, staff);
   // Injury library and per-case applications feed the embedded viewer.
   app.get("/api/injuries", staff, (_req, res) => res.json(listLibrary(db)));
-  app.get("/api/cases/:caseId/injuries", (req, res) =>
-    res.json(caseInjuries(db, String(req.params.caseId))),
-  );
+  app.get("/api/cases/:caseId/injuries", staff, (req, res) => {
+    const id = String(req.params.caseId),
+      legacy = caseInjuries(db, id);
+    const productionInjuries = db
+      .prepare(
+        "SELECT id,body,hidden FROM injury_production WHERE case_id=? AND applied=1 AND state='complete' AND source_review=1 AND placement_review=1 AND render_review=1",
+      )
+      .all(id)
+      .map((r) => ({
+        id: r.id,
+        parentId: JSON.parse(String(r.body)).recipe.parentId,
+        mode:
+          JSON.parse(String(r.body)).recipe.kind === "fracture"
+            ? "replacement"
+            : "overlay",
+        hidden: !!r.hidden,
+        url: `/api/cases/${id}/production/${r.id}/geometry`,
+      }));
+    res.json({ ...legacy, productionInjuries });
+  });
   app.post("/api/cases/:caseId/injuries/apply", staff, (req, res) => {
     const { injuries } = z
       .object({
@@ -533,7 +575,18 @@ export function createApp(
       })
       .parse(req.body);
     const id = String(req.params.caseId);
-    const queued = queueGeneration(db, id, res.locals.user.id, name, description);
+    const draft = createProduction(
+      db,
+      res.locals.user,
+      id,
+      productionSchema.parse({ name, description: description || name }),
+    );
+    const queued = {
+      id: draft.id,
+      name,
+      status: "queued",
+      workspaceUrl: `/injuries?case=${id}&injury=${draft.id}`,
+    };
     audit(db, res.locals.user.id, "injury.generation-queued", id);
     res.status(202).json(queued);
   });

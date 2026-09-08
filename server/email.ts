@@ -22,3 +22,28 @@ export async function sendLink(email: string, url: string) {
     }),
   );
 }
+
+export async function sendProductionComplete(email: string, url: string) {
+  if (process.env.NODE_ENV !== "production")
+    throw new Error("Completion emails are disabled outside production");
+  if (!process.env.SES_FROM_EMAIL)
+    throw new Error("SES_FROM_EMAIL is required");
+  await new SESv2Client({
+    region: process.env.SES_REGION || process.env.AWS_REGION || "us-east-2",
+  }).send(
+    new SendEmailCommand({
+      FromEmailAddress: process.env.SES_FROM_EMAIL,
+      Destination: { ToAddresses: [email] },
+      Content: {
+        Simple: {
+          Subject: { Data: "Your injury.bot files are ready for review" },
+          Body: {
+            Text: {
+              Data: `Your injury production request is complete. The generated files are saved in your private case Evidence library. Sign in to review them and approve any atlas placement.\n\n${url}\n\nThis link does not grant access to anyone outside your authorized workspace.`,
+            },
+          },
+        },
+      },
+    }),
+  );
+}

@@ -1,3 +1,4 @@
+import { build } from "esbuild";
 import {
   readFileSync,
   writeFileSync,
@@ -63,6 +64,14 @@ for (const c of model.chunks) {
 const target = path.join(root, ".atlas-build");
 rmSync(target, { recursive: true, force: true });
 cpSync(output, target, { recursive: true });
+await build({
+  entryPoints: [path.join(source, "app/production-worker.ts")],
+  outfile: path.join(target, "injury-generator.mjs"),
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  target: "node24",
+});
 cpSync(path.join(source, "LICENSE"), path.join(target, "LICENSE.txt"));
 writeFileSync(path.join(target, "release.json"), JSON.stringify(lock, null, 2));
 console.log(
