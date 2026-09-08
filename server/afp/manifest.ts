@@ -16,7 +16,7 @@ export function applicationVersion() {
     const sha = JSON.parse(readFileSync("dist/release.json", "utf8")).commit;
     if (/^[a-f0-9]{40}$/.test(sha)) return sha;
   } catch {}
-  return "0.1.0+development";
+  return process.env.NODE_ENV === "production" ? "unavailable" : "0.1.0+development";
 }
 export const manifestJsonSchema = {
   ...z.toJSONSchema(manifestSchema),
@@ -94,6 +94,7 @@ export function validateManifest(
     };
   }
   const m = parsed.data;
+  if(version === "unavailable") reasons.push("application_version_unavailable");
   if (!actor || !actor.active || actor.role === "client")
     reasons.push("actor_not_authorized");
   if (new Set(m.protectedBoundaries).size !== protectedBoundaries.length)

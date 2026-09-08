@@ -74,6 +74,7 @@ test("AFP SDK v0.1 enforces schema, tenancy, policy, revisions, resources and no
   try {
     const m = template();
     assert.equal(m.schemaVersion, AFP_SCHEMA);
+    assert.equal(validateManifest(manifestTemplate(users.staff,readControlPlane(db).policies,"unavailable"),users.staff,readControlPlane(db).policies,"unavailable").result,"Incompatible");
     assert.equal(
       (await (await call("staff", "/afp/manifests/evaluate", m)).json()).result,
       "Compatible",
