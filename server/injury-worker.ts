@@ -612,6 +612,40 @@ export async function notifyNext(
     ).run(n.production_id);
   }
 }
+export const LEGACY_RESPONSE_ERROR =
+  "The agent returned an incomplete response. Retry production; no additional medical fields are required.";
+/** Retry this retired failure once, preserving the original record and request. */
+export function recoverResponseFailures(db: Store) {
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    const rows = db
+      .prepare(
+        `SELECT p.id FROM injury_production p JOIN users u ON u.id=p.creator JOIN cases c ON c.id=p.case_id
+      WHERE p.state='failed' AND p.error=? AND p.source_review=0 AND p.placement_review=0 AND p.render_review=0
+      AND u.active=1 AND u.role IN ('owner','attorney') AND u.firm_id=p.firm_id AND c.firm_id=p.firm_id AND c.archived=0
+      AND json_valid(p.body) AND json_extract(p.body,'$.agentManaged')=1
+      AND COALESCE(json_extract(p.body,'$.workflow'),'injury')='injury'
+      AND NOT EXISTS(SELECT 1 FROM injury_artifacts a WHERE a.production_id=p.id)
+      AND NOT EXISTS(SELECT 1 FROM injury_response_recovery x WHERE x.production_id=p.id)
+      ORDER BY p.updated LIMIT 20`,
+      )
+      .all(LEGACY_RESPONSE_ERROR);
+    for (const r of rows) {
+      db.prepare("INSERT INTO injury_response_recovery VALUES(?,?)").run(
+        r.id,
+        Date.now(),
+      );
+      db.prepare(
+        "UPDATE injury_production SET state='queued',stage='Retrying with corrected AI response handling',error='',attempts=0,updated=? WHERE id=?",
+      ).run(Date.now(), r.id);
+    }
+    db.exec("COMMIT");
+    return rows.length;
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  }
+}
 export function claimJob(db: Store) {
   db.prepare(
     "UPDATE injury_production SET state='failed',stage='Needs attention',error='Production was interrupted. Retry this request.',updated=? WHERE state='running' AND updated<?",
@@ -655,6 +689,7 @@ if (
         sendLibraryComplete,
         process.env.APP_URL || "http://localhost:5173",
       );
+      recoverResponseFailures(db);
       const job = claimJob(db);
       if (job) {
         const watchdog = setTimeout(() => process.exit(1), 18 * 60000);

@@ -120,3 +120,81 @@ test("agent anatomy validation rejects wrong side and non-bone fracture plans", 
     null,
   );
 });
+
+test("null geometric choices are illustrative defaults, while invalid AI fields are repaired automatically", async () => {
+  const { structuredResponse, responseSchema, ResponseContractError } =
+    await import("../server/ai/structured-response");
+  const { injuryAgentOutput } = await import("../server/injury-agent");
+  const schema = responseSchema(injuryAgentOutput);
+  assert.equal(schema.additionalProperties, false);
+  assert.deepEqual(schema.required, Object.keys(schema.properties));
+  assert.equal(schema.properties.placement.additionalProperties, false);
+  assert.ok(JSON.stringify(schema).includes("surface-abrasion"));
+  assert.ok(!JSON.stringify(schema).includes('"maximum":'));
+  const nullable = {
+    ...result,
+    placement: { ...result.placement, orientation: null, surface: null },
+  };
+  const parsed = injuryAgentOutput.parse(nullable);
+  assert.equal(parsed.placement.orientation, "transverse");
+  assert.equal(parsed.placement.surface, "anterior");
+  let calls = 0;
+  const diagnostics: any[] = [];
+  const client = {
+    messages: {
+      create: async (request: any) => {
+        calls++;
+        assert.deepEqual(request.responseSchema, schema);
+        if (calls === 1)
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify({
+                  ...nullable,
+                  generalDefinition: null,
+                  placement: { ...nullable.placement, method: "bone fracture" },
+                }),
+              },
+            ],
+            meta: { provider: "anthropic", model: "test-model" },
+          };
+        assert.match(request.messages.at(-1).content, /generalDefinition/);
+        assert.match(request.messages.at(-1).content, /placement.method/);
+        return { content: [{ type: "text", text: JSON.stringify(nullable) }] };
+      },
+    },
+  };
+  const fixed = await structuredResponse(
+    client,
+    {
+      system: "Keep source facts separate.",
+      messages: [{ role: "user", content: "broken kneecap" }],
+    },
+    injuryAgentOutput,
+    (d) => diagnostics.push(d),
+  );
+  assert.equal(fixed.placement.method, "fracture");
+  assert.equal(calls, 2);
+  assert.equal(diagnostics[0].issues[0].path, "generalDefinition");
+  assert.ok(!JSON.stringify(diagnostics).includes("broken kneecap"));
+  let failedCalls = 0;
+  await assert.rejects(
+    structuredResponse(
+      {
+        messages: {
+          create: async () => {
+            failedCalls++;
+            return {
+              content: [{ type: "text", text: '{"generalDefinition":null}' }],
+            };
+          },
+        },
+      },
+      { system: "Test", messages: [] },
+      injuryAgentOutput,
+    ),
+    ResponseContractError,
+  );
+  assert.equal(failedCalls, 3);
+});
