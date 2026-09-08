@@ -244,6 +244,38 @@ try {
   await page.locator("#usage").screenshot({path:"artifacts/production/usage-pricing-mobile.png"});
   await page.goto("http://127.0.0.1:3198/settings#afp");
   await page.getByRole("heading",{name:"AFP Management",exact:true}).waitFor();
+  const tab=label=>page.getByRole("tab",{name:label,exact:true});
+  for(const label of ["Overview","AFP Readiness","Extension Points","Permissions","Resources","AFP Features","Memory & Decisions"]){
+    await tab(label).click();
+    assert.equal(await tab(label).getAttribute("aria-selected"),"true");
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  }
+  await tab("Permissions").click();
+  assert.equal(await page.getByText("Protected · locked",{exact:true}).count(),4);
+  await page.getByLabel("UI additions policy",{exact:true}).selectOption("Approval Required");
+  await page.getByText("AFP control-plane record saved.",{exact:true}).waitFor();
+  await page.reload();
+  assert.equal(await page.getByLabel("UI additions policy",{exact:true}).inputValue(),"Approval Required");
+  await tab("AFP Readiness").click();
+  await page.getByRole("button",{name:"Review Extension Point Registry",exact:true}).click();
+  await page.getByLabel("Readiness status",{exact:true}).selectOption("Verified");
+  await page.getByLabel("Implementation / verification reference",{exact:true}).fill("Synthetic browser registry review");
+  await page.getByRole("button",{name:"Save readiness review",exact:true}).click();
+  await page.getByText("AFP control-plane record saved.",{exact:true}).waitFor();
+  await tab("AFP Features").click();
+  await page.getByRole("heading",{name:"No AFP-created features yet",exact:true}).waitFor();
+  await tab("Overview").click();
+  assert.ok(await page.locator(".afp-control-header").evaluate(el=>el.scrollHeight<=el.clientHeight+1));
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.screenshot({path:"artifacts/production/afp-control-mobile.png",fullPage:true});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.evaluate(()=>window.scrollTo(0,0));
+  await page.screenshot({path:"artifacts/production/afp-control-desktop.png",fullPage:true});
+  await tab("Overview").focus();
+  await page.keyboard.press("End");
+  assert.equal(await tab("Memory & Decisions").getAttribute("aria-selected"),"true");
+  await page.setViewportSize({width:390,height:844});
+
   await page.getByRole("heading",{name:"Private feature previews",exact:true}).waitFor();
   await page.getByLabel("What should we work toward next?",{exact:true}).fill("Preview before activation.");
   await page.getByRole("button",{name:"Save AFP direction",exact:true}).click();
@@ -266,6 +298,8 @@ try {
   await page.waitForFunction(()=>window.__voiceSent.some(e=>e.item?.call_id==="afp-fresh"));
   const afpRead=await page.evaluate(()=>window.__voiceSent.find(e=>e.item?.call_id==="afp-fresh").item.output);
   assert.equal(JSON.parse(afpRead).direction.priorities,"Preview before activation.");
+  assert.equal(JSON.parse(afpRead).controlPlane.readiness.find(r=>r.id==="extension-registry").status,"Verified");
+  assert.equal(JSON.parse(afpRead).controlPlane.runtime.provisioning,false);
   await page.screenshot({path:"artifacts/production/afp-voice-memory.png",fullPage:true});
   assert.deepEqual(errors, []);
   console.log(

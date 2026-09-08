@@ -15,6 +15,7 @@ Tool-first, attorney-facing injury evidence and reconstruction workspace. Human 
 
 - Consider AFP compatibility while extending injury.bot: explicit component boundaries, scoped configuration, isolated user data, traceable versions, reproducible previews and reversible updates. Keep the injury workflow the primary product.
 - Read `server/afp/memory.json` before architecture changes. Update its release checkpoints and gaps when a change materially advances AFP. Cite actual files, commits or validation; distinguish foundations from implemented AFP runtime capabilities.
-- AFP Management adds editable direction and progress notes in persistent SQLite. Do not overwrite these runtime records with release defaults. Notes made by the coordinator are proposals, not proof of implementation.
+- AFP Management separates committed project knowledge from structured definitions (`shared/afp.ts`, `server/afp/{readiness,extension-points,policy,resources,features}.ts`) and mutable runtime registries. Maintain truthful implementation ceilings and locked policies.
+- AFP Management adds editable direction, journal records, review metadata and registry revisions in persistent SQLite. Do not overwrite these runtime records with release defaults. Notes made by the coordinator are proposals, not proof of implementation.
 - AFP knowledge is super-admin product context. Never put case evidence, personal medical details, private firm data or credentials in the shared AFP memory.
 - No AFP coding, fork provisioning or upstream reconciliation runtime exists yet. Do not represent the memory/settings interface as delivering those capabilities.

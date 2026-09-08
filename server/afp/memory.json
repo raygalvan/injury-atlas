@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "updated": "2026-09-08",
   "vision": "Make injury.bot an AFP-friendly pilot where people can shape their own application through an agent. Preserve the maintained base application while supporting isolated personal variations, approved extensions and upstream updates. Develop AFP as a separate platform and compatibility standard, using injury.bot and law.bot as pilots without derailing their primary products.",
   "principles": [
@@ -46,13 +46,37 @@
       "status": "Implemented in this release",
       "detail": "Super-admin AFP Management maintains direction, progress and recommendations. Text and voice tools read current memory and save notes. This tracks AFP development; it does not certify AFP compatibility.",
       "evidence": "server/afp/memory.json; server/afp/management.ts; src/AfpManagement.tsx"
+    },
+    {
+      "id": "afp-control-plane",
+      "title": "AFP control plane and governed journal",
+      "status": "Implemented in this release",
+      "detail": "Seven management views expose structured readiness, candidate extension points, customization policy, resources and feature metadata. Persistent journal reviews and registry edits retain revisions and audit history. Runtime attachment, MCP, SDK and resource provisioning remain future work.",
+      "evidence": "server/afp/control-plane.ts; server/afp/management.ts; shared/afp.ts; src/AfpManagement.tsx; tests/afp-control-plane.test.ts; scripts/check-coordinator-browser.mjs"
     }
   ],
   "gaps": [
-    "Define and validate an AFP manifest with supported extension points and protected boundaries.",
+    "Validate and standardize the draft AFP manifest and implement a trusted SDK boundary; declarative candidate extension points are now registered.",
     "Build an isolated customization runtime and data ownership contract, including optional separate databases and graphics compute.",
     "Add a coding agent with reproducible bug reports, tests, preview, authorized activation and rollback.",
     "Implement upstream update reconciliation and conflict review without losing personal customizations.",
     "Define feature sharing, developer approval, compute pricing, portability and a compatibility validator or registry."
+  ],
+  "architectureDecisions": [
+    {
+      "id": "base-and-extensions",
+      "decision": "AFP customizations attach through a trusted SDK to a maintained shared application; a whole-application clone is not required.",
+      "reference": "server/afp/extension-points.ts; shared/afp.ts"
+    },
+    {
+      "id": "knowledge-journal-registry",
+      "decision": "Committed project knowledge, durable mutable journal and structured registry/manifest definitions are separate. Coordinator proposals require human review. Injury.bot retains platform super-admin governance; law.bot PR #31 uses firm-owner governance.",
+      "reference": "server/afp/management.ts; server/afp/control-plane.ts; law-bot PR #31"
+    }
+  ],
+  "protocolAssumptions": [
+    "AFP MCP supplies intelligence/orchestration; AFP SDK is the trusted application interface. Neither is connected yet.",
+    "The application manifest declares developer rules and capabilities; the current injury.bot.afp-draft/1 export is a local draft, not a finalized AFP protocol.",
+    "Feature packages describe individualized customization; optional resource infrastructure must preserve ownership, tenancy, evidence provenance, audit and review gates."
   ]
 }

@@ -576,3 +576,51 @@ tr.is-near td {
   .afp-actions > a,.afp-actions > button { flex:1 1 100%; min-height:44px; }
   .afp-entries .settings-section-head { align-items:flex-start; flex-direction:column; gap:8px; }
 }
+
+/* AFP control plane: tabbed views reuse the existing settings and memory forms. */
+.afp-management [hidden] { display:none !important; }
+.afp-control-header,.afp-row-head { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+.afp-control-header { height:auto; padding:0; border:0; background:transparent; }
+.afp-control-header h2 { margin:8px 0; }
+.afp-subtabs { display:flex; flex-wrap:wrap; gap:6px; border-bottom:1px solid var(--line,#d4d9d6); margin:24px 0; padding-bottom:12px; }
+.afp-subtabs button { border:1px solid transparent; background:transparent; border-radius:8px; min-height:44px; padding:10px 14px; color:inherit; }
+.afp-subtabs button[aria-selected=true] { background:#203e35; color:#fff; }
+.afp-subtabs button:focus-visible { outline:2px solid #ab8a43; outline-offset:2px; }
+.afp-overview-hero { background:#e8eeea; border-left:3px solid #ab8a43; border-radius:10px; padding:24px; }
+.afp-overview-hero h3 { font-size:1.5rem; margin:8px 0; }
+.afp-status { display:inline-block; flex-shrink:0; padding:5px 9px; border-radius:6px; background:#ecebe6; color:#555e59; font-size:.78rem; font-weight:600; }
+.afp-status-implemented,.afp-status-verified { background:#e1eee4; color:#27513e; }
+.afp-status-partial,.afp-status-foundation { background:#f3eddc; color:#755b27; }
+.afp-status-protected { background:#e1e8ed; color:#354c60; }
+.afp-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:20px 0; }
+.afp-metrics article { border:1px solid #d9dfda; padding:18px; border-radius:10px; }
+.afp-metrics strong { font-size:1.8rem; }
+.afp-metrics article > span:last-child { display:block; margin-top:10px; font-size:.85rem; }
+.afp-overview-grid,.afp-two-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.afp-overview-grid article,.afp-registry > article { padding:20px; border:1px solid #d9dfda; border-radius:10px; min-width:0; }
+.afp-registry { display:grid; gap:16px; margin:20px 0; }
+.afp-registry h4 { font-size:1.05rem; margin:0 0 10px; }
+.afp-registry p { overflow-wrap:anywhere; }
+.afp-registry label { display:grid; gap:8px; min-width:180px; }
+.afp-registry select { padding:10px; border:1px solid #cbd3ce; border-radius:7px; color:inherit; background:var(--panel,#fffdf8); }
+.afp-registry dl { display:grid; gap:6px; }
+.afp-registry dt { font-size:.8rem; color:var(--muted,#65746c); margin-top:8px; }
+.afp-registry dd { margin:0; overflow-wrap:anywhere; }
+.afp-criteria { border:1px solid #d9dfda; border-radius:10px; padding:18px; margin:18px 0; }
+.afp-criteria ul { list-style:none; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.afp-criteria li span:last-child { display:block; font-size:.8rem; margin-left:19px; }
+.afp-inline-review { padding-top:18px; border-top:1px solid #d9dfda; }
+.afp-empty { padding:32px; background:#edf1ed; border:1px dashed #a6b6aa; border-radius:12px; margin:24px 0; }
+.afp-empty h4 { font-size:1.3rem; }
+.afp-group-heading { margin-top:28px; font-size:1.15rem; }
+@media(max-width:700px) {
+  .afp-control-header { flex-direction:column; gap:10px; }
+  .afp-subtabs { display:grid; grid-template-columns:1fr 1fr; }
+  .afp-subtabs button { padding:10px 6px; }
+  .afp-metrics { grid-template-columns:1fr 1fr; }
+  .afp-overview-grid,.afp-two-columns,.afp-criteria ul { grid-template-columns:1fr; }
+  .afp-row-head { flex-direction:column; gap:10px; }
+  .afp-registry label { width:100%; min-width:0; }
+  .afp-overview-grid button,.afp-registry article > button { width:100%; min-height:44px; }
+  .afp-overview-hero,.afp-empty { padding:20px; }
+}
