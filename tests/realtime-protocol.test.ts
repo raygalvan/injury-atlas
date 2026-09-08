@@ -221,7 +221,7 @@ test("errors: the active-response conflict is the talk-over notice; anything els
 test("tool calls: the result is sent back followed by a response request", async () => {
   const h = harness();
   h.protocol.onOpen();
-  h.protocol.onServerEvent({ type: "response.function_call_arguments.done", name: "whats_waiting", arguments: '{"scope":"me"}', call_id: "call_1" });
+  h.protocol.onServerEvent({ type: "response.done", response: { status: "completed", output: [{ type: "function_call", status: "completed", name: "whats_waiting", arguments: '{"scope":"me"}', call_id: "call_1" }] } });
   await tick();
   assert.deepEqual(h.calls, [{ name: "whats_waiting", args: { scope: "me" } }]);
   assert.deepEqual(h.sent.slice(1), [
@@ -254,4 +254,42 @@ test("dispose: timers are cleared and nothing further is sent", () => {
   h.protocol.onServerEvent({ type: "session.updated" });
   h.protocol.notify("hello");
   assert.deepEqual(h.types(), ["session.update"]);
+});
+
+
+test("voice actions ignore interrupted calls and execute completed calls exactly once", async () => {
+  const h = harness();
+  const item = { type: "function_call", status: "completed", name: "add_library_injury", arguments: '{"name":"broken kneecap"}', call_id: "library-1" };
+  h.protocol.onServerEvent({ ...item, type: "response.function_call_arguments.done" });
+  h.protocol.onServerEvent({ type: "response.done", response: { status: "cancelled", output: [item] } });
+  await tick();
+  assert.equal(h.calls.length, 0);
+  const completed = { type: "response.done", response: { status: "completed", output: [item] } };
+  h.protocol.onServerEvent(completed);
+  h.protocol.onServerEvent(completed);
+  await tick();
+  assert.equal(h.calls.length, 1);
+  assert.equal(h.sent.filter(e => e.type === "response.create").length, 1);
+});
+
+test("voice action errors are visible and are returned as failures, never Done", async () => {
+  const sent: any[] = [], notices: string[] = [];
+  const p = createRealtimeProtocol({
+    onUserTranscript() {}, onAssistantTranscript() {},
+    onToolCall: async () => { throw new Error("Medical Library Agent is not configured."); },
+    onNotice: t => notices.push(t),
+  }, { send: e => sent.push(e), setMicOpen() {}, now: () => 0, setTimer: () => 0, clearTimer() {} });
+  p.onServerEvent({ type: "response.done", response: { status: "completed", output: [{ type: "function_call", status: "completed", name: "add_library_injury", call_id: "failed", arguments: '{"name":"sprain"}' }] } });
+  await tick();
+  assert.match(notices.at(-1)!, /Medical Library Agent is not configured/);
+  assert.equal(JSON.parse(sent[0].item.output).ok, false);
+  assert.equal(sent[1].type, "response.create");
+});
+
+test("voice batches tool results before requesting one follow-up", async () => {
+  const h = harness();
+  h.protocol.onServerEvent({ type: "response.done", response: { status: "completed", output: ["one", "two"].map(call_id => ({ type: "function_call", status: "completed", name: "find_cases", call_id, arguments: "{}" })) } });
+  await tick();
+  assert.equal(h.calls.length, 2);
+  assert.deepEqual(h.types(), ["conversation.item.create", "conversation.item.create", "response.create"]);
 });

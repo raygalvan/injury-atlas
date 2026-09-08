@@ -100,6 +100,7 @@ export async function mintRealtimeClientSecret(
         model: config.realtimeModel,
         instructions: session.instructions,
         tools: session.tools,
+        tool_choice: "auto",
         audio: {
           input: {
             transcription: {

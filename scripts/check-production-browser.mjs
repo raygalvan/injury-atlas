@@ -361,7 +361,7 @@ try {
     path: "artifacts/production/abrasion-applied.png",
     fullPage: true,
   });
-  await frame.getByRole("tab", { name: "Apply Injuries", exact: true }).click();
+  await frame.getByRole("tab", { name: "Select Injuries", exact: true }).click();
   await frame.getByRole("tab", { name: /Find matching/ }).waitFor();
   await frame.getByPlaceholder("Filter the catalogue…").fill("patellar");
   assert.equal(await frame.locator(".injury-pick").count(), 1);

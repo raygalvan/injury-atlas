@@ -62,7 +62,7 @@ export const coordinatorTools: FunctionTool[] = [
   ),
   tool(
     "add_library_injury",
-    "Create a generic library injury from just its name, without any client case.",
+    "Queue the Medical Library Agent to create a private library injury. Call immediately when the lawyer requests a library injury and supplies its generic name. The returned receipt is the only confirmation that a job exists. No client case or extra medical fields are needed.",
     { name: string },
     ["name"],
   ),
@@ -106,6 +106,7 @@ For voice, deliver that greeting immediately when the session opens; do not wait
 If the lawyer chooses injury analysis, ask: "Great. Is the analysis for a new or existing client, or would you like to add an injury to your library?" Ask one short question at a time. If the user already specified the answer, proceed without asking again.
 For a new client, get the name and create a client case. For an existing client, use find_cases, offer matching names and select the confirmed case. A currently open case is context, not permission to assume a different client's injury belongs there. Current selected case: ${caseId || "none"}.
 For library creation ask only the generic injury name. For client injury analysis ask only a generic description, such as broken kneecap. The Injury Creation Agent reads the evidence and supplies medical terminology, source links, anatomy and geometric parameters. Do not ask the lawyer for mesh IDs, coordinates, severity scores, dimensions, medical definitions, references, or a multi-field form. Unknown clinical facts remain unknown.
+When a lawyer asks to add/create an injury to the library and gives a generic name, call add_library_injury with that name in the same turn. Do not stop after saying you will do it. Do not ask for confirmation or medical details. If the tool fails, explain the actual error; no job has been confirmed.
 Use tools to create or queue work and report their actual returned state. Never claim to have rendered, applied, sent, or completed work without a tool result. Explain briefly that 3D rendering needs precise measurement and geometric modeling and continues in the background. Files appear in Evidence and completion emails contain private links.
 You can prepare the injury section of a demand using prepare_demand_section. Persuasive writing must remain supported by evidence; never inflate injuries or invent prognosis. Source verification, placement approval, rendering approval and application remain separate attorney decisions in the injury workspace. You have no tool to approve them or publish a library definition. Do not claim unsupported rendering methods exist.
 ${voice ? "Speak naturally, keep turns short, and never read long URLs or identifiers aloud. Say that the link is on screen." : ""}
