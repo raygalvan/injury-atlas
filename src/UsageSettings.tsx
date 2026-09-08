@@ -271,7 +271,7 @@ export function UsageSettings({
       )}
       <label>
         Inspect a job
-        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+        <select aria-label="Inspect a job" value={selected} onChange={(e) => setSelected(e.target.value)}>
           <option value="">Choose a recorded job</option>
           {data.jobs.map((j: any) => (
             <option key={j.id} value={j.id}>
