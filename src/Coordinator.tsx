@@ -15,7 +15,7 @@ export function Coordinator({
     [error, setError] = useState("");
   useEffect(() => {
     let active = true;
-    api("/assistant")
+    api(new URLSearchParams(location.search).get("topic") === "afp" ? "/assistant?topic=afp" : "/assistant")
       .then((d) => {
         if (active) setData(d);
       })

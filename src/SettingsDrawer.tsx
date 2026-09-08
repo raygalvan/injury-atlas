@@ -97,6 +97,7 @@ export function SettingsDrawer({
             <p className="drawer-label">Customization</p>
             <a href="/settings#instructions">Instructions</a>
             <a href="/settings#memory">Memory</a>
+            {platformRole === "super_admin" && <a href="/settings#afp">AFP Management</a>}
             <a href="/settings#skills">Agent skills</a>
             <a href="/settings#models">Model choices</a>
             <a href="/settings#credentials">Provider credentials</a>

@@ -1,3 +1,4 @@
+import { afpRoutes } from "../afp/management";
 import { usageSummary, usagePolicySchema } from "./usage";
 import { AiError } from "./error";
 import type express from "express";
@@ -162,5 +163,6 @@ export function settingsRoutes(
     audit(db, u.id, "settings.memory-" + action);
     res.json({ ok: true });
   });
+  afpRoutes(app, db, staff);
   connectionRoutes(app, db, staff, admin);
 }

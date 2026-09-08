@@ -1,3 +1,4 @@
+import { ensureAfp } from "../afp/management";
 import { ensureUsage, testingUser } from "./usage";
 import { AiError } from "./error";
 // Adapted from law-bot settings, credentials and memory boundaries.
@@ -26,6 +27,22 @@ export function ensureAi(db: Store) {
     CREATE TABLE IF NOT EXISTS assistant_messages(id TEXT PRIMARY KEY,firm_id TEXT NOT NULL,user_id TEXT NOT NULL,role TEXT NOT NULL,modality TEXT NOT NULL,content TEXT NOT NULL,card TEXT,created INTEGER NOT NULL);
     CREATE TABLE IF NOT EXISTS assistant_actions(user_id TEXT NOT NULL,call_id TEXT NOT NULL,name TEXT NOT NULL,output TEXT NOT NULL,PRIMARY KEY(user_id,call_id));
     CREATE TABLE IF NOT EXISTS assistant_voice_sessions(id TEXT PRIMARY KEY,user_id TEXT NOT NULL,firm_id TEXT NOT NULL,case_id TEXT,expires INTEGER NOT NULL);`);
+  ensureAfp(db);
+  db.exec("CREATE TABLE IF NOT EXISTS afp_migrations(id TEXT PRIMARY KEY)");
+  if (!db.prepare("SELECT id FROM afp_migrations WHERE id='coordinator-tools-v1'").get()) {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      for (const row of db.prepare("SELECT scope,body FROM ai_settings").all()) {
+        const settings = JSON.parse(String(row.body));
+        if (settings.agents?.coordinator) {
+          settings.agents.coordinator.skills = [...new Set([...settings.agents.coordinator.skills, "read_afp_memory", "record_afp_note"])];
+          db.prepare("UPDATE ai_settings SET body=? WHERE scope=?").run(JSON.stringify(settings),row.scope);
+        }
+      }
+      db.prepare("INSERT INTO afp_migrations VALUES('coordinator-tools-v1')").run();
+      db.exec("COMMIT");
+    } catch(e) {db.exec("ROLLBACK"); throw e;}
+  }
 }
 export function defaults(): AiSettings {
   const anthropic = process.env.INJURY_AI_MODEL || "claude-opus-5";

@@ -20,6 +20,8 @@ export const agentRoster = [
       "prepare_demand_section",
       "propose_memory",
       "read_connections",
+      "read_afp_memory",
+      "record_afp_note",
     ],
   },
   {
@@ -67,6 +69,8 @@ export type AssistantCard = {
   items?: { id: string; title: string; detail?: string; href?: string }[];
 };
 export const skillLabels: Record<string, string> = {
+  read_afp_memory: "Discuss AFP progress (super admin)",
+  record_afp_note: "Record AFP proposals (super admin)",
   find_cases: "Find client cases",
   create_case: "Create a client case",
   start_injury_analysis: "Start injury analysis",
