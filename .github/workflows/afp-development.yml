@@ -37,6 +37,7 @@ jobs:
         with:
           openai-api-key: ${{ steps.claim.outputs.api_key }}
           prompt-file: ${{ steps.claim.outputs.prompt_file }}
+          allow-bot-users: github-actions[bot]
           sandbox: danger-full-access
           output-file: ${{ runner.temp }}/afp-result.txt
       - name: Independently verify application and deployment
