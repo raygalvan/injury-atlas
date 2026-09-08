@@ -67,6 +67,13 @@
       "status": "Implemented in this release",
       "detail": "Text and voice share the authenticated AFP SDK for a declarative private text-tab label. Exact build/policy validation, per-user/firm isolation and audit apply. A super-admin product-only context endpoint and read-only operator command expose persistent Coordinator proposals for coding-agent review; no code execution or proposal self-approval is added.",
       "evidence": "server/afp/presentation.ts; server/afp/development-context.ts; scripts/afp-context.ts; tests/afp-presentation.test.ts; scripts/check-coordinator-browser.mjs; AGENTS.md"
+    },
+    {
+      "id": "afp-lab-mode",
+      "title": "Private AFP Lab permissions and Atlas styling",
+      "status": "Implemented in this release",
+      "detail": "Owners and super admins have private Safe/Standard/Lab presets and editable categories. Text/voice execute Coordinator labels and Select Injuries color tokens through the SDK. Contract compatibility preserves simple preferences across unrelated builds; rendering preflight remains exact-build. Unsupported categories are explicitly Not Implemented. Protected boundaries remain locked.",
+      "evidence": "server/afp/lab.ts; server/afp/presentation.ts; shared/afp-lab.ts; src/AfpLabPermissions.tsx; tests/afp-lab.test.ts; scripts/check-coordinator-browser.mjs; human-atlas PR #16"
     }
   ],
   "gaps": [
@@ -89,8 +96,8 @@
     }
   ],
   "protocolAssumptions": [
-    "AFP MCP supplies intelligence/orchestration and remains unconnected. The internal AFP SDK enforces rendering recipe inspection and private declarative Coordinator presentation contracts; it does not execute extension code.",
-    "The experimental injury.bot.afp/0.1 manifest schema and validator are internal and injury.bot-specific. They are not a finalized external standard. Exact application release compatibility requires explicit revision after an update.",
+    "AFP MCP remains unconnected. The trusted internal SDK supports recipe inspection and private declarative Coordinator/Atlas presentation. Owner Lab Mode authorizes permitted private test categories but supplies no arbitrary executable runtime.",
+    "The experimental injury.bot.afp/0.1 manifest remains injury.bot-specific. Rendering preflight uses exact-build compatibility. Simple presentation preferences validate their contract/schema, current permissions and ownership, with application build identity retained as provenance rather than a compatibility gate.",
     "Feature packages describe individualized customization; optional resource infrastructure must preserve ownership, tenancy, evidence provenance, audit and review gates."
   ]
 }

@@ -16,6 +16,7 @@ const policy = (
   revision: 1,
 });
 export const afpPolicies: AfpPolicy[] = [
+  policy("atlas-presentation", "Private Atlas presentation", "Allowed", "Only allowlisted color tokens for the Select Injuries control. No arbitrary CSS or geometry.", "server/afp/presentation.ts"),
   policy(
     "assistant-presentation",
     "Private Coordinator label",

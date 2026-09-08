@@ -1,3 +1,4 @@
+import {AfpLabPermissions} from "./AfpLabPermissions";
 import { AfpPrivatePreference } from "./AfpPrivatePreference";
 import { AfpManifestInspector } from "./AfpManifestInspector";
 import { useEffect, useState, useRef } from "react";
@@ -467,6 +468,8 @@ export function AfpManagement() {
             hidden={view !== "permissions"}
           >
             <h3>Permissions</h3>
+            <AfpLabPermissions/>
+            <details className="afp-developer-policies"><summary>Shared developer policies</summary>
             <p>
               These developer rules are consulted by the manifest validator and
               SDK. The SDK enforces rendering.recipe.inspect and
@@ -513,6 +516,7 @@ export function AfpManagement() {
                 </article>
               ))}
             </div>
+            </details>
           </div>
           <div
             role="tabpanel"
@@ -557,6 +561,7 @@ export function AfpManagement() {
           >
             <h3>AFP Features</h3>
             <AfpPrivatePreference />
+            <AfpPrivatePreference kind="atlas"/>
             <AfpManifestInspector />
             {!data.featureCount ? (
               <div className="afp-empty">

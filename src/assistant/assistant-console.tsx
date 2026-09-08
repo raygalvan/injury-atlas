@@ -217,7 +217,7 @@ export function AssistantConsole({
               callId,
               sessionId: voiceSessionId.current,
             });
-            if (name === "set_private_afp_ui_preference")
+            if (["set_private_afp_ui_preference","set_private_afp_presentation"].includes(name))
               await refreshPresentation();
             if (result.card)
               append({

@@ -247,8 +247,8 @@ test("private presentation: authenticated text/voice, isolation, policy, compati
     db.prepare(
       "UPDATE afp_private_preferences SET manifest=?,digest=? WHERE user_id=?",
     ).run(JSON.stringify(stale), digest(stale), "a");
-    assert.equal((await read("a")).textTabLabel, "Text Chat");
-    assert.equal((await read("a")).feature.compatibility, "Incompatible");
+    assert.equal((await read("a")).textTabLabel, "My Text");
+    assert.equal((await read("a")).feature.compatibility, "Compatible");
     await call("a", "/afp/preferences/presentation", {
       action: "set",
       textTabLabel: "Text",

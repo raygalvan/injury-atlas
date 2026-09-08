@@ -629,9 +629,21 @@ tr.is-near td {
 .afp-manifest-inspector textarea { width:100%; min-width:0; padding:12px; box-sizing:border-box; font:12px/1.5 monospace; resize:vertical; border:1px solid #cbd3ce; border-radius:8px; }
 .afp-manifest-inspector article { overflow-wrap:anywhere; border-top:1px solid #d9dfda; padding:12px 0; }
 
-.afp-private-preference {border:1px solid var(--line, #d9ded8);border-radius:12px;padding:18px;margin-bottom:24px;overflow-wrap:anywhere;}
-.afp-private-preference dl {display:grid;grid-template-columns:minmax(100px,180px) minmax(0,1fr);gap:8px 16px;}
-.afp-private-preference dd {margin:0;}
-.afp-private-preference .actions {display:flex;flex-wrap:wrap;gap:10px;}
-.afp-private-preference button {min-height:44px;}
-@media(max-width:600px){.afp-private-preference dl{grid-template-columns:minmax(0,1fr);} .afp-private-preference dd{margin-bottom:8px;}}
+:is(.afp-private-preference,.afp-private-color) {border:1px solid var(--line, #d9ded8);border-radius:12px;padding:18px;margin-bottom:24px;overflow-wrap:anywhere;}
+:is(.afp-private-preference,.afp-private-color) dl {display:grid;grid-template-columns:minmax(100px,180px) minmax(0,1fr);gap:8px 16px;}
+:is(.afp-private-preference,.afp-private-color) dd {margin:0;}
+:is(.afp-private-preference,.afp-private-color) .actions {display:flex;flex-wrap:wrap;gap:10px;}
+:is(.afp-private-preference,.afp-private-color) button {min-height:44px;}
+@media(max-width:600px){:is(.afp-private-preference,.afp-private-color) dl{grid-template-columns:minmax(0,1fr);} :is(.afp-private-preference,.afp-private-color) dd{margin-bottom:8px;}}
+
+.afp-lab-permissions{margin-bottom:28px}
+.afp-lab-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;border:1px solid #b8c7bf;border-radius:14px;padding:20px;margin-bottom:18px;background:#f5f7f4}
+.afp-lab-banner.on{background:#e0ece6;border-color:#3e6356}
+.afp-lab-banner h4{margin:0;font-size:20px}.afp-lab-banner p{margin:8px 0}
+.afp-lab-toggle{display:flex;gap:10px;align-items:center;min-height:44px}.afp-lab-toggle input{width:24px;height:24px;accent-color:#214c3d}
+.afp-lab-categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}
+.afp-lab-categories article{display:flex;flex-direction:column;gap:12px;border:1px solid #d4dcd6;border-radius:10px;padding:16px;min-width:0}
+.afp-lab-categories h5{font-size:15px;margin:0 0 5px}.afp-lab-categories select{width:100%;min-height:44px}
+@media(max-width:620px){.afp-lab-categories{grid-template-columns:minmax(0,1fr)}.afp-lab-banner{align-items:flex-start;gap:10px;padding:14px}}
+
+.afp-lab-banner>div{min-width:0;flex:1}.afp-lab-toggle{flex:0 0 auto}.afp-lab-toggle input{flex:0 0 24px;min-width:24px}

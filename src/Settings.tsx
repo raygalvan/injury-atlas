@@ -1,3 +1,4 @@
+import {AfpPrivateManagement} from "./AfpLabPermissions";
 import { AfpManagement } from "./AfpManagement";
 import { UsageSettings } from "./UsageSettings";
 // Settings sections and visual structure adapted from law.bot's settings page.
@@ -125,7 +126,7 @@ export function Settings({ platformAdmin }: { platformAdmin: boolean }) {
         {[
           ["instructions", "Instructions"],
           ["memory", "Memory"],
-          ...(platformAdmin ? [["afp", "AFP Management"]] : []),
+          ["afp", "AFP Management"],
           ["skills", "Agents and skills"],
           ["models", "Models"],
           ["usage", "Usage and pricing"],
@@ -137,7 +138,7 @@ export function Settings({ platformAdmin }: { platformAdmin: boolean }) {
           </a>
         ))}
       </nav>
-      {platformAdmin && <AfpManagement />}
+      {platformAdmin ? <AfpManagement /> : <AfpPrivateManagement/>}
       <section className="settings-card" id="instructions">
         <div className="settings-section-head">
           <div>

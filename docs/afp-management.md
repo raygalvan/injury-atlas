@@ -1,3 +1,5 @@
+> Current compatibility refinement: simple presentation preferences now use contract/schema, current permissions and ownership rather than Git revision. Rendering preflight remains exact-build. See [AFP Lab Mode](afp-lab-mode.md) for current policy and tooling.
+
 # AFP Management
 
 AFP Management is a super-admin workspace under Settings. It tracks injury.bot's progress toward personal application customization and gives the existing text and voice coordinator product context for recommendations. It does not implement a coding agent, MCP server, isolated fork runtime, provisioning or update reconciliation.

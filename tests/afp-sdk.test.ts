@@ -133,6 +133,8 @@ test("AFP SDK v0.1 enforces schema, tenancy, policy, revisions, resources and no
         "saveManifest",
         "readPrivatePresentation",
         "setPrivatePresentation",
+        "setPrivateAtlasPresentation",
+        "inspectPrivateCapability",
         "privatePresentationHistory",
       ].sort(),
     );
