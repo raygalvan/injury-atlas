@@ -1,3 +1,4 @@
+import { rasterImage } from "./raster-image";
 import { Resvg } from "@resvg/resvg-js";
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
@@ -109,7 +110,7 @@ export function projectGeometry(
           ) / 3;
       const shade = Math.round(165 + 55 * Math.abs(nz));
       triangles.push({
-        pts,
+        pts: pts.map((p) => [p[0], p[1], p[2] + (red ? 0.00002 : 0)]),
         depth: pts.reduce((v, p) => v + p[2], 0) / 3 + (red ? 0.00002 : 0),
         fill: red
           ? `rgb(${Math.round(shade * 0.6)},28,39)`
@@ -150,7 +151,7 @@ export function projectGeometry(
   if (!Number.isFinite(scale)) throw new Error("Degenerate geometry");
   triangles.sort((a, b) => a.depth - b.depth);
   return Buffer.from(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900"><rect width="1200" height="900" fill="#fffdf8"/><text x="40" y="45" font-family="sans-serif" font-size="23">injury.bot | Anatomical illustration</text><text x="40" y="78" font-family="sans-serif" font-size="15">Reference anatomy illustration. Source citations and measurement basis accompany the injury document.</text><svg x="120" y="105" width="980" height="700" viewBox="120 105 980 700">${triangles.map((t) => `<path d="M${t.pts.map((p) => `${(140 + (p[0] - minX) * scale).toFixed(2)},${(110 + (p[1] - minY) * scale).toFixed(2)}`).join("L")}Z" fill="${t.fill}"/>`).join("")}</svg><text x="40" y="850" font-family="sans-serif" font-size="16">${angle === 0 ? "Anterior projection" : angle === Math.PI ? "Posterior projection" : "Oblique projection"} · Orientation follows atlas coordinates · See accompanying injury documentation</text></svg>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900"><rect width="1200" height="900" fill="#fffdf8"/><text x="40" y="45" font-family="sans-serif" font-size="23">injury.bot | Anatomical illustration</text><text x="40" y="78" font-family="sans-serif" font-size="15">Reference anatomy illustration. Source citations and measurement basis accompany the injury document.</text><image x="0" y="0" width="1200" height="900" href="data:image/png;base64,${rasterImage(triangles, minX, minY, scale).toString("base64")}"/><text x="40" y="850" font-family="sans-serif" font-size="16">${angle === 0 ? "Anterior projection" : angle === Math.PI ? "Posterior projection" : "Oblique projection"} · Orientation follows atlas coordinates · See accompanying injury documentation</text></svg>`,
   );
 }
 export async function processProduction(

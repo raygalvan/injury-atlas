@@ -45,5 +45,6 @@ export async function sendProductionComplete(email: string, url: string) {
         },
       },
     }),
+    { abortSignal: AbortSignal.timeout(30000) },
   );
 }

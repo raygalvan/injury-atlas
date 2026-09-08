@@ -551,6 +551,21 @@ export function InjuryWorkspace({
                   </button>
                 )}
                 {admin && (
+                  <button
+                    onClick={() => {
+                      setSubmitFor(`library:${p.id}`);
+                      setPub({
+                        name: p.name,
+                        description: p.description,
+                        medicalReferences: p.medical_references,
+                        kind: p.kind,
+                      });
+                    }}
+                  >
+                    Revise definition
+                  </button>
+                )}
+                {admin && (
                   <div className="production-actions">
                     {["approved", "rejected", "retired"].map((status) => (
                       <button
@@ -698,6 +713,7 @@ export function InjuryWorkspace({
             <label>
               Production method
               <select
+                aria-label="Production method"
                 value={draft.recipe?.kind || "documentation"}
                 onChange={(e) =>
                   set(
@@ -743,6 +759,7 @@ export function InjuryWorkspace({
                 <label>
                   Target structure
                   <select
+                    aria-label="Target structure"
                     required
                     value={draft.recipe.parentId}
                     onChange={(e) => {
@@ -916,9 +933,11 @@ export function InjuryWorkspace({
               e.preventDefault();
               void run(async () => {
                 await api(
-                  submitFor === "admin"
-                    ? "/injury-library"
-                    : `/cases/${caseId}/production/${submitFor}/submit`,
+                  submitFor.startsWith("library:")
+                    ? `/injury-library/${submitFor.slice(8)}/revise`
+                    : submitFor === "admin"
+                      ? "/injury-library"
+                      : `/cases/${caseId}/production/${submitFor}/submit`,
                   pub,
                 );
                 setSubmitFor("");

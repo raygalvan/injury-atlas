@@ -350,6 +350,30 @@ export function productionRoutes(
     );
     res.status(201).json({ ok: true });
   });
+  app.post("/api/injury-library/:id/revise", staff, (req, res) => {
+    const u = res.locals.user as User,
+      previous = db
+        .prepare("SELECT * FROM injury_publications WHERE id=?")
+        .get(String(req.params.id));
+    if (!previous || (!isPlatformAdmin(db, u) && previous.creator !== u.id))
+      return res.sendStatus(404);
+    const d = publication.parse(req.body);
+    db.prepare(
+      "INSERT INTO injury_publications(id,production_id,creator,firm_id,name,description,medical_references,kind,created) VALUES(?,?,?,?,?,?,?,?,?)",
+    ).run(
+      randomUUID(),
+      previous.production_id ?? null,
+      u.id,
+      u.firm_id,
+      d.name,
+      d.description,
+      d.medicalReferences,
+      d.kind,
+      Date.now(),
+    );
+    audit(db, u.id, "injury.library-revised");
+    res.status(201).json({ ok: true });
+  });
   app.post("/api/injury-library/:id/review", staff, (req, res) => {
     if (!isPlatformAdmin(db, res.locals.user)) return res.sendStatus(403);
     const d = z
