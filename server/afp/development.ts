@@ -34,7 +34,7 @@ export function developmentRoutes(app: express.Express,db: Store,staff: express.
   ensureDevelopment(db);
   // One-time handoff of the owner's explicit, previously blocked button request.
   // No synthetic case or evidence data is created and no job is seeded for other accounts.
-  const handoff="owner-mobile-evidence-alignment-v1";
+  const handoff="owner-mobile-evidence-alignment-v2-trusted-bot";
   if (!db.prepare("SELECT id FROM afp_migrations WHERE id=?").get(handoff)) {
     const owner=db.prepare("SELECT * FROM users WHERE email='raygalvan@gmail.com' AND active=1").get() as User | undefined;
     if(owner && developmentAllowed(db,owner) && credentialFor(db,owner.firm_id,"openai")) {
