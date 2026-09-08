@@ -126,11 +126,26 @@ try {
   let agentCalls = 0;
   await processProduction(db, storage, knee.id, undefined, {
     messages: {
-      create: async () => {
+      create: async (request) => {
         agentCalls++;
+        if (agentCalls === 1) {
+          assert.ok(request.responseSchema.properties.placement);
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify({
+                  name: "Patellar fracture",
+                  generalDefinition: null,
+                  placement: { method: "bone fracture" },
+                }),
+              },
+            ],
+          };
+        }
         return {
           content:
-            agentCalls === 1
+            agentCalls === 2
               ? [
                   {
                     type: "text",
@@ -168,6 +183,15 @@ try {
   const kneeResult = productionRecord(db, knee.id);
   assert.equal(kneeResult.state, "complete", kneeResult.error);
   assert.equal(kneeResult.body.recipe.parentId, "FJ3275");
+  assert.equal(agentCalls, 3);
+  assert.equal(
+    db
+      .prepare(
+        "SELECT count(*) n FROM injury_agent_diagnostics WHERE production_id=?",
+      )
+      .get(knee.id).n,
+    1,
+  );
   assert(kneeResult.assets.some((a) => a.kind === "geometry"));
   assert.equal(kneeResult.source_review, 0);
   assert.equal(kneeResult.applied, 0);

@@ -14,6 +14,7 @@ export function agentClient(
   return {
     messages: {
       create: async (params: any) => {
+        const { responseSchema, ...requestParams } = params;
         const config = await selectProvider(db, firmId, userId, task);
         const s = effectiveSettings(db, firmId);
         const research = !!params.tools?.some(
@@ -36,7 +37,14 @@ export function agentClient(
           const messages = [...params.messages];
           for (let turn = 0; turn < 3; turn++) {
             response = await request(config, "/messages", {
-              ...params,
+              ...requestParams,
+              ...(responseSchema
+                ? {
+                    output_config: {
+                      format: { type: "json_schema", schema: responseSchema },
+                    },
+                  }
+                : {}),
               model: config.model,
               system,
               messages,
@@ -48,7 +56,10 @@ export function agentClient(
             throw new Error(
               "The agent reached its response limit. Retry a narrower request.",
             );
-          return response;
+          return {
+            ...response,
+            meta: { provider: config.provider, model: config.model },
+          };
         }
         const input = params.messages.map((m: any) => ({
           role: m.role,
@@ -87,6 +98,18 @@ export function agentClient(
           instructions: system,
           input,
           store: false,
+          ...(responseSchema
+            ? {
+                text: {
+                  format: {
+                    type: "json_schema",
+                    name: "injury_response",
+                    strict: true,
+                    schema: responseSchema,
+                  },
+                },
+              }
+            : {}),
           max_output_tokens: Math.max(params.max_tokens || 6000, 6000),
           ...(research
             ? {
@@ -122,7 +145,15 @@ export function agentClient(
                 title: a.title,
               })),
           }));
-        return { content };
+        return {
+          content,
+          id: body.id,
+          meta: {
+            provider: config.provider,
+            model: config.model,
+            stopReason: body.status,
+          },
+        };
       },
     },
   };

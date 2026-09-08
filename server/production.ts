@@ -71,6 +71,8 @@ export function ensureProduction(db: Store) {
   db.exec(
     "CREATE TABLE IF NOT EXISTS worker_health(id INTEGER PRIMARY KEY,heartbeat INTEGER NOT NULL)",
   );
+  db.exec(`CREATE TABLE IF NOT EXISTS injury_agent_diagnostics(id INTEGER PRIMARY KEY,production_id TEXT NOT NULL,details TEXT NOT NULL,created INTEGER NOT NULL);
+    CREATE TABLE IF NOT EXISTS injury_response_recovery(production_id TEXT PRIMARY KEY,created INTEGER NOT NULL);`);
   db.exec(`CREATE TABLE IF NOT EXISTS injury_production(id TEXT PRIMARY KEY,case_id TEXT NOT NULL REFERENCES cases(id),firm_id TEXT NOT NULL,creator TEXT NOT NULL REFERENCES users(id),body TEXT NOT NULL,state TEXT NOT NULL DEFAULT 'draft',stage TEXT NOT NULL DEFAULT 'Describe injury',error TEXT NOT NULL DEFAULT '',attempts INTEGER NOT NULL DEFAULT 0,updated INTEGER NOT NULL,source_review INTEGER NOT NULL DEFAULT 0,placement_review INTEGER NOT NULL DEFAULT 0,render_review INTEGER NOT NULL DEFAULT 0,applied INTEGER NOT NULL DEFAULT 0,hidden INTEGER NOT NULL DEFAULT 0,notification TEXT NOT NULL DEFAULT 'none');
  CREATE TABLE IF NOT EXISTS injury_artifacts(id TEXT PRIMARY KEY,production_id TEXT NOT NULL REFERENCES injury_production(id),evidence_id TEXT NOT NULL REFERENCES evidence(id),kind TEXT NOT NULL,UNIQUE(production_id,kind));
  CREATE TABLE IF NOT EXISTS injury_publications(id TEXT PRIMARY KEY,production_id TEXT,creator TEXT NOT NULL,firm_id TEXT NOT NULL,name TEXT NOT NULL,description TEXT NOT NULL,medical_references TEXT NOT NULL,kind TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'submitted',reviewer TEXT,review_note TEXT NOT NULL DEFAULT '',created INTEGER NOT NULL);
