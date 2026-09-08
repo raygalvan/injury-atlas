@@ -65,7 +65,8 @@ export function AssistantConsole({
     ...initialMessages,
     { id: "greeting", role: "assistant", modality: "text", content: greeting },
   ]);
-  const [draft, setDraft] = useState("");
+  const topic = new URLSearchParams(location.search).get("topic") === "afp" ? "afp" : undefined;
+  const [draft, setDraft] = useState(topic ? "What should we improve next to make injury.bot more AFP friendly?" : "");
   const [sending, setSending] = useState(false);
   const [voiceState, setVoiceState] = useState<OrbState>("idle");
   const [voiceNote, setVoiceNote] = useState<string | null>(null);
@@ -208,6 +209,7 @@ export function AssistantConsole({
           greetOnStart: true,
           interruptEnabled: interruptRef.current,
           caseId,
+          topic,
           signal: controller.signal,
         },
       );
@@ -224,7 +226,7 @@ export function AssistantConsole({
         error instanceof Error ? error.message : "Live voice could not start.",
       );
     }
-  }, [append, voiceConfigured, persistTranscript, caseId]);
+  }, [append, voiceConfigured, persistTranscript, caseId, topic]);
 
   useEffect(() => {
     if (voiceConfigured) void startVoice();
@@ -259,7 +261,7 @@ export function AssistantConsole({
       const result = await postJson<{
         assistant: { id: string; content: string };
         tools: { id: string; content: string; card: AssistantCard | null }[];
-      }>("/api/assistant/messages", { text, caseId });
+      }>("/api/assistant/messages", { text, caseId, topic });
       for (const tool of result.tools) {
         if (tool.card)
           append({

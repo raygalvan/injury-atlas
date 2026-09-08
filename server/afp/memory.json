@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "updated": "2026-09-08",
+  "vision": "Make injury.bot an AFP-friendly pilot where people can shape their own application through an agent. Preserve the maintained base application while supporting isolated personal variations, approved extensions and upstream updates. Develop AFP as a separate platform and compatibility standard, using injury.bot and law.bot as pilots without derailing their primary products.",
+  "principles": [
+    "Start with a plain-language request. Let the coordinator explore the desired outcome, propose an approach and explain tradeoffs.",
+    "Keep a user's customization isolated from other users and firms. Never copy private evidence, sessions or credentials into a fork.",
+    "Protect authentication, tenant boundaries, evidence provenance and independent attorney review decisions.",
+    "Support a path to separate databases and higher-compute runtimes for demanding customizations. These are planned capabilities, not installed services.",
+    "Consider developer revenue through explicit compute upgrades and reusable, shareable features. Show cost and obtain authorization before provisioning paid resources.",
+    "Track local bug fixes and a path to reporting them upstream, testing updates, resolving conflicts and rolling back.",
+    "An MCP interface is one integration surface. Fork isolation, deployment, versioning, data ownership and update reconciliation still need implementation."
+  ],
+  "checkpoints": [
+    {
+      "id": "settings",
+      "title": "Configurable agents and settings",
+      "status": "Available foundation",
+      "detail": "Existing firm/platform instructions, memory, model routing, installed skills and encrypted credentials support configuration. They do not provide arbitrary code customization.",
+      "evidence": "server/ai/settings.ts; server/ai/settings-routes.ts; shared/ai.ts"
+    },
+    {
+      "id": "coordinator",
+      "title": "Text and voice actions",
+      "status": "Available foundation",
+      "detail": "The coordinator executes registered server tools with permission checks and action receipts. AFP discussions can use this interface; no coding or deployment tool is installed.",
+      "evidence": "server/ai/coordinator.ts; src/assistant/realtime-protocol.ts"
+    },
+    {
+      "id": "engine",
+      "title": "Separate anatomical engine",
+      "status": "Available foundation",
+      "detail": "Human Atlas is independently maintained and pinned into the host build. This is a useful versioned component boundary, not a user-fork runtime.",
+      "evidence": "atlas.lock.json; scripts/build-atlas.mjs"
+    },
+    {
+      "id": "releases",
+      "title": "Verified releases and cost visibility",
+      "status": "Available foundation",
+      "detail": "AWS deployment verifies release state. AI usage and pricing settings expose supported server usage estimates. Per-user deployment, arbitrary compute upgrades and live voice token metering are not implemented.",
+      "evidence": ".github/workflows/deploy.yml; server/ai/usage.ts; src/UsageSettings.tsx"
+    },
+    {
+      "id": "afp-memory-v1",
+      "title": "AFP memory and discussion",
+      "status": "Implemented in this release",
+      "detail": "Super-admin AFP Management maintains direction, progress and recommendations. Text and voice tools read current memory and save notes. This tracks AFP development; it does not certify AFP compatibility.",
+      "evidence": "server/afp/memory.json; server/afp/management.ts; src/AfpManagement.tsx"
+    }
+  ],
+  "gaps": [
+    "Define and validate an AFP manifest with supported extension points and protected boundaries.",
+    "Build an isolated customization runtime and data ownership contract, including optional separate databases and graphics compute.",
+    "Add a coding agent with reproducible bug reports, tests, preview, authorized activation and rollback.",
+    "Implement upstream update reconciliation and conflict review without losing personal customizations.",
+    "Define feature sharing, developer approval, compute pricing, portability and a compatibility validator or registry."
+  ]
+}

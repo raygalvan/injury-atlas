@@ -10,3 +10,11 @@ Tool-first, attorney-facing injury evidence and reconstruction workspace. Human 
 - Do not send invitations or other emails in tests or while developing.
 - Use new branches from current main. Prepare unmerged PRs unless the user authorizes merging.
 - Test with npm test, npm run build, npm run build:atlas. Deployment tests must verify actual runtime state; a frontend build alone is not a deployment test.
+
+## AFP continuity
+
+- Consider AFP compatibility while extending injury.bot: explicit component boundaries, scoped configuration, isolated user data, traceable versions, reproducible previews and reversible updates. Keep the injury workflow the primary product.
+- Read `server/afp/memory.json` before architecture changes. Update its release checkpoints and gaps when a change materially advances AFP. Cite actual files, commits or validation; distinguish foundations from implemented AFP runtime capabilities.
+- AFP Management adds editable direction and progress notes in persistent SQLite. Do not overwrite these runtime records with release defaults. Notes made by the coordinator are proposals, not proof of implementation.
+- AFP knowledge is super-admin product context. Never put case evidence, personal medical details, private firm data or credentials in the shared AFP memory.
+- No AFP coding, fork provisioning or upstream reconciliation runtime exists yet. Do not represent the memory/settings interface as delivering those capabilities.

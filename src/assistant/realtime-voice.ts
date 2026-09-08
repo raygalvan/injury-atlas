@@ -45,6 +45,7 @@ export interface RealtimeSession {
 }
 
 export interface RealtimeOptions {
+  topic?: string;
   caseId?: string;
   signal?: AbortSignal;
   greetOnStart?: boolean;
@@ -65,11 +66,12 @@ export function voiceDebugEnabled(): boolean {
 export async function mintSession(
   caseId?: string,
   signal?: AbortSignal,
+  topic?: string,
 ): Promise<{ clientSecret: string; model: string; sessionId: string }> {
   const response = await fetch("/api/assistant/realtime-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ caseId }),
+    body: JSON.stringify({ caseId, topic }),
     signal,
   });
   const body = (await response.json().catch(() => ({}))) as {
@@ -136,6 +138,7 @@ export async function startRealtimeSession(
   const { clientSecret, model, sessionId } = await mintSession(
     options.caseId,
     options.signal,
+    options.topic,
   );
   handlers.onSession?.(sessionId);
   const mic = await openMicrophone();

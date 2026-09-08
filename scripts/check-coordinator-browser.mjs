@@ -51,6 +51,8 @@ globalThis.fetch = async (url, options) => {
   if (String(url) === "https://api.openai.com/v1/realtime/client_secrets") {
     const session = JSON.parse(options.body).session;
     assert.ok(session.tools.some(t => t.name === "add_library_injury"));
+    assert.ok(session.tools.some(t => t.name === "read_afp_memory"));
+    assert.match(session.instructions,/AFP direction/);
     return Response.json({ value: "synthetic-voice-secret" });
   }
   assert.equal(String(url), "https://api.openai.com/v1/responses");
@@ -216,6 +218,13 @@ try {
   assert.equal(results.length,1);
   assert.equal(JSON.parse(results[0].item.output).id, record[0].id);
   await page.screenshot({path:"artifacts/production/coordinator-voice-library-receipt.png",fullPage:true});
+  await page.evaluate(() => {
+    const event={type:"response.done",response:{id:"synthetic-afp",status:"completed",output:[{type:"function_call",status:"completed",name:"record_afp_note",call_id:"browser-afp",arguments:JSON.stringify({kind:"recommendation",title:"Private feature previews",content:"Preview extensions and their costs before activation."})}]}};
+    window.__voiceEvent(event);window.__voiceEvent(event);
+  });
+  await page.getByText("AFP note saved",{exact:true}).waitFor();
+  assert.equal(db.prepare("SELECT count(*) n FROM afp_entries").get().n,1);
+  assert.equal(db.prepare("SELECT status FROM afp_entries").get().status,"proposed");
   await page.goto(`http://127.0.0.1:3198/injuries?library=${record[0].id}`);
   await page.locator(`#library-${record[0].id}`).waitFor();
   recordUsage({db,firmId:u.firm_id,userId:u.id,agent:"library-research",jobId:record[0].id},"anthropic","claude-opus-5",{usage:{input_tokens:1000,output_tokens:200}},"end_turn",100);
@@ -233,6 +242,31 @@ try {
   await page.locator("#usage").scrollIntoViewIfNeeded();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.locator("#usage").screenshot({path:"artifacts/production/usage-pricing-mobile.png"});
+  await page.goto("http://127.0.0.1:3198/settings#afp");
+  await page.getByRole("heading",{name:"AFP Management",exact:true}).waitFor();
+  await page.getByRole("heading",{name:"Private feature previews",exact:true}).waitFor();
+  await page.getByLabel("What should we work toward next?",{exact:true}).fill("Preview before activation.");
+  await page.getByRole("button",{name:"Save AFP direction",exact:true}).click();
+  await page.getByText("AFP memory saved. The coordinator can read this update now.",{exact:true}).waitFor();
+  assert.equal(db.prepare("SELECT priorities FROM afp_direction").get().priorities,"Preview before activation.");
+  await page.getByRole("button",{name:"Review record",exact:true}).click();
+  await page.getByLabel("Progress status",{exact:true}).selectOption("planned");
+  await page.getByRole("button",{name:"Save AFP record",exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector(".afp-entries")?.textContent.includes("Planned"));
+  assert.equal(db.prepare("SELECT status FROM afp_entries").get().status,"planned");
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.locator("#afp").screenshot({path:"artifacts/production/afp-mobile.png"});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.locator("#afp").screenshot({path:"artifacts/production/afp-desktop.png"});
+  await page.getByRole("link",{name:"Discuss AFP with the coordinator",exact:true}).click();
+  await page.getByText(/Hello Ray, let’s work on AFP/).waitFor();
+  await page.getByText("Live",{exact:true}).waitFor();
+  await page.evaluate(()=>window.__voiceEvent({type:"response.done",response:{id:"afp-read",status:"completed",output:[{type:"function_call",status:"completed",name:"read_afp_memory",call_id:"afp-fresh",arguments:"{}"}]}}));
+  await page.getByText("AFP memory",{exact:true}).waitFor();
+  await page.waitForFunction(()=>window.__voiceSent.some(e=>e.item?.call_id==="afp-fresh"));
+  const afpRead=await page.evaluate(()=>window.__voiceSent.find(e=>e.item?.call_id==="afp-fresh").item.output);
+  assert.equal(JSON.parse(afpRead).direction.priorities,"Preview before activation.");
+  await page.screenshot({path:"artifacts/production/afp-voice-memory.png",fullPage:true});
   assert.deepEqual(errors, []);
   console.log(
     "Center button, personalized text turn, voice interface, minimize, settings save, mobile layout: passed. Voice event to saved library job and visible receipt passed with a synthetic WebRTC provider; live microphone/provider speech is not tested.",
