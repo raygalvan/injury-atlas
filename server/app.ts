@@ -1,7 +1,13 @@
+import { AiError } from "./ai/error";
+import { configureVault } from "./ai/vault";
+import { settingsRoutes } from "./ai/settings-routes";
+import { coordinatorRoutes } from "./ai/coordinator";
+import { agentReady } from "./ai/settings";
 import {
   ensureProduction,
   createProduction,
   productionSchema,
+  isPlatformAdmin,
 } from "./production";
 import { productionRoutes } from "./production-routes";
 import express from "express";
@@ -55,6 +61,7 @@ export function createApp(
   },
 ) {
   const app = express();
+  configureVault(options.dataDir);
   ensureInjuryTables(db);
   ensureProduction(db);
   const origin = new URL(options.origin).origin;
@@ -162,7 +169,7 @@ export function createApp(
           const entry = user.role === "client" ? "/client/sign-in" : "/sign-in";
           const returnTo =
             typeof req.body.returnTo === "string" &&
-            /^\/injuries\?case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?$/.test(
+            /^\/injuries\?(?:case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?|library=[a-zA-Z0-9_-]+)$/.test(
               req.body.returnTo,
             ) &&
             user.role !== "client"
@@ -220,7 +227,13 @@ export function createApp(
   });
   app.get("/api/me", (_req, res) => {
     const { id, name, role, email } = res.locals.user as User;
-    res.json({ id, name, role, email });
+    res.json({
+      id,
+      name,
+      role,
+      email,
+      platformAdmin: isPlatformAdmin(db, res.locals.user),
+    });
   });
   app.get("/api/cases", (_req, res) => {
     const u = res.locals.user as User;
@@ -237,6 +250,8 @@ export function createApp(
       return res.status(403).json({ error: "Attorney access required" });
     next();
   };
+  settingsRoutes(app, db, staff);
+  coordinatorRoutes(app, db, staff);
   const caseSchema = z.object({
     title: z.string().trim().min(1).max(160),
     client: str,
@@ -658,7 +673,7 @@ export function createApp(
           return res
             .status(400)
             .json({ error: "This library definition is unavailable." });
-        if (!process.env.ANTHROPIC_API_KEY)
+        if (!agentReady(db, res.locals.user.firm_id, "injury-creation"))
           return res
             .status(503)
             .json({ error: "AI injury creation is currently unavailable." });
@@ -675,12 +690,10 @@ export function createApp(
         if (body.recipe?.kind === "fracture" && !r.applied) {
           const parent = body.recipe.parentId;
           if (occupied.has(parent) || requested.has(parent))
-            return res
-              .status(409)
-              .json({
-                error:
-                  "This anatomy piece already has an applied fracture illustration. Remove it before applying a replacement.",
-              });
+            return res.status(409).json({
+              error:
+                "This anatomy piece already has an applied fracture illustration. Remove it before applying a replacement.",
+            });
           requested.add(parent);
         }
         if (
@@ -741,7 +754,7 @@ export function createApp(
       })
       .parse(req.body);
     const id = String(req.params.caseId);
-    if (!process.env.ANTHROPIC_API_KEY)
+    if (!agentReady(db, res.locals.user.firm_id, "injury-creation"))
       return res.status(503).json({
         error:
           "AI injury creation is currently unavailable. Please try again after AI service is configured.",
@@ -755,12 +768,10 @@ export function createApp(
           .get(res.locals.user.firm_id)!.n,
       ) >= 20
     )
-      return res
-        .status(429)
-        .json({
-          error:
-            "Your firm already has 20 queued requests. Please wait for an existing request to finish.",
-        });
+      return res.status(429).json({
+        error:
+          "Your firm already has 20 queued requests. Please wait for an existing request to finish.",
+      });
     const draft = createProduction(
       db,
       res.locals.user,
@@ -804,6 +815,7 @@ export function createApp(
       res: express.Response,
       _next: express.NextFunction,
     ) => {
+      if (err instanceof AiError) return res.status(err.status).json({error:err.message});
       if (err instanceof z.ZodError)
         return res.status(400).json({ error: "Check the required fields" });
       if (err instanceof multer.MulterError)

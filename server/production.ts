@@ -1,3 +1,4 @@
+import { ensureAi } from "./ai/settings";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { Store, User } from "./store";
@@ -37,6 +38,7 @@ export const productionSchema = z
     recipe: recipeSchema.nullable().default(null),
     useAI: z.boolean().default(false),
     agentManaged: z.boolean().optional(),
+    workflow: z.enum(["injury", "demand"]).optional(),
     agentNotes: z.string().max(8000).optional(),
     generalDefinition: z.string().max(8000).optional(),
     generalReferences: z.string().max(8000).optional(),
@@ -65,6 +67,7 @@ export type ProductionRecord = {
   assets: { id: string; name: string; mime: string; kind: string }[];
 };
 export function ensureProduction(db: Store) {
+  ensureAi(db);
   db.exec(
     "CREATE TABLE IF NOT EXISTS worker_health(id INTEGER PRIMARY KEY,heartbeat INTEGER NOT NULL)",
   );

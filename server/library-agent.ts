@@ -1,3 +1,4 @@
+import { agentClient } from "./ai/agent-client";
 import Anthropic from "@anthropic-ai/sdk";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
@@ -50,14 +51,20 @@ export function claimLibraryJob(db: Store) {
 export async function processLibraryDefinition(
   db: Store,
   id: string,
-  client: any = new Anthropic({ timeout: 120000, maxRetries: 1 }),
+  client?: any,
 ) {
   const job = db
     .prepare(
-      "SELECT request FROM injury_library_jobs WHERE publication_id=? AND state='running'",
+      "SELECT j.request,p.firm_id,p.creator FROM injury_library_jobs j JOIN injury_publications p ON p.id=j.publication_id WHERE publication_id=? AND state='running'",
     )
     .get(id);
   if (!job) return;
+  client ||= agentClient(
+    db,
+    String(job.firm_id),
+    String(job.creator),
+    "library-research",
+  );
   const stage = (text: string) =>
     db
       .prepare(

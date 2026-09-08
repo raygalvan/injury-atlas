@@ -2,6 +2,7 @@ export type Member = {
   id: string;
   name: string;
   email: string;
+  platformAdmin?: boolean;
   role: "owner" | "attorney" | "client";
 };
 export type Case = {

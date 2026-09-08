@@ -22,16 +22,23 @@ import {
   Archive,
   ArchiveRestore,
   Trash2,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import "./style.css";
 import "./portal-entry.css";
 import { api } from "./api";
 import { Field, Empty } from "./ui";
 import { Atlas } from "./Atlas";
+import { Coordinator } from "./Coordinator";
+import { Settings } from "./Settings";
+import { SettingsDrawer } from "./SettingsDrawer";
+import "./settings.css";
+import "./coordinator.css";
 import { Login } from "./Login";
 import type { Member, Case, Evidence, Finding } from "./domain";
 const navigation = [
   ["dashboard", "Command center", LayoutDashboard],
+  ["coordinator", "Coordinator", Bot],
   ["atlas", "Human Atlas", Box],
   ["cases", "Cases", FolderOpen],
   ["evidence", "Evidence", Files],
@@ -39,6 +46,7 @@ const navigation = [
   ["reconstruction", "Reconstruction", Clapperboard],
   ["exhibits", "Exhibits", FileOutput],
   ["agents", "Agents", Bot],
+  ["settings", "Settings", SettingsIcon],
 ] as const;
 const viewPath = (view: string) => (view === "dashboard" ? "/" : `/${view}`);
 const pathView = () =>
@@ -175,11 +183,31 @@ function App() {
     await loadDetails();
     setNotice("Evidence saved. Original file retained.");
   };
+  if (view === "coordinator" && !client)
+    return (
+      <Coordinator
+        member={member}
+        caseId={active?.archived ? undefined : caseId || undefined}
+        onMinimize={() => {
+          go("dashboard");
+          void loadCases();
+        }}
+      />
+    );
   return (
     <div
       className={`app ${railOpen ? "" : "rail-closed"} ${view === "atlas" ? "view-atlas" : ""} ${atlasExpanded ? "atlas-expanded" : ""}`}
     >
       <header className="site-header">
+        {!client && (
+          <SettingsDrawer
+            firmName="injury.bot"
+            userName={member.name}
+            canCustomize={member.role === "owner" || !!member.platformAdmin}
+            platformRole={member.platformAdmin ? "super_admin" : "user"}
+            pathname={view}
+          />
+        )}
         <button
           className="rail-toggle desktop"
           onClick={() => setRailOpen((open) => !open)}
@@ -224,7 +252,12 @@ function App() {
         <nav>
           {(client
             ? navigation.filter((n) => n[0] === "evidence")
-            : navigation
+            : navigation.filter(
+                ([id]) =>
+                  id !== "settings" ||
+                  member.role === "owner" ||
+                  member.platformAdmin,
+              )
           ).map(([id, label, Icon]) => (
             <button
               key={id}
@@ -250,7 +283,11 @@ function App() {
             <div>
               <b>{member.name}</b>
               <small>
-                {member.role === "owner" ? "Super admin" : member.role}
+                {member.platformAdmin
+                  ? "Super admin"
+                  : member.role === "owner"
+                    ? "Firm owner"
+                    : member.role}
               </small>
             </div>
             <button
@@ -281,7 +318,7 @@ function App() {
           {[
             ["dashboard", "Home", LayoutDashboard],
             ["injuries", "Review", ShieldCheck],
-            ["atlas", "Atlas", Box],
+            ["coordinator", "Coordinator", Bot],
             ["cases", "Cases", FolderOpen],
             ["evidence", "Evidence", Files],
           ].map(([id, label, Icon]) => {
@@ -289,11 +326,31 @@ function App() {
             return (
               <button
                 key={String(id)}
-                className={`mobile-tab ${view === id ? "active" : ""} ${id === "atlas" ? "mobile-tab-primary" : ""}`}
+                className={`mobile-tab ${view === id ? "active" : ""} ${id === "coordinator" ? "mobile-tab-orchestrator" : ""}`}
                 aria-current={view === id ? "page" : undefined}
                 onClick={() => go(String(id))}
               >
-                <Symbol size={22} />
+                {id === "coordinator" ? (
+                  <span className="mobile-tab-icon mobile-tab-icon-primary">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="25"
+                      height="25"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 3a9 9 0 0 0-7.6 13.8L3 21l4.4-1.3A9 9 0 1 0 12 3zM8.5 12h.01M12 12h.01M15.5 12h.01"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                ) : (
+                  <Symbol size={22} />
+                )}
                 <span>{String(label)}</span>
               </button>
             );
@@ -324,7 +381,12 @@ function App() {
             </span>
           </div>
         </header>
-        <div className="content">
+        <div
+          className={`content ${view === "settings" ? "view-settings" : ""}`}
+        >
+          {!client && view === "settings" && (
+            <Settings platformAdmin={!!member.platformAdmin} />
+          )}
           <div className="page-heading">
             <div>
               <p className="eyebrow">
@@ -837,12 +899,19 @@ function App() {
                   Open injury application panel
                 </button>
               </article>
+              <article className="card">
+                <Bot />
+                <h2>Coordinator</h2>
+                <p>
+                  Start a client file, ask for an injury analysis, or assemble
+                  your demand material by text or voice.
+                </p>
+                <button className="primary" onClick={() => go("coordinator")}>
+                  Open coordinator
+                </button>
+              </article>
               <div className="case-grid">
-                {[
-                  "Case Coordinator",
-                  "Evidence Reconciliation",
-                  "Reconstruction",
-                ].map((n) => (
+                {["Evidence Reconciliation", "Reconstruction"].map((n) => (
                   <article className="card" key={n}>
                     <Bot />
                     <h2>{n}</h2>

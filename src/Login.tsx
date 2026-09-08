@@ -14,7 +14,7 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
     const returnTo = new URLSearchParams(location.search).get("returnTo");
     if (
       returnTo &&
-      /^\/injuries\?case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?$/.test(
+      /^\/injuries\?(?:case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?|library=[a-zA-Z0-9_-]+)$/.test(
         returnTo,
       )
     )
@@ -98,7 +98,7 @@ export function Login({ onSuccess }: { onSuccess: () => Promise<void> }) {
                     const back = sessionStorage.getItem("injury-return");
                     if (
                       back &&
-                      /^\/injuries\?case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?$/.test(
+                      /^\/injuries\?(?:case=[a-zA-Z0-9_-]+(?:&injury=[a-zA-Z0-9_-]+)?|library=[a-zA-Z0-9_-]+)$/.test(
                         back,
                       )
                     ) {

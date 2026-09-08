@@ -26,6 +26,10 @@ jobs:
         run: node --import tsx scripts/check-production-browser.mjs
         env:
           BROWSER_TOOLS: ${{ runner.temp }}/browser
+      - name: Verify coordinator and settings interface
+        run: node --import tsx scripts/check-coordinator-browser.mjs
+        env:
+          BROWSER_TOOLS: ${{ runner.temp }}/browser
       - uses: actions/upload-artifact@v4
         if: always()
         with:
