@@ -1,3 +1,4 @@
+import type { ProductionRecord } from "../server/production";
 import { InjuryWorkspace } from "./InjuryWorkspace";
 import React, { useEffect, useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
@@ -51,6 +52,7 @@ function App() {
     [caseId, setCaseId] = useState(""),
     [evidence, setEvidence] = useState<Evidence[]>([]),
     [findings, setFindings] = useState<Finding[]>([]),
+    [productions, setProductions] = useState<ProductionRecord[]>([]),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [dialog, setDialog] = useState(""),
@@ -80,16 +82,19 @@ function App() {
     if (!caseId) {
       setEvidence([]);
       setFindings([]);
+      setProductions([]);
       return;
     }
     const context = `${member?.id || ""}:${caseId}`;
-    const [ev, fs] = await Promise.all([
+    const [ev, fs, ps] = await Promise.all([
       api(`/cases/${caseId}/evidence`),
       client ? Promise.resolve([]) : api(`/cases/${caseId}/findings`),
+      client ? Promise.resolve([]) : api(`/cases/${caseId}/production`),
     ]);
     if (currentContext.current !== context) return;
     setEvidence(ev);
     setFindings(fs);
+    setProductions(ps);
   };
   useEffect(() => {
     api("/me")
@@ -116,8 +121,12 @@ function App() {
   useEffect(() => {
     setEvidence([]);
     setFindings([]);
+    setProductions([]);
     loadDetails().catch((e) => setError(e.message));
   }, [caseId, member]);
+  useEffect(() => {
+    if (member && caseId) loadDetails().catch((e) => setError(e.message));
+  }, [view]);
   useEffect(() => {
     const back = () => {
       setView(member?.role === "client" ? "evidence" : pathView());
@@ -404,11 +413,11 @@ function App() {
                 </div>
                 <div className="mini-stat">
                   <span>Injury findings</span>
-                  <b>{findings.length}</b>
+                  <b>{findings.length + productions.length}</b>
                 </div>
                 <div className="mini-stat">
                   <span>Placement approved</span>
-                  <b>0</b>
+                  <b>{productions.filter((p) => p.placement_review).length}</b>
                 </div>
                 <hr />
                 <p className="eyebrow">REVIEW SEQUENCE</p>
@@ -427,8 +436,8 @@ function App() {
                   Open evidence <ArrowUpRight size={16} />
                 </button>
                 <p className="fine">
-                  Reference anatomy is available. Injury placement and
-                  reconstruction will follow source review.
+                  Reviewed injury illustrations are available through the Injury
+                  workspace. Incident reconstruction remains separate.
                 </p>
               </aside>
             </div>
@@ -724,10 +733,78 @@ function App() {
             />
           )}
           {view === "exhibits" && (
-            <Empty
-              title="Exhibits will begin with reviewed findings"
-              text="Exhibit production and shareable presentations are planned. Nothing is published from this workspace yet."
-            />
+            <section>
+              <div className="section-heading">
+                <div>
+                  <h2>Exhibits and demand material</h2>
+                  <p>
+                    Saved documents from your injury production records.
+                    Reviewed exports retain the approved case version.
+                  </p>
+                </div>
+                <button onClick={() => go("injuries")}>
+                  Open injury workspace
+                </button>
+              </div>
+              {productions
+                .filter((p) =>
+                  p.assets.some((a) =>
+                    [
+                      "document",
+                      "demand",
+                      "exhibit",
+                      "demand-reviewed",
+                    ].includes(a.kind),
+                  ),
+                )
+                .map((p) => (
+                  <article className="card" key={p.id}>
+                    <h3>{p.body.name}</h3>
+                    <p>
+                      {p.source_review
+                        ? "Source reviewed"
+                        : "Source review pending"}{" "}
+                      ·{" "}
+                      {p.body.recipe
+                        ? p.render_review
+                          ? "Illustration reviewed"
+                          : "Illustration review pending"
+                        : "Documentation only"}
+                    </p>
+                    {p.assets
+                      .filter((a) =>
+                        [
+                          "document",
+                          "demand",
+                          "exhibit",
+                          "demand-reviewed",
+                        ].includes(a.kind),
+                      )
+                      .map((a) => (
+                        <a
+                          className="production-download"
+                          href={`/api/cases/${caseId}/evidence/${a.id}`}
+                          key={a.id}
+                        >
+                          {a.name}
+                          <ArrowUpRight size={16} />
+                        </a>
+                      ))}
+                  </article>
+                ))}
+              {!productions.some((p) =>
+                p.assets.some((a) =>
+                  ["document", "demand", "exhibit", "demand-reviewed"].includes(
+                    a.kind,
+                  ),
+                ),
+              ) && (
+                <Empty
+                  title="No generated documents yet"
+                  text="Create an injury in the Injury workspace and start production. Completed PDFs and Word drafts will appear here and in Evidence."
+                />
+              )}
+            </section>
           )}
           {view === "agents" && (
             <>

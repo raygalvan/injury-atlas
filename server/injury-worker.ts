@@ -1,3 +1,4 @@
+import { signatureFor } from "./anatomy-compatibility";
 import { rasterImage } from "./raster-image";
 import { Resvg } from "@resvg/resvg-js";
 import { readFileSync, existsSync } from "node:fs";
@@ -82,6 +83,7 @@ export function projectGeometry(
   injury: Geometry,
   mode: string,
   angle: number,
+  appearance?: (p: number[]) => number[],
 ) {
   const project = (p: number[]) => [
     p[0] * Math.cos(angle) + p[2] * Math.sin(angle),
@@ -95,7 +97,13 @@ export function projectGeometry(
           { g: base, red: false },
           { g: injury, red: true },
         ];
-  const triangles: { pts: number[][]; depth: number; fill: string }[] = [];
+  const triangles: {
+    pts: number[][];
+    depth: number;
+    fill: string;
+    world?: number[][];
+    appearance?: (p: number[]) => number[];
+  }[] = [];
   for (const { g, red } of layers) {
     for (let i = 0; i < g.indices.length; i += 3) {
       const ids = g.indices.slice(i, i + 3),
@@ -110,6 +118,12 @@ export function projectGeometry(
           ) / 3;
       const shade = Math.round(165 + 55 * Math.abs(nz));
       triangles.push({
+        ...(red && appearance
+          ? {
+              world: ids.map((k) => g.positions.slice(k * 3, k * 3 + 3)),
+              appearance,
+            }
+          : {}),
         pts: pts.map((p) => [p[0], p[1], p[2] + (red ? 0.00002 : 0)]),
         depth: pts.reduce((v, p) => v + p[2], 0) / 3 + (red ? 0.00002 : 0),
         fill: red
@@ -222,6 +236,12 @@ export async function processProduction(
     const images: Buffer[] = [];
     if (d.recipe) {
       stage("Validating anatomy and measurements");
+      const renderer = generateOverride
+        ? null
+        : await import(
+            pathToFileURL(path.resolve(".atlas-build/injury-generator.mjs"))
+              .href
+          );
       let result: any;
       const renderCache = db
         .prepare(
@@ -293,6 +313,12 @@ export async function processProduction(
         stage("Building registered 3D geometry");
         result = module.generateInjury(positions, normals, indices, rcp);
       }
+      result.geometrySignature = existsSync(".atlas-build/release.json")
+        ? signatureFor(
+            result,
+            JSON.parse(readFileSync(".atlas-build/release.json", "utf8")),
+          )
+        : result.geometrySignature;
       result.engine =
         result.engine ||
         (existsSync(".atlas-build/release.json")
@@ -315,6 +341,8 @@ export async function processProduction(
       const payload = {
         version: 1,
         engine,
+        geometrySignature: result.geometrySignature,
+        appearanceVersion: result.appearanceVersion ?? 0,
         parentId: d.recipe.parentId,
         mode: result.mode,
         recipe: d.recipe,
@@ -341,6 +369,9 @@ export async function processProduction(
           label === "reference" ? result.source : result.geometry,
           label === "reference" ? "replacement" : result.mode,
           angle,
+          result.appearanceVersion === 1 && renderer?.injuryAppearance
+            ? (p: number[]) => renderer.injuryAppearance(p, d.recipe!.kind)
+            : undefined,
         );
         const png = Buffer.from(
           new Resvg(svg, { fitTo: { mode: "width", value: 2400 } })

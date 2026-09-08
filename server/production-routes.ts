@@ -1,3 +1,4 @@
+import { anatomyCompatible } from "./anatomy-compatibility";
 import { injuryDocuments } from "./injury-documents";
 import { saveArtifact } from "./injury-worker";
 import type express from "express";
@@ -287,7 +288,7 @@ export function productionRoutes(
       const release = JSON.parse(
         readFileSync(".atlas-build/release.json", "utf8"),
       );
-      if (payload.engine !== release.commit)
+      if (!anatomyCompatible(payload, release))
         return res.status(409).json({
           error:
             "This illustration uses a different anatomy engine version. Create and review a new revision before applying it.",
