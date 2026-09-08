@@ -1,0 +1,69 @@
+name: AFP owner development
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+  id-token: write
+concurrency:
+  group: afp-owner-development
+  cancel-in-progress: false
+jobs:
+  develop:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Preserve trusted worker transport
+        run: cp scripts/afp-worker.mjs "$RUNNER_TEMP/afp-worker.mjs"
+      - name: Claim owner task
+        id: claim
+        run: node "$RUNNER_TEMP/afp-worker.mjs" claim
+      - name: Install application dependencies
+        if: steps.claim.outputs.has_task == 'true'
+        run: npm ci
+      - name: Run owner coding agent
+        if: steps.claim.outputs.has_task == 'true'
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ steps.claim.outputs.api_key }}
+          prompt-file: ${{ steps.claim.outputs.prompt_file }}
+          sandbox: danger-full-access
+          output-file: ${{ runner.temp }}/afp-result.txt
+      - name: Independently verify application and deployment
+        if: steps.claim.outputs.has_task == 'true'
+        run: |
+          npm test
+          python3 -m unittest discover -s tests -p 'test_deployment.py'
+          npm run build
+          npm run build:atlas
+          git diff --check
+      - name: Install browser proof tools
+        if: steps.claim.outputs.has_task == 'true'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false playwright@1.55.1
+          node "$RUNNER_TEMP/browser/node_modules/playwright/cli.js" install chromium
+      - name: Verify browser workflows
+        if: steps.claim.outputs.has_task == 'true'
+        env:
+          BROWSER_TOOLS: ${{ runner.temp }}/browser
+        run: |
+          node --import tsx scripts/check-production-browser.mjs
+          node --import tsx scripts/check-coordinator-browser.mjs
+      - name: Publish tested change
+        if: steps.claim.outputs.has_task == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node "$RUNNER_TEMP/afp-worker.mjs" publish
+      - name: Record failed task
+        if: failure() && steps.claim.outputs.has_task == 'true'
+        run: node "$RUNNER_TEMP/afp-worker.mjs" failed

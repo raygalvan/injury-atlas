@@ -1,0 +1,17 @@
+# Owner development executor
+
+The application owner explicitly requested real coding access after the private preference experiments. This release adds a separate super-admin development channel. It does not broaden ordinary firm/user permissions. It can inspect and change repository code, run commands and tests, create a PR, and request production deployment. It is not confined to named buttons or CSS tokens.
+
+Text and voice share `execute_development_task` and `development_task_status`. The host derives the actor from the authenticated session. Existing tool receipts prevent repeat calls from queuing the same operation again. The owner can disable coding access under AFP Management → Permissions. A queued result is never presented as an applied change.
+
+Tasks persist in `afp_development_jobs`. A GitHub-hosted worker polls approximately every five minutes, with GitHub scheduling delays possible. Its signed OIDC identity must identify this exact repository, main branch, audience and workflow before it may claim a task. The task's owner must still have current platform-admin access. An existing OpenAI key is returned only to that verified worker, masked and passed into the official Codex action. No new GitHub PAT, SSH key or AWS infrastructure is needed. The coding process runs on the disposable GitHub worker, not the production EC2 process. It does not inherit ChatGPT's connector sessions.
+
+The code worker may use shell/filesystem and network access within its runner. Independent test/build/browser steps run before publication. The trusted transport script is copied outside the checkout before the agent begins. PR-only delivery remains available; deploy delivery merges the tested PR and explicitly dispatches the existing deployment workflow because GITHUB_TOKEN-generated pushes do not trigger it automatically. Repository branch protections still apply. GitHub may require its repository setting allowing Actions to create pull requests.
+
+This is shared application development access. A request for a private feature must be implemented with account isolation, not a global style change presented as private. The normal declarative AFP SDK, per-user Lab presets, protected customer data and journal governance remain unchanged. No client records or complete voice transcripts are exported automatically. Task records contain the requested development specification, source, actor, state, run/PR/commit references and timestamps; audit events record lifecycle transitions.
+
+Additive startup tables and a one-time skill migration preserve existing model choices and settings. OpenAI API usage and GitHub runner minutes are billable under the existing accounts. The two-hour runner ceiling is an infrastructure job limit, not a button or feature permission allowlist. Failed runs are visible; no automatic retry loops spend indefinitely.
+
+This is not yet a general AFP marketplace or per-user isolated deployed application runtime. Owner coding access is real repository development with normal tested release delivery.
+
+The release also hands off the owner’s previously requested mobile Evidence-button alignment once, for raygalvan@gmail.com only after existing platform-owner and OpenAI configuration checks. It is a real queued development request, recorded as owner request handoff, not a synthetic case or a claimed completion. The migration marker prevents repeated work on restart.

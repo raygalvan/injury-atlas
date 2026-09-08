@@ -33,3 +33,7 @@ Identify applicable proposal IDs/revisions in the implementation plan and PR. At
 Private Coordinator presentation is a declarative SDK contract, not an executable runtime. Derive identity/source from authenticated host routes, preserve contract/schema/ownership/policy checks for simple preferences and exact-build checks for rendering, and retain preference audit. Do not add arbitrary settings, HTML/CSS/JS, shell, database or deployment access to the Coordinator.
 
 - AFP Lab Mode is private owner/super-admin policy, never a Coordinator permission-escalation tool. Maintain Safe/Standard/Lab presets, effective category controls, and the distinction between Not Authorized and Not Implemented. Use registered tokens only; do not infer arbitrary code execution from an Allowed category. See `docs/afp-lab-mode.md`.
+
+## Owner development executor
+
+The application owner has explicitly authorized a real Coordinator coding executor. This supersedes earlier blanket prohibitions on coding runtimes for this owner-only channel. `execute_development_task` sends work to `.github/workflows/afp-development.yml`; it may edit repository code and run commands/tests without a per-button allowlist. Private user SDK policies remain separate. Do not claim a queued task is implemented or a merged task is deployed. Preserve authenticated ownership, actual test results and audit. No other firm owner inherits application-owner access.

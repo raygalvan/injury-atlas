@@ -25,6 +25,8 @@ export const agentRoster = [
       "set_private_afp_ui_preference",
       "set_private_afp_presentation",
       "inspect_afp_capability",
+      "execute_development_task",
+      "development_task_status",
     ],
   },
   {
@@ -72,6 +74,8 @@ export type AssistantCard = {
   items?: { id: string; title: string; detail?: string; href?: string }[];
 };
 export const skillLabels: Record<string, string> = {
+  execute_development_task:"Execute owner development task",
+  development_task_status:"Read owner development task status",
   read_afp_memory: "Discuss AFP progress (super admin)",
   set_private_afp_presentation:"Change my private Select Injuries color",
   inspect_afp_capability:"Inspect my AFP capability and permission",

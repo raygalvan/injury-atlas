@@ -23,7 +23,7 @@
       "id": "coordinator",
       "title": "Text and voice actions",
       "status": "Available foundation",
-      "detail": "The coordinator executes registered server tools with permission checks and action receipts. AFP discussions can use this interface; no coding or deployment tool is installed.",
+      "detail": "The coordinator executes registered server tools. Application owners additionally have a real queued coding/deployment channel, separate from private presentation tools.",
       "evidence": "server/ai/coordinator.ts; src/assistant/realtime-protocol.ts"
     },
     {
@@ -74,12 +74,19 @@
       "status": "Implemented in this release",
       "detail": "Owners and super admins have private Safe/Standard/Lab presets and editable categories. Text/voice execute Coordinator labels and Select Injuries color tokens through the SDK. Contract compatibility preserves simple preferences across unrelated builds; rendering preflight remains exact-build. Unsupported categories are explicitly Not Implemented. Protected boundaries remain locked.",
       "evidence": "server/afp/lab.ts; server/afp/presentation.ts; shared/afp-lab.ts; src/AfpLabPermissions.tsx; tests/afp-lab.test.ts; scripts/check-coordinator-browser.mjs; human-atlas PR #16"
+    },
+    {
+      "id": "owner-development-executor",
+      "title": "Owner coding executor",
+      "status": "Implemented workflow; deployment verification required",
+      "detail": "Application-owner requests can queue repository coding tasks through text or voice. A signed GitHub runner executes Codex, tests and publishes the result. This is separate from private declarative SDK preferences and does not grant other users production coding access.",
+      "evidence": "server/afp/development.ts; .github/workflows/afp-development.yml; tests/afp-development.test.ts"
     }
   ],
   "gaps": [
     "Implement isolated preview execution, capability tokens and scoped artifact return around the existing v0.1 manifest/SDK contract; external protocol interoperability remains unproven.",
     "Build an isolated customization runtime and data ownership contract, including optional separate databases and graphics compute.",
-    "Add a coding agent with reproducible bug reports, tests, preview, authorized activation and rollback.",
+    "Extend the owner coding executor with private deployed previews and automatic post-deployment rollback decisions.",
     "Implement upstream update reconciliation and conflict review without losing personal customizations.",
     "Define feature sharing, developer approval, compute pricing, portability and a compatibility validator or registry."
   ],
