@@ -1,3 +1,4 @@
+import { recordUsage, type UsageContext } from "./usage";
 import { AiError } from "./error";
 import { agentConfig, reserveRun } from "./settings";
 import type { Provider as AiProviderId, AgentId } from "../../shared/ai";
@@ -8,6 +9,7 @@ export interface ProviderConfig {
   provider: AiProviderId;
   model: string;
   apiKey: string;
+  usageContext?: UsageContext;
 }
 export interface SourceCitation {
   title: string;
@@ -46,20 +48,25 @@ export async function request(
   config: ProviderConfig,
   path: string,
   body: unknown,
+  timeoutMs = 180_000,
 ): Promise<Record<string, any>> {
+  const started = Date.now();
   let response: Response;
   try {
     response = await fetch(`${endpoints[config.provider]}${path}`, {
       method: "POST",
       headers: headers(config),
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(180_000),
+      signal: AbortSignal.timeout(timeoutMs),
     });
   } catch {
+    if (config.usageContext) recordUsage(config.usageContext, config.provider, config.model, null, "transport_error", Date.now()-started);
     throw new AiError(
       `${providerNames[config.provider]} did not respond in time. Your work was saved; you can retry it.`,
     );
   }
+  const result = await response.json().catch(() => ({}));
+  if (config.usageContext) recordUsage(config.usageContext, config.provider, config.model, result, response.ok ? (result.stop_reason || result.status || "completed") : `http_${response.status}`, Date.now()-started);
   if (!response.ok) {
     const reason =
       response.status === 401 || response.status === 403
@@ -73,7 +80,7 @@ export async function request(
       `${providerNames[config.provider]} returned ${response.status}. ${reason}`,
     );
   }
-  return response.json();
+  return result;
 }
 export async function validateProviderKey(
   provider: AiProviderId,
@@ -96,7 +103,7 @@ export async function selectProvider(
 ): Promise<ProviderConfig> {
   const config = agentConfig(db, firmId, agentId);
   reserveRun(db, { id: userId, firm_id: firmId }, agentId, config);
-  return config;
+  return { ...config, usageContext: { db, firmId, userId, agent: agentId } };
 }
 /** Translate the application-owned tool transcript into Anthropic messages. */
 export function anthropicMessages(

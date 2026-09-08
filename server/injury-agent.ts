@@ -198,6 +198,7 @@ export async function runInjuryAgent(
     r.creator,
     "injury-creation",
     r.case_id,
+    r.id,
   );
   const skills = effectiveSettings(db, r.firm_id).agents["injury-creation"]
     .skills;
@@ -322,7 +323,7 @@ export async function runInjuryAgent(
       const research = await (
         injected
           ? client
-          : agentClient(db, r.firm_id, r.creator, "library-research")
+          : agentClient(db, r.firm_id, r.creator, "library-research", r.case_id, r.id)
       ).messages.create({
         model: process.env.INJURY_AI_MODEL || "claude-opus-5",
         max_tokens: 2500,

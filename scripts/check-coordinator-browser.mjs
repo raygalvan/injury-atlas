@@ -1,3 +1,4 @@
+import { recordUsage } from "../server/ai/usage.ts";
 // Synthetic accounts and provider responses; no mail, live keys or real case data.
 import { createRequire } from "node:module";
 import { mkdtempSync, mkdirSync, rmSync } from "node:fs";
@@ -217,6 +218,21 @@ try {
   await page.screenshot({path:"artifacts/production/coordinator-voice-library-receipt.png",fullPage:true});
   await page.goto(`http://127.0.0.1:3198/injuries?library=${record[0].id}`);
   await page.locator(`#library-${record[0].id}`).waitFor();
+  recordUsage({db,firmId:u.firm_id,userId:u.id,agent:"library-research",jobId:record[0].id},"anthropic","claude-opus-5",{usage:{input_tokens:1000,output_tokens:200}},"end_turn",100);
+  await page.goto("http://127.0.0.1:3198/settings#usage");
+  await page.getByRole("heading",{name:"Usage and pricing",exact:true}).waitFor();
+  assert.equal(await page.getByLabel("Super-admin testing mode",{exact:true}).isChecked(),true);
+  await page.getByLabel("Storage, review and support allowance per job, USD",{exact:true}).fill("2");
+  await page.getByRole("button",{name:"Save usage and pricing",exact:true}).click();
+  await page.getByText(/Changes saved and recorded/).waitFor();
+  await page.getByLabel("Inspect a job",{exact:true}).selectOption(record[0].id);
+  await page.getByText(/Price at 70% gross margin/).waitFor();
+  assert.match(await page.locator(".usage-quote").innerText(),/\$6\.7000/);
+  await page.locator("#usage").screenshot({path:"artifacts/production/usage-pricing-desktop.png"});
+  await page.setViewportSize({width:390,height:844});
+  await page.locator("#usage").scrollIntoViewIfNeeded();
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.locator("#usage").screenshot({path:"artifacts/production/usage-pricing-mobile.png"});
   assert.deepEqual(errors, []);
   console.log(
     "Center button, personalized text turn, voice interface, minimize, settings save, mobile layout: passed. Voice event to saved library job and visible receipt passed with a synthetic WebRTC provider; live microphone/provider speech is not tested.",

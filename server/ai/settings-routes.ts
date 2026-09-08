@@ -1,3 +1,4 @@
+import { usageSummary, usagePolicySchema } from "./usage";
 import { AiError } from "./error";
 import type express from "express";
 import { z } from "zod";
@@ -50,6 +51,7 @@ export function settingsRoutes(
       scope: s === "platform" ? "platform" : "firm",
       platformAdmin: isPlatformAdmin(db, u),
       settings: readSettings(db, s),
+      costs: usageSummary(db, s === "platform" ? null : u.firm_id),
       credentials: credentialSummaries(db, s),
       vaultReady: credentialVaultReady(),
       memories: db
@@ -73,9 +75,18 @@ export function settingsRoutes(
       s = scope(req, u),
       current = readSettings(db, s);
     const section = z
-      .enum(["instructions", "models", "credentials", "agent", "voice"])
+      .enum(["instructions", "models", "credentials", "agent", "voice", "usage"])
       .parse(req.body.section);
     const v = req.body.value;
+    if (section === "usage") {
+      if (s !== "platform" || !isPlatformAdmin(db,u)) return res.status(403).json({error:"Only the super admin can change testing and cost policy."});
+      const policy = usagePolicySchema.parse(v);
+      db.prepare("INSERT INTO ai_cost_policy VALUES(1,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body").run(JSON.stringify(policy));
+      // Backfill only previously unpriced, provider-reported calls. Never rewrite recorded estimates.
+      for (const r of policy.rates) db.prepare(`UPDATE ai_call_usage SET estimated_usd=(input_tokens*?+output_tokens*?+cached_tokens*?+cache_write_tokens*?)/1000000.0+searches*?/1000.0 WHERE provider=? AND model=? AND reported=1 AND input_tokens+cached_tokens+cache_write_tokens<=200000 AND estimated_usd IS NULL`).run(r.input,r.output,r.cachedInput,r.cacheWrite,r.searchPerThousand,r.provider,r.model);
+      audit(db,u.id,"settings.usage-updated");
+      return res.json({ok:true});
+    }
     if (section === "instructions") current.instructions = v;
     if (section === "models") {
       current.models = v.models;
