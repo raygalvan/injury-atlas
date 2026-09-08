@@ -1,3 +1,4 @@
+import { createRealtimeProtocol } from "../src/assistant/realtime-protocol";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, readFileSync } from "node:fs";
@@ -368,6 +369,32 @@ test("coordinator settings, tools and provider routing preserve access and run r
       ).status,
       403,
     );
+    // Real voice event -> authenticated endpoint -> persisted background library job.
+    assert.ok(requests.at(-1).body.session.tools.some((t: any) => t.name === "add_library_injury"));
+    const sent: any[] = [];
+    const cards: any[] = [];
+    let finish!: () => void;
+    const finished = new Promise<void>(resolve => { finish = resolve; });
+    const protocol = createRealtimeProtocol({
+      onUserTranscript() {}, onAssistantTranscript() {},
+      onToolCall: async (name, args, callId) => {
+        const response = await call("admin", `/assistant/tools/${name}`, { sessionId: voiceBody.sessionId, args, callId });
+        assert.equal(response.status, 200);
+        const result = await response.json();
+        cards.push(result.card);
+        return result.output;
+      },
+    }, { send: event => { sent.push(event); if (event.type === "response.create") finish(); }, setMicOpen() {}, now: () => 0, setTimer: () => 0, clearTimer() {} });
+    const voiceCall = { type: "response.done", response: { status: "completed", output: [{ type: "function_call", status: "completed", name: "add_library_injury", call_id: "voice-library", arguments: JSON.stringify({ name: "Synthetic voice kneecap injury" }) }] } };
+    protocol.onServerEvent(voiceCall);
+    protocol.onServerEvent(voiceCall);
+    await finished;
+    const receipt = JSON.parse(sent[0].item.output);
+    assert.equal(cards[0].title, "Library injury queued");
+    assert.equal(db.prepare("SELECT count(*) n FROM injury_library_jobs WHERE publication_id=?").get(receipt.id)!.n, 1);
+    assert.equal(db.prepare("SELECT state FROM injury_library_jobs WHERE publication_id=?").get(receipt.id)!.state, "queued");
+    assert.equal(cards.length, 1);
+    protocol.dispose();
     const voiceAction = await call("admin", "/assistant/tools/find_cases", {
       sessionId: voiceBody.sessionId,
       callId: "voice-find",

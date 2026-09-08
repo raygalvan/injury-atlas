@@ -47,6 +47,11 @@ saveSettings(db, "platform", config, u);
 saveCredential(db, "platform", "openai", "synthetic-browser-key", u);
 const originalFetch = globalThis.fetch;
 globalThis.fetch = async (url, options) => {
+  if (String(url) === "https://api.openai.com/v1/realtime/client_secrets") {
+    const session = JSON.parse(options.body).session;
+    assert.ok(session.tools.some(t => t.name === "add_library_injury"));
+    return Response.json({ value: "synthetic-voice-secret" });
+  }
   assert.equal(String(url), "https://api.openai.com/v1/responses");
   const b = JSON.parse(options.body);
   assert.match(b.instructions, /Hello Ray/);
@@ -160,9 +165,60 @@ try {
   await page.screenshot({
     path: "artifacts/production/coordinator-desktop.png",
   });
+  // Exercise the real browser voice transport and authenticated action endpoint.
+  // Only microphone, provider SDP and server events are synthetic; no email is sent.
+  config.voice.enabled = true;
+  config.agents["library-research"].provider = "openai";
+  saveSettings(db, "platform", config, u);
+  await context.addInitScript(() => {
+    const audio = new AudioContext();
+    navigator.mediaDevices.getUserMedia = async () => audio.createMediaStreamDestination().stream;
+    window.__voiceSent = [];
+    window.RTCPeerConnection = class {
+      connectionState = "new";
+      createDataChannel() {
+        this.channel = { readyState: "connecting", send: raw => {
+          const e = JSON.parse(raw); window.__voiceSent.push(e);
+          if (e.type === "session.update") queueMicrotask(() => window.__voiceEvent({type:"session.updated"}));
+          if (e.type === "response.create") queueMicrotask(() => {
+            window.__voiceEvent({type:"response.created",response:{id:"synthetic-reply"}});
+            window.__voiceEvent({type:"response.done",response:{id:"synthetic-reply",status:"completed",output:[]}});
+          });
+        }};
+        window.__voiceEvent = e => this.channel.onmessage({data:JSON.stringify(e)});
+        return this.channel;
+      }
+      addTrack() {}
+      async createOffer() { return {type:"offer",sdp:"synthetic-offer"}; }
+      async setLocalDescription() {}
+      async setRemoteDescription() {
+        this.connectionState = "connected"; this.onconnectionstatechange();
+        this.channel.readyState = "open"; this.channel.onopen();
+      }
+      close() { this.connectionState = "closed"; this.channel.readyState = "closed"; }
+    };
+  });
+  await page.route("https://api.openai.com/v1/realtime/calls**", route => route.fulfill({status:200,contentType:"application/sdp",body:"synthetic-answer"}));
+  await page.reload();
+  await page.getByText("Live", {exact:true}).waitFor();
+  await page.evaluate(() => {
+    window.__voiceEvent({type:"conversation.item.input_audio_transcription.completed",transcript:"Add a broken kneecap to my injury library"});
+    const event = {type:"response.done",response:{id:"synthetic-action",status:"completed",output:[{type:"function_call",status:"completed",name:"add_library_injury",call_id:"browser-library",arguments:JSON.stringify({name:"Synthetic kneecap injury"})}]}};
+    window.__voiceEvent(event); window.__voiceEvent(event);
+  });
+  await page.getByText("Library injury queued",{exact:true}).waitFor();
+  const record = db.prepare("SELECT p.id FROM injury_publications p JOIN injury_library_jobs j ON j.publication_id=p.id WHERE p.firm_id=? AND j.state='queued'").all(u.firm_id);
+  assert.equal(record.length, 1);
+  await page.waitForFunction(() => window.__voiceSent.some(e => e.item?.type === "function_call_output"));
+  const results = await page.evaluate(() => window.__voiceSent.filter(e => e.item?.type === "function_call_output"));
+  assert.equal(results.length,1);
+  assert.equal(JSON.parse(results[0].item.output).id, record[0].id);
+  await page.screenshot({path:"artifacts/production/coordinator-voice-library-receipt.png",fullPage:true});
+  await page.goto(`http://127.0.0.1:3198/injuries?library=${record[0].id}`);
+  await page.locator(`#library-${record[0].id}`).waitFor();
   assert.deepEqual(errors, []);
   console.log(
-    "Center button, personalized text turn, voice interface, minimize, settings save, mobile layout: passed. Live audio requires configured provider and microphone.",
+    "Center button, personalized text turn, voice interface, minimize, settings save, mobile layout: passed. Voice event to saved library job and visible receipt passed with a synthetic WebRTC provider; live microphone/provider speech is not tested.",
   );
 } finally {
   globalThis.fetch = originalFetch;
