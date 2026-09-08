@@ -94,6 +94,7 @@ export function createApp(
         ? JSON.parse(readFileSync("dist/release.json", "utf8")).commit
         : "development",
       atlasReady: existsSync(".atlas-build/index.html"),
+      injuryAgentConfigured: !!process.env.ANTHROPIC_API_KEY,
       productionWorkerReady:
         Number(
           db.prepare("SELECT heartbeat FROM worker_health WHERE id=1").get()
@@ -527,7 +528,55 @@ export function createApp(
   });
   productionRoutes(app, db, storage, staff);
   // Injury library and per-case applications feed the embedded viewer.
-  app.get("/api/injuries", staff, (_req, res) => res.json(listLibrary(db)));
+  const catalogueFor = (caseId: string) => {
+    const privateEntries = db
+      .prepare(
+        "SELECT id,body FROM injury_production WHERE case_id=? AND state='complete' AND applied=0",
+      )
+      .all(caseId)
+      .map((r) => {
+        const b = JSON.parse(String(r.body));
+        return {
+          id: String(r.id),
+          name: b.name,
+          shortName: b.name,
+          color: "#984b49",
+          description: b.generalDefinition || b.medicalDescription,
+          section: "Your injuries",
+          laterality: "unspecified",
+          status: "ready",
+          engineId: null,
+          caseId,
+          generatedFrom: null,
+          createdBy: null,
+          created: 0,
+          sourceIds: b.recipe ? [b.recipe.parentId] : [],
+        };
+      });
+    const shared = db
+      .prepare(
+        "SELECT id,name,description FROM injury_publications WHERE status='approved'",
+      )
+      .all()
+      .map((r) => ({
+        id: "library-" + r.id,
+        name: String(r.name),
+        shortName: String(r.name),
+        color: "#984b49",
+        description: String(r.description),
+        section: "Injury library",
+        laterality: "unspecified",
+        status: "approved",
+        engineId: null,
+        caseId: null,
+        generatedFrom: null,
+        createdBy: null,
+        created: 0,
+        sourceIds: [],
+      }));
+    return [...privateEntries, ...shared].slice(0, 500);
+  };
+  app.get("/api/injuries", staff, (_req, res) => res.json(catalogueFor("")));
   app.get("/api/cases/:caseId/injuries", staff, (req, res) => {
     const id = String(req.params.caseId),
       legacy = caseInjuries(db, id);
@@ -538,6 +587,7 @@ export function createApp(
       .all(id)
       .map((r) => ({
         id: r.id,
+        name: JSON.parse(String(r.body)).name,
         parentId: JSON.parse(String(r.body)).recipe.parentId,
         mode:
           JSON.parse(String(r.body)).recipe.kind === "fracture"
@@ -546,7 +596,37 @@ export function createApp(
         hidden: !!r.hidden,
         url: `/api/cases/${id}/production/${r.id}/geometry`,
       }));
-    res.json({ ...legacy, productionInjuries });
+    const generated = db
+      .prepare(
+        "SELECT id,body,state,stage,error FROM injury_production WHERE case_id=? AND applied=0 ORDER BY updated DESC LIMIT 200",
+      )
+      .all(id)
+      .map((r) => ({
+        id: r.id,
+        name: JSON.parse(String(r.body)).name,
+        status:
+          r.state === "failed"
+            ? "failed"
+            : r.state === "complete"
+              ? "ready"
+              : r.state === "running"
+                ? "generating"
+                : "queued",
+        stage:
+          r.state === "failed"
+            ? String(r.error)
+            : r.state === "complete"
+              ? JSON.parse(String(r.body)).recipe
+                ? "Generated · awaiting review"
+                : "Documentation ready · 3D modeling pending"
+              : String(r.stage),
+      }));
+    res.json({
+      applied: [],
+      generated,
+      productionInjuries,
+      catalogue: catalogueFor(id),
+    });
   });
   app.post("/api/cases/:caseId/injuries/apply", staff, (req, res) => {
     const { injuries } = z
@@ -557,15 +637,101 @@ export function createApp(
       })
       .parse(req.body);
     const id = String(req.params.caseId);
-    const result = applyInjuries(db, id, res.locals.user.id, injuries);
+    const occupied = new Set(
+      db
+        .prepare(
+          "SELECT json_extract(body,'$.recipe.parentId') parent FROM injury_production WHERE case_id=? AND applied=1 AND json_extract(body,'$.recipe.kind')='fracture'",
+        )
+        .all(id)
+        .map((r) => String(r.parent)),
+    );
+    const requested = new Set<string>();
+    // Only actual workflow records can be applied. Seed/demo IDs are rejected.
+    for (const item of injuries) {
+      if (item.id.startsWith("library-")) {
+        const entry = db
+          .prepare(
+            "SELECT * FROM injury_publications WHERE id=? AND status='approved'",
+          )
+          .get(item.id.slice(8));
+        if (!entry)
+          return res
+            .status(400)
+            .json({ error: "This library definition is unavailable." });
+        if (!process.env.ANTHROPIC_API_KEY)
+          return res
+            .status(503)
+            .json({ error: "AI injury creation is currently unavailable." });
+      } else {
+        const r = db
+          .prepare("SELECT * FROM injury_production WHERE id=? AND case_id=?")
+          .get(item.id, id);
+        if (!r)
+          return res.status(400).json({
+            error:
+              "Only injuries created through this workflow can be applied.",
+          });
+        const body = JSON.parse(String(r.body));
+        if (body.recipe?.kind === "fracture" && !r.applied) {
+          const parent = body.recipe.parentId;
+          if (occupied.has(parent) || requested.has(parent))
+            return res
+              .status(409)
+              .json({
+                error:
+                  "This anatomy piece already has an applied fracture illustration. Remove it before applying a replacement.",
+              });
+          requested.add(parent);
+        }
+        if (
+          r.state !== "complete" ||
+          !r.source_review ||
+          !r.placement_review ||
+          !r.render_review
+        )
+          return res.status(409).json({
+            error:
+              "Review this generated injury in the Injury workspace before applying it.",
+          });
+      }
+    }
+    for (const item of injuries) {
+      if (item.id.startsWith("library-")) {
+        const entry = db
+          .prepare("SELECT * FROM injury_publications WHERE id=?")
+          .get(item.id.slice(8))!;
+        const created = createProduction(
+          db,
+          res.locals.user,
+          id,
+          productionSchema.parse({
+            name: String(entry.name),
+            description: `Create an illustration for this case using the following general injury definition. Case facts must come from this case's evidence. General definition: ${entry.description}`,
+            useAI: true,
+            agentManaged: true,
+          }),
+        );
+        db.prepare(
+          "UPDATE injury_production SET state='queued',stage='Injury Creation Agent · queued' WHERE id=?",
+        ).run(created.id);
+      } else
+        db.prepare(
+          "UPDATE injury_production SET applied=1,hidden=? WHERE id=? AND case_id=?",
+        ).run(item.hidden ? 1 : 0, item.id, id);
+    }
     audit(db, res.locals.user.id, "injuries.applied", id);
-    res.json(result);
+    res.json({ ok: true });
   });
   app.post("/api/cases/:caseId/injuries/match", staff, async (req, res) => {
     const { description } = z
       .object({ description: z.string().trim().min(1).max(4000) })
       .parse(req.body);
-    res.json(await matchInjuries(description, listLibrary(db)));
+    res.json(
+      await matchInjuries(
+        description,
+        catalogueFor(String(req.params.caseId)) as any,
+      ),
+    );
   });
   app.post("/api/cases/:caseId/injuries/generate", staff, (req, res) => {
     const { name, description } = z
@@ -575,12 +741,40 @@ export function createApp(
       })
       .parse(req.body);
     const id = String(req.params.caseId);
+    if (!process.env.ANTHROPIC_API_KEY)
+      return res.status(503).json({
+        error:
+          "AI injury creation is currently unavailable. Please try again after AI service is configured.",
+      });
+    if (
+      Number(
+        db
+          .prepare(
+            "SELECT count(*) n FROM injury_production WHERE firm_id=? AND state IN ('queued','running')",
+          )
+          .get(res.locals.user.firm_id)!.n,
+      ) >= 20
+    )
+      return res
+        .status(429)
+        .json({
+          error:
+            "Your firm already has 20 queued requests. Please wait for an existing request to finish.",
+        });
     const draft = createProduction(
       db,
       res.locals.user,
       id,
-      productionSchema.parse({ name, description: description || name }),
+      productionSchema.parse({
+        name,
+        description: description || name,
+        useAI: true,
+        agentManaged: true,
+      }),
     );
+    db.prepare(
+      "UPDATE injury_production SET state='queued',stage='Queued for AI injury description',updated=? WHERE id=?",
+    ).run(Date.now(), draft.id);
     const queued = {
       id: draft.id,
       name,

@@ -2,7 +2,7 @@
 
 ## User workflow
 
-Open Injury workspace for a case. Create a private injury; describe the documented injury separately from general medical explanation and client effects. Link evidence and citations. Choose documentation only or a supported rendering method. For geometry, choose the anatomy, click its actual surface to anchor placement, enter millimeter dimensions, and record measurement sources or illustrative assumptions. Save and start production. Leaving the page or signing out does not stop the worker.
+Use the restored Apply Injuries panel or Injury workspace. Describe an injury in ordinary language, such as “broken kneecap.” The Injury Creation Agent is assigned automatically. It reads available supported case evidence, resolves clinical terminology against the actual anatomy catalogue, prepares general medical documentation separately from client effects, and constructs a registered illustrative geometry plan. No renderer choice, mesh ID, coordinates or medical authoring fields are required. Leaving the page or signing out does not stop the worker.
 
 Completed files are saved as generated artifacts in the case Evidence library: registered 3D JSON, reproducible source geometry, anterior/oblique/posterior PNG views, reference PNG, a PDF, and editable Word demand material. Optional AI drafting produces a separately retained draft. Completion email uses SES and a sign-in-protected deep link. A failure to send does not discard the outputs; notification delivery retries with backoff. In rare process crashes after SES accepts a message but before its receipt is recorded, duplicate delivery is possible.
 
@@ -20,19 +20,23 @@ The web service starts one isolated Node child worker with a 512 MB heap cap. SQ
 
 The health check now verifies worker heartbeat and bundled geometry generator availability. No new service installation or IAM privilege is needed beyond the existing storage and SES permissions. Non-production completion email is disabled.
 
-ANTHROPIC_API_KEY enables optional AI drafting. INJURY_AI_MODEL overrides the model; the default follows the existing application's Claude model. Without a key, user-authored descriptions and geometric/document production remain available. AI currently consumes the supplied text and citations; it does not automatically extract a diagnosis or measurements from an uploaded photograph or report. Users must supply/review the injury description and placement.
+ANTHROPIC_API_KEY enables the Injury Creation Agent; INJURY_AI_MODEL overrides its Claude Opus 5 default. Missing configuration is reported before an AI request is queued. Health reports the non-secret injuryAgentConfigured flag. The agent reads up to six supported original case files per pass with a combined 12 MB bound: PDF, JPEG, PNG, WebP, GIF and plain text. It records the source IDs and hashes it read and discloses skipped files. General medical research uses the provider's web-search tool restricted to medical reference domains; only an anatomy/classification topic is sent to that research step, never case documents or client identity. References are taken from actual tool results.
 
-## Current rendering capabilities and limits
+The retained agent plan includes clinical wording, general library wording, source linkage, geometric choices and uncertainties. Retries reuse it. Unspecified side and geometric dimensions remain explicitly illustrative reference choices; they do not become verified client measurements. Source, placement and rendering approvals remain independent. Unknown or unsupported injury morphology is marked for additional modeling rather than replaced with an unrelated injury.
+## Geometry mechanics are not an injury catalogue
 
-- Surface abrasion on the actual skin triangles; no extra layer thickness.
-- Subarachnoid surface blood layer on a selected cerebral surface structure. This is not a volumetric reconstruction of patient-specific bleeding.
-- Measured individual-rib fracture plane/gap with illustrative cut faces. One replacement per source anatomy piece; compound/multiple fractures require a future composite generator.
-- Other injuries remain documented requests; the system does not fabricate an unsupported mesh.
+The agent selects internal geometry operations against actual reference structures. A fracture operation now accepts any appropriate individual bone, including the patella, rather than being restricted to the rib test. Surface operations create a registered superficial abrasion or cerebral surface blood layer where appropriate. Complex morphology that cannot be accurately represented by these operations is explicitly identified for further modeling. No hard-coded test injury becomes a selectable app entry.
 
-Engine code remains in human-atlas and is pinned/bundled at release time. Geometry stores the engine commit. An engine mismatch blocks applying old geometry and requires an explicitly reviewed revision. Published library metadata loads at runtime without rebuilding the application.
+Find contains workflow-created private injuries and approved shared definitions. The old seed table is no longer populated, listed, matched or accepted by application endpoints. The hosted viewer no longer falls back to the Homer test catalogue. Standalone engineering proofs remain isolated from application cases.
+
+Engine code remains in human-atlas and is pinned/bundled at release time. Geometry stores the engine commit. An anatomy-signature mismatch blocks applying old geometry and requires an explicitly reviewed revision. Published library metadata loads at runtime without rebuilding the application.
 
 Synthetic validations use no real case data and send no email. The browser proof exercises desktop/mobile layouts, actual three-method geometry production, generated image delivery, placement UI and atlas applications. Screenshots are retained as CI artifacts.
 
 ## Saved anatomy and appearance compatibility
 
 New geometry records carry a SHA-256 signature of the atlas catalogue and every raw geometry chunk. Code-only engine updates retain compatibility; changed anatomy requires a reviewed revision. The initial production pin (`5968f08031e185df3830637e961a2d0f3d47caad`) has an explicit, byte-verified signature mapping for its existing records. Unknown legacy pins are rejected. Appearance version 0 is preserved; new abrasion and blood layers use reference-coordinate variation (version 1), which is illustrative and does not encode severity or wound age. Existing evidence images and documents are never regenerated by a viewer update.
+
+## Panel restoration
+
+The original Client Injuries / Apply Injuries layout and CSS from the pre-production panel are restored. Find/Describe, the catalogue checklist, missing-injury card, queued rows, isolation and mobile controls remain. The panel receives actual catalogue records and durable job stages from the host. Server acknowledgements and failures are shown in place without a redirect into a technical form.

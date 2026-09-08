@@ -14,7 +14,9 @@ export async function injuryDocuments(
     ["Injury description", d.description],
     [
       "Medical background",
-      d.medicalDescription || "No separate medical background supplied.",
+      d.generalDefinition ||
+        d.medicalDescription ||
+        "Medical background is awaiting review.",
     ],
     ["Medical references", d.medicalReferences || "Not supplied."],
     [
@@ -117,7 +119,8 @@ export async function injuryDocuments(
       aiDemand ||
         "Prepare the demand argument from the reviewed injury, treatment, and client-impact evidence. No automated damages valuation has been made.",
     ],
-    ["Medical context", d.medicalDescription],
+    ["General medical context", d.generalDefinition || d.medicalDescription],
+    ["Agent review notes", d.agentNotes || ""],
     ["Medical references", d.medicalReferences],
     [
       "Version and illustration assumptions",
