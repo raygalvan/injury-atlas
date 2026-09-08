@@ -1,3 +1,4 @@
+import {labCategories,presets} from "../../shared/afp-lab";
 import { readFileSync } from "node:fs";
 import type { Store } from "../store";
 import { readControlPlane } from "./control-plane";
@@ -18,6 +19,7 @@ export function developmentContext(db: Store) {
     .all();
   return {
     schemaVersion: "injury.bot.afp-development-context/1",
+    labPermissionModel:{presets,categories:labCategories,privateByDefault:true,coordinatorMayEnable:false},
     generatedAt: Date.now(),
     readOnly: true,
     guidance:
@@ -59,7 +61,7 @@ export function developmentContext(db: Store) {
         .all(),
       privatePresentation: db
         .prepare(
-          "SELECT state,count(*) count FROM afp_private_preferences GROUP BY state",
+          "SELECT feature_id,state,count(*) count FROM afp_private_preferences GROUP BY feature_id,state",
         )
         .all(),
     },

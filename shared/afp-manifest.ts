@@ -1,3 +1,4 @@
+import { colorTokens } from "./afp-lab";
 import { z } from "zod";
 export const AFP_SCHEMA = "injury.bot.afp/0.1" as const;
 export const AFP_VERSION = "0.1.0" as const;
@@ -5,6 +6,17 @@ export const RENDERING_CONTRACT = "injury.bot.rendering.preflight/0.1" as const;
 export const PRESENTATION_CONTRACT =
   "injury.bot.assistant.presentation/0.1" as const;
 export const PRESENTATION_FEATURE = "private-coordinator-text-label" as const;
+export const ATLAS_PRESENTATION_CONTRACT =
+  "injury.bot.atlas.presentation/0.1" as const;
+export const ATLAS_PRESENTATION_FEATURE = "private-atlas-select-color" as const;
+export const atlasPreferenceRequestSchema = z.discriminatedUnion("action", [
+  z.strictObject({
+    action: z.literal("set"),
+    selectInjuriesColor: z.enum(colorTokens),
+  }),
+  z.strictObject({ action: z.literal("disable") }),
+  z.strictObject({ action: z.literal("remove") }),
+]);
 export const DEFAULT_TEXT_LABEL = "Text Chat";
 export const textTabLabelSchema = z
   .string()
@@ -89,9 +101,22 @@ const presentationManifestSchema = renderingManifestSchema.extend({
     firmId: id,
   }),
 });
+const atlasPresentationManifestSchema = presentationManifestSchema.extend({
+  extensionId: z.literal(ATLAS_PRESENTATION_FEATURE),
+  extensionPoints: z.tuple([
+    z.strictObject({
+      id: z.literal("atlas-presentation"),
+      contract: z.literal(ATLAS_PRESENTATION_CONTRACT),
+    }),
+  ]),
+  requestedPermissions: z.tuple([
+    z.literal("atlas.presentation.private.write"),
+  ]),
+});
 export const manifestSchema = z.union([
   renderingManifestSchema,
   presentationManifestSchema,
+  atlasPresentationManifestSchema,
 ]);
 export type AfpManifest = z.infer<typeof manifestSchema>;
 export type Evaluation = {

@@ -177,3 +177,5 @@ extensionPoints.push({
   customizationAllowed:
     "Only a private text-tab label, 1–24 ASCII letters/spaces. No code, styling, markup or resource escalation.",
 });
+
+extensionPoints.push({id:"atlas-presentation",name:"Atlas Presentation",type:"Declarative preference",description:"Private Select Injuries color using six reviewed tokens.",extensionTypes:["private color token"],protected:["geometry","case access","provenance","shared UI"],reference:"server/afp/presentation.ts; src/Atlas.tsx; human-atlas app/injurybot-bridge.ts",status:"Implemented",dynamicAttachment:false,customizationAllowed:"Private color token only; no arbitrary CSS.",resourceEscalation:false,resourcePolicy:[],sdkContract:"injury.bot.atlas.presentation/0.1"});

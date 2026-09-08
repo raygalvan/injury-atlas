@@ -66,7 +66,22 @@ export function Atlas({
         refreshing = false;
       }
     }
-    const refreshTimer = window.setInterval(refresh, 5000);
+    async function refreshPresentation() {
+      if (!active || !viewerReady) return;
+      try {
+        const prefs = await api("/afp/preferences/presentation");
+        if (active)
+          post({
+            type: "injurybot:atlas:presentation",
+            contract: "injury.bot.atlas.presentation/0.1",
+            selectInjuriesColor: prefs.selectInjuriesColor ?? "default",
+          });
+      } catch {}
+    }
+    const refreshTimer = window.setInterval(() => {
+      void refresh();
+      void refreshPresentation();
+    }, 5000);
     async function receive(e: MessageEvent) {
       if (
         e.source !== frame.current?.contentWindow ||
@@ -77,8 +92,9 @@ export function Atlas({
       const d = e.data;
       if (d.type === "human-atlas:ready") {
         setReady(true);
-        if (!caseRecord) return;
         viewerReady = true;
+        await refreshPresentation();
+        if (!caseRecord) return;
         await refresh();
       }
       if (d.caseId !== caseRecord?.id) return;

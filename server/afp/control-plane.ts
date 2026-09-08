@@ -74,7 +74,7 @@ export function readControlPlane(db: Store): AfpControlPlane {
     sdkBoundary: {
       version: AFP_VERSION,
       contract: RENDERING_CONTRACT,
-      contracts: [RENDERING_CONTRACT, "injury.bot.assistant.presentation/0.1"],
+      contracts: [RENDERING_CONTRACT, "injury.bot.assistant.presentation/0.1", "injury.bot.atlas.presentation/0.1"],
       privatePresentation: true,
       implemented: true,
       executable: false,

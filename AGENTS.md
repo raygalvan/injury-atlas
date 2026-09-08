@@ -20,7 +20,7 @@ Tool-first, attorney-facing injury evidence and reconstruction workspace. Human 
 - AFP knowledge is super-admin product context. Never put case evidence, personal medical details, private firm data or credentials in the shared AFP memory.
 - No AFP coding, fork provisioning or upstream reconciliation runtime exists yet. Do not represent the memory/settings interface as delivering those capabilities.
 
-- AFP v0.1 provides an internal manifest validator, read-only rendering recipe preflight and private declarative presentation (`server/afp/sdk.ts`). Preserve exact compatibility, fresh policy/ownership checks and audit. Do not expose DB/shell/filesystem access or infer arbitrary code execution from SDK availability.
+- AFP v0.1 provides an internal manifest validator, read-only rendering recipe preflight and private declarative presentation (`server/afp/sdk.ts`). Preserve exact-build compatibility for rendering and contract-based compatibility for simple presentation, plus fresh policy/ownership checks and audit. Do not expose DB/shell/filesystem access or infer arbitrary code execution from SDK availability.
 
 ## AFP proposal handoff before material work
 
@@ -30,4 +30,6 @@ If runtime access is unavailable, report that fact, inspect committed AFP knowle
 
 Identify applicable proposal IDs/revisions in the implementation plan and PR. Attach implementation, commit/PR and test references through the existing governed journal interface when authorized access is available; otherwise include those references in the PR for owner review. Preserve optimistic revision checks. Lifecycle: proposal → implementation begins → implementation/test references → human review → verified only after actual validation. The Coordinator may create proposals; it cannot approve or verify its own records. Never promote a proposal merely because code was generated.
 
-Private Coordinator presentation is a declarative SDK contract, not an executable runtime. Derive identity/source from authenticated host routes, preserve the exact-build and policy checks, and retain preference audit. Do not add arbitrary settings, HTML/CSS/JS, shell, database or deployment access to the Coordinator.
+Private Coordinator presentation is a declarative SDK contract, not an executable runtime. Derive identity/source from authenticated host routes, preserve contract/schema/ownership/policy checks for simple preferences and exact-build checks for rendering, and retain preference audit. Do not add arbitrary settings, HTML/CSS/JS, shell, database or deployment access to the Coordinator.
+
+- AFP Lab Mode is private owner/super-admin policy, never a Coordinator permission-escalation tool. Maintain Safe/Standard/Lab presets, effective category controls, and the distinction between Not Authorized and Not Implemented. Use registered tokens only; do not infer arbitrary code execution from an Allowed category. See `docs/afp-lab-mode.md`.

@@ -8,6 +8,8 @@ import {
   RENDERING_CONTRACT,
   PRESENTATION_CONTRACT,
   PRESENTATION_FEATURE,
+  ATLAS_PRESENTATION_FEATURE,
+  ATLAS_PRESENTATION_CONTRACT,
   protectedBoundaries,
   type AfpManifest,
 } from "../../shared/afp-manifest";
@@ -78,6 +80,21 @@ export function presentationManifest(
     ownership: { scope: "Private", ownerId: actor.id, firmId: actor.firm_id },
   };
 }
+export function atlasPresentationManifest(
+  actor: User,
+  policies: AfpPolicy[],
+  version = applicationVersion(),
+): AfpManifest {
+  return {
+    ...presentationManifest(actor, policies, version),
+    extensionId: ATLAS_PRESENTATION_FEATURE,
+    extensionPoints: [
+      { id: "atlas-presentation", contract: ATLAS_PRESENTATION_CONTRACT },
+    ],
+    requestedPermissions: ["atlas.presentation.private.write"],
+    ownership: { scope: "Private", ownerId: actor.id, firmId: actor.firm_id },
+  };
+}
 export function validateManifest(
   input: unknown,
   actor: User | null,
@@ -92,7 +109,9 @@ export function validateManifest(
       manifestSchema.options[
         (input as any)?.extensionPoints?.[0]?.id === "assistant-presentation"
           ? 1
-          : 0
+          : (input as any)?.extensionPoints?.[0]?.id === "atlas-presentation"
+            ? 2
+            : 0
       ].safeParse(input);
     const issues = branch.success ? parsed.error.issues : branch.error.issues;
     const codes: Record<string, string> = {
@@ -141,9 +160,11 @@ export function validateManifest(
     (actor.role !== "owner" || m.ownership.ownerId !== actor.id)
   )
     reasons.push("firm_owner_required");
+  const presentation = m.extensionPoints[0].id !== "rendering-pipeline";
   if (
-    m.application.version !== version ||
-    m.compatibility.applicationVersion !== version
+    !presentation &&
+    (m.application.version !== version ||
+      m.compatibility.applicationVersion !== version)
   )
     reasons.push("incompatible_application_version");
   const permission = policies.find(
@@ -151,7 +172,9 @@ export function validateManifest(
       p.id ===
       (m.extensionPoints[0].id === "assistant-presentation"
         ? "assistant-presentation"
-        : "rendering-preflight"),
+        : m.extensionPoints[0].id === "atlas-presentation"
+          ? "atlas-presentation"
+          : "rendering-preflight"),
   );
   if (!permission || permission.level === "Protected")
     reasons.push("permission_protected");
@@ -179,6 +202,7 @@ export function validateManifest(
   if (reasons.length)
     return { result: "Incompatible" as const, reasons, manifest: m };
   if (
+    !presentation &&
     JSON.stringify(
       [...m.customizationPolicies].sort((a, b) => a.id.localeCompare(b.id)),
     ) !== JSON.stringify(policySnapshot(policies))

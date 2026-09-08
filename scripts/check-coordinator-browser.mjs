@@ -58,7 +58,9 @@ globalThis.fetch = async (url, options) => {
   assert.equal(String(url), "https://api.openai.com/v1/responses");
   const b = JSON.parse(options.body);
   assert.match(b.instructions, /Hello Ray/);
-  if(JSON.stringify(b.input).includes("Change Text Chat to My Text for me") && !b.input.some(i=>i.type === "function_call_output")) {
+  const lastUser=[...b.input].reverse().find(i=>i.role==='user');
+  if(JSON.stringify(lastUser).includes("Make the Select Injuries button blue for me") && !b.input.some(i=>i.type === "function_call_output"))return Response.json({output:[{type:"function_call",name:"set_private_afp_presentation",call_id:"browser-lab-text",arguments:JSON.stringify({action:"set",selectInjuriesColor:"blue"})}]});
+  if(JSON.stringify(lastUser).includes("Change Text Chat to My Text for me") && !b.input.some(i=>i.type === "function_call_output")) {
     return Response.json({output:[{type:"function_call",name:"set_private_afp_ui_preference",call_id:"browser-text-preference",arguments:JSON.stringify({action:"set",textTabLabel:"My Text"})}]});
   }
   return Response.json({
@@ -77,7 +79,7 @@ globalThis.fetch = async (url, options) => {
 };
 let browser;
 try {
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: true, args: ["--no-sandbox", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] });
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
   });
@@ -90,6 +92,7 @@ try {
     },
   ]);
   const page = await context.newPage();
+  page.setDefaultTimeout(45000);
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   mkdirSync("artifacts/production", { recursive: true });
@@ -117,6 +120,29 @@ try {
   await page.getByRole("textbox",{name:"Message",exact:true}).fill("Change Text Chat to My Text for me");
   await page.getByRole("button",{name:"Send",exact:true}).click();
   await page.getByRole("button",{name:"My Text",exact:true}).waitFor();
+  await page.goto("http://127.0.0.1:3198/settings?afpView=permissions#afp");
+  await page.getByLabel("AFP permission preset",{exact:true}).selectOption("Safe");
+  await page.waitForFunction(()=>document.querySelector('[aria-label="AFP permission preset"]').value==='Safe');
+  await page.getByRole("switch",{name:"AFP Lab Mode",exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('[aria-label="AFP permission preset"]').value==='Lab');
+  assert.equal(await page.getByLabel("UI colors and styling permission",{exact:true}).inputValue(),"Allow Automatically");
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:"artifacts/production/afp-lab-permissions-mobile.png",fullPage:true});
+  await page.goto("http://127.0.0.1:3198/coordinator");
+  await page.getByRole("textbox",{name:"Message",exact:true}).fill("Make the Select Injuries button blue for me");
+  await page.getByRole("button",{name:"Send",exact:true}).click();
+  await page.getByText("Private Atlas presentation applied",{exact:true}).waitFor();
+  const colorPage=await context.newPage();await colorPage.setViewportSize({width:1440,height:1000});
+  await colorPage.goto("http://127.0.0.1:3198/atlas");
+  const colorTab=colorPage.frameLocator('iframe').getByRole('tab',{name:'Select Injuries',exact:true});
+  await colorTab.waitFor();
+  await colorPage.waitForFunction(()=>document.querySelector('iframe')?.contentDocument?.querySelector('.apply-tab')?.getAttribute('data-afp-color')==='blue');
+  assert.equal(await colorTab.evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(29, 78, 216)');
+  await colorPage.screenshot({path:"artifacts/production/afp-blue-select-desktop.png",fullPage:true});
+  await colorPage.setViewportSize({width:390,height:844});
+  await colorPage.frameLocator('iframe').getByRole('button',{name:'Open atlas layers',exact:true}).click();
+  await colorTab.waitFor();
+  await colorPage.close();
   await page.getByRole("button", { name: "Voice", exact: true }).click();
   await page.locator(".as-orb").waitFor();
   await page.screenshot({
@@ -226,6 +252,10 @@ try {
   await page.screenshot({path:"artifacts/production/coordinator-voice-library-receipt.png",fullPage:true});
   await page.evaluate(()=>window.__voiceEvent({type:"response.done",response:{id:"voice-pref",status:"completed",output:[{type:"function_call",status:"completed",name:"set_private_afp_ui_preference",call_id:"browser-voice-preference",arguments:JSON.stringify({action:"set",textTabLabel:"Text"})}]}}));
   await page.getByRole("button",{name:"Text",exact:true}).waitFor();
+  await page.evaluate(()=>window.__voiceEvent({type:"response.done",response:{id:"lab-color",status:"completed",output:[{type:"function_call",status:"completed",name:"set_private_afp_presentation",call_id:"browser-lab-voice",arguments:JSON.stringify({action:"set",selectInjuriesColor:"blue"})}]}}));
+  await page.waitForFunction(()=>window.__voiceSent.some(e=>e.item?.call_id==='browser-lab-voice'));
+  assert.ok(db.prepare("SELECT body FROM afp_preference_audit").all().some(r=>{const h=JSON.parse(r.body);return h.featureId==='private-atlas-select-color'&&h.source==='voice coordinator'&&h.labAuthorized;}));
+
   await page.screenshot({path:"artifacts/production/afp-private-label-desktop.png",fullPage:true});
   await page.setViewportSize({width:390,height:844});
   await page.screenshot({path:"artifacts/production/afp-private-label-mobile.png",fullPage:true});
@@ -236,6 +266,11 @@ try {
     const otherPage=await isolated.newPage();await otherPage.route("**/api/assistant/realtime-session",route=>route.fulfill({status:503,contentType:"application/json",body:JSON.stringify({error:"Voice disabled in this isolation check"})}));await otherPage.goto("http://127.0.0.1:3198/coordinator");
     await otherPage.getByRole("button",{name:"Text Chat",exact:true}).waitFor();
     assert.equal(await otherPage.getByRole("button",{name:"Text",exact:true}).count(),0);
+    await otherPage.setViewportSize({width:1440,height:1000});
+    await otherPage.goto("http://127.0.0.1:3198/atlas");
+    const defaultTab=otherPage.frameLocator('iframe').getByRole('tab',{name:'Select Injuries',exact:true});await defaultTab.waitFor();
+    assert.equal(await defaultTab.getAttribute('data-afp-color'),'default');
+    assert.notEqual(await defaultTab.evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(29, 78, 216)');
     await isolated.close();
   }
   assert.ok(db.prepare("SELECT body FROM afp_preference_audit").all().some(r=>JSON.parse(r.body).source === "voice coordinator"));
@@ -272,10 +307,12 @@ try {
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   }
   await tab("Permissions").click();
+  await page.getByText("Shared developer policies",{exact:true}).click();
   assert.equal(await page.getByText("Protected · locked",{exact:true}).count(),4);
   await page.getByLabel("UI additions policy",{exact:true}).selectOption("Approval Required");
   await page.getByText("AFP control-plane record saved.",{exact:true}).waitFor();
   await page.reload();
+  await page.getByText("Shared developer policies",{exact:true}).click();
   assert.equal(await page.getByLabel("UI additions policy",{exact:true}).inputValue(),"Approval Required");
   await tab("AFP Readiness").click();
   await page.getByRole("button",{name:"Review Extension Point Registry",exact:true}).click();
@@ -285,13 +322,17 @@ try {
   await page.getByText("AFP control-plane record saved.",{exact:true}).waitFor();
   await tab("AFP Features").click();
   await page.getByRole("heading",{name:"No additional feature definitions",exact:true}).waitFor();
-  await page.locator(".afp-private-preference").getByText("Text / Text Chat",{exact:true}).waitFor();
+  await page.locator(".afp-private-preference").getByText("Text / Text",{exact:true}).waitFor();
   await page.locator(".afp-private-preference").screenshot({path:"artifacts/production/afp-private-feature-mobile.png"});
-  await page.getByRole("button",{name:"Disable private preference",exact:true}).click();
+  await page.locator(".afp-private-preference").getByRole("button",{name:"Disable private preference",exact:true}).click();
   await page.locator(".afp-private-preference").getByText("Default / Text Chat",{exact:true}).waitFor();
-  await page.getByRole("button",{name:"Remove private preference",exact:true}).click();
-  await page.getByRole("button",{name:"View preference history",exact:true}).click();
+  await page.locator(".afp-private-preference").getByRole("button",{name:"Remove private preference",exact:true}).click();
+  await page.locator(".afp-private-preference").getByRole("button",{name:"View preference history",exact:true}).click();
   await page.locator(".afp-private-preference li").first().waitFor();
+  await page.locator(".afp-private-color").getByRole("button",{name:"Remove private preference",exact:true}).click();
+  await page.locator(".afp-private-color").getByText("Default / default",{exact:true}).waitFor();
+  const resetPage=await context.newPage();await resetPage.setViewportSize({width:1440,height:1000});await resetPage.goto("http://127.0.0.1:3198/atlas");
+  const resetTab=resetPage.frameLocator('iframe').getByRole('tab',{name:'Select Injuries',exact:true});await resetTab.waitFor();assert.equal(await resetTab.getAttribute('data-afp-color'),'default');await resetPage.close();
   const checkPage=await context.newPage();await checkPage.goto("http://127.0.0.1:3198/coordinator");
   await checkPage.getByRole("button",{name:"Text Chat",exact:true}).waitFor();await checkPage.close();
   await page.getByRole("button",{name:"New manifest draft",exact:true}).click();

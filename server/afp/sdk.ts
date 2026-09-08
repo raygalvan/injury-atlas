@@ -1,4 +1,10 @@
 import {
+  ensureLab,
+  labRoutes,
+  presentationPolicies,
+  permissionDecision,
+} from "./lab";
+import {
   ensurePresentation,
   presentationCapability,
   type PreferenceSource,
@@ -29,6 +35,7 @@ import {
   type ManifestRecord,
 } from "../../shared/afp-manifest";
 export function ensureSdk(db: Store) {
+  ensureLab(db);
   ensurePresentation(db);
   db.exec(`CREATE TABLE IF NOT EXISTS afp_manifests(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,firm_id TEXT NOT NULL,scope TEXT NOT NULL,revision INTEGER NOT NULL,body TEXT NOT NULL,digest TEXT NOT NULL,created INTEGER NOT NULL,updated INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS afp_sdk_audit(id TEXT PRIMARY KEY,actor TEXT NOT NULL,manifest_id TEXT,body TEXT NOT NULL,created INTEGER NOT NULL);
@@ -123,7 +130,11 @@ export function createAfpSdk(db: Store, actorId: string) {
     const v = validateManifest(
       input,
       actor() ?? null,
-      readControlPlane(db).policies,
+      (input as any)?.extensionPoints?.[0]?.id === "assistant-presentation"
+        ? presentationPolicies(db, actorId, "labels")
+        : (input as any)?.extensionPoints?.[0]?.id === "atlas-presentation"
+          ? presentationPolicies(db, actorId, "styling")
+          : presentationPolicies(db, actorId, "rendering-preflight"),
       applicationVersion(),
       operation,
     );
@@ -172,6 +183,12 @@ export function createAfpSdk(db: Store, actorId: string) {
     };
   }
   return Object.freeze({
+    inspectPrivateCapability(category: string) {
+      return permissionDecision(db, actorId, category);
+    },
+    setPrivateAtlasPresentation(input: unknown, source: PreferenceSource) {
+      return presentationCapability(db, actorId).setAtlas(input, source);
+    },
     readPrivatePresentation() {
       return presentationCapability(db, actorId).read();
     },
@@ -410,6 +427,7 @@ export function sdkRoutes(
   db: Store,
   staff: express.RequestHandler,
 ) {
+  labRoutes(app, db, staff);
   const sdk = (res: express.Response) => createAfpSdk(db, res.locals.user.id);
   const send = (res: express.Response, r: { status: number; body: unknown }) =>
     res.set("Cache-Control", "no-store").status(r.status).json(r.body);
@@ -421,6 +439,9 @@ export function sdkRoutes(
   );
   app.post("/api/afp/preferences/presentation", staff, (req, res) =>
     send(res, sdk(res).setPrivatePresentation(req.body, "settings")),
+  );
+  app.post("/api/afp/preferences/atlas", staff, (req, res) =>
+    send(res, sdk(res).setPrivateAtlasPresentation(req.body, "settings")),
   );
   app.get("/api/afp/contract", staff, (_req, res) =>
     send(res, sdk(res).describe()),

@@ -98,6 +98,36 @@ export function ensureAi(db: Store) {
       throw e;
     }
   }
+  if (
+    !db.prepare("SELECT id FROM afp_migrations WHERE id='lab-tools-v1'").get()
+  ) {
+    db.exec("BEGIN IMMEDIATE");
+    try {
+      for (const row of db
+        .prepare("SELECT scope,body FROM ai_settings")
+        .all()) {
+        const settings = JSON.parse(String(row.body));
+        if (settings.agents?.coordinator) {
+          settings.agents.coordinator.skills = [
+            ...new Set([
+              ...settings.agents.coordinator.skills,
+              "set_private_afp_presentation",
+              "inspect_afp_capability",
+            ]),
+          ];
+          db.prepare("UPDATE ai_settings SET body=? WHERE scope=?").run(
+            JSON.stringify(settings),
+            row.scope,
+          );
+        }
+      }
+      db.prepare("INSERT INTO afp_migrations VALUES('lab-tools-v1')").run();
+      db.exec("COMMIT");
+    } catch (e) {
+      db.exec("ROLLBACK");
+      throw e;
+    }
+  }
 }
 export function defaults(): AiSettings {
   const anthropic = process.env.INJURY_AI_MODEL || "claude-opus-5";
