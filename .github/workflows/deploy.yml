@@ -48,7 +48,7 @@ jobs:
       - run: npm ci && npm test
       - run: python3 -m unittest discover -s tests -p 'test_deployment.py' -v
       - run: npm run build && npm run build:atlas && node scripts/release.mjs
-      - run: tar -czf release.tgz dist .atlas-build server package.json package-lock.json deploy
+      - run: tar -czf release.tgz dist .atlas-build server shared package.json package-lock.json deploy
       - name: Obtain temporary AWS deployment credentials
         id: aws
         uses: aws-actions/configure-aws-credentials@v4

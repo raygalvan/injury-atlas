@@ -1,3 +1,4 @@
+import { agentReady } from "./ai/settings";
 import { libraryRequest, queueLibraryDefinition } from "./library-agent";
 import { anatomyCompatible } from "./anatomy-compatibility";
 import { injuryDocuments } from "./injury-documents";
@@ -39,7 +40,11 @@ export function productionRoutes(
     res.json({
       parts,
       platformAdmin: isPlatformAdmin(db, res.locals.user),
-      injuryAgentConfigured: !!process.env.ANTHROPIC_API_KEY,
+      injuryAgentConfigured: agentReady(
+        db,
+        res.locals.user.firm_id,
+        "injury-creation",
+      ),
     });
   });
   app.get("/api/cases/:caseId/production", staff, (req, res) =>
@@ -101,7 +106,14 @@ export function productionRoutes(
         error:
           "Record the measurement source or explicit illustrative assumptions before rendering",
       });
-    if (r.body.useAI && !process.env.ANTHROPIC_API_KEY)
+    if (
+      r.body.useAI &&
+      !agentReady(
+        db,
+        r.firm_id,
+        r.body.workflow === "demand" ? "demand-writer" : "injury-creation",
+      )
+    )
       return res.status(409).json({
         error:
           "The Injury Creation Agent is not configured. Ask your administrator to configure the AI key.",
@@ -298,25 +310,21 @@ export function productionRoutes(
     },
   );
   const canQueueLibrary: express.RequestHandler = (_req, res, next) => {
-    if (!process.env.ANTHROPIC_API_KEY)
-      return res
-        .status(503)
-        .json({
-          error:
-            "The Injury Creation Agent is not configured. Ask your administrator to configure the AI key.",
-        });
+    if (!agentReady(db, res.locals.user.firm_id, "library-research"))
+      return res.status(503).json({
+        error:
+          "The Injury Creation Agent is not configured. Ask your administrator to configure the AI key.",
+      });
     const count = db
       .prepare(
         "SELECT count(*) n FROM injury_library_jobs j JOIN injury_publications p ON p.id=j.publication_id WHERE p.firm_id=? AND j.state IN ('queued','running')",
       )
       .get(res.locals.user.firm_id)!;
     if (Number(count.n) >= 20)
-      return res
-        .status(429)
-        .json({
-          error:
-            "Your firm already has 20 library requests queued. Please wait for one to finish.",
-        });
+      return res.status(429).json({
+        error:
+          "Your firm already has 20 library requests queued. Please wait for one to finish.",
+      });
     next();
   };
   app.post(
@@ -424,12 +432,10 @@ export function productionRoutes(
           (previous.generation_state &&
             previous.generation_state !== "complete")))
     )
-      return res
-        .status(409)
-        .json({
-          error:
-            "Wait for the agent to finish the definition and medical references before review.",
-        });
+      return res.status(409).json({
+        error:
+          "Wait for the agent to finish the definition and medical references before review.",
+      });
     const result = db
       .prepare(
         "UPDATE injury_publications SET status=?,reviewer=?,review_note=? WHERE id=?",

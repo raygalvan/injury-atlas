@@ -1,3 +1,5 @@
+import { agentClient } from "./ai/agent-client";
+import { effectiveSettings } from "./ai/settings";
 import Anthropic from "@anthropic-ai/sdk";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -184,9 +186,23 @@ export async function runInjuryAgent(
   storage: EvidenceStorage,
   r: ProductionRecord,
   stage: (s: string) => void,
-  client: any = new Anthropic({ timeout: 120000, maxRetries: 1 }),
+  client?: any,
   atlasOverride?: any,
 ) {
+  const injected = !!client;
+  client ||= agentClient(
+    db,
+    r.firm_id,
+    r.creator,
+    "injury-creation",
+    r.case_id,
+  );
+  const skills = effectiveSettings(db, r.firm_id).agents["injury-creation"]
+    .skills;
+  if (!injected && !skills.includes("read_evidence"))
+    throw new Error(
+      "Enable the injury agent's evidence-reading skill in Settings.",
+    );
   const atlas =
     atlasOverride ||
     JSON.parse(readFileSync(".atlas-build/models/atlas.json", "utf8"));
@@ -296,7 +312,11 @@ export async function runInjuryAgent(
     generalDefinition = result.generalDefinition;
   if (part && result.placement.method !== "unavailable") {
     try {
-      const research = await client.messages.create({
+      const research = await (
+        injected
+          ? client
+          : agentClient(db, r.firm_id, r.creator, "library-research")
+      ).messages.create({
         model: process.env.INJURY_AI_MODEL || "claude-opus-5",
         max_tokens: 2500,
         tools: [
@@ -343,7 +363,14 @@ export async function runInjuryAgent(
     }
   }
   stage("Injury Creation Agent · preparing geometric model");
-  const planned = geometryPlan(result.placement, atlas);
+  const planned =
+    !injected && !skills.includes("plan_geometry")
+      ? {
+          recipe: null,
+          notes:
+            "Geometric planning is disabled in Settings. Documentation is available for review.",
+        }
+      : geometryPlan(result.placement, atlas);
   const notes = [
     ...result.uncertainties,
     planned.notes,
