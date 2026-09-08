@@ -611,3 +611,40 @@
     padding: 16px;
   }
 }
+/* The host's form defaults must not impose minimum widths on law.bot sections. */
+.settings-shell,
+.settings-shell form,
+.settings-shell fieldset,
+.settings-shell label,
+.settings-shell input,
+.settings-shell select,
+.settings-shell textarea,
+.settings-shell .integration-card,
+.settings-shell .model-row > * {
+  min-width: 0;
+}
+.settings-shell code,
+.settings-shell p {
+  overflow-wrap: anywhere;
+}
+.settings-shell .settings-heading {
+  height: auto;
+  min-height: 0;
+  padding: 0 0 22px;
+  background: transparent;
+}
+.settings-shell .settings-heading > * {
+  min-width: 0;
+}
+.settings-shell .settings-tabs {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.as-msg-user .as-msg-text {
+  color: white;
+}
+.as-msg-assistant .as-msg-text {
+  color: var(--ink);
+}

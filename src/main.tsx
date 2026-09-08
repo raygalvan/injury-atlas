@@ -283,7 +283,11 @@ function App() {
             <div>
               <b>{member.name}</b>
               <small>
-                {member.role === "owner" ? "Super admin" : member.role}
+                {member.platformAdmin
+                  ? "Super admin"
+                  : member.role === "owner"
+                    ? "Firm owner"
+                    : member.role}
               </small>
             </div>
             <button

@@ -120,15 +120,24 @@ try {
     "Integrations",
   ])
     await page.getByRole("heading", { name, exact: true }).waitFor();
-  assert.ok(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  );
   await page.screenshot({
     path: "artifacts/production/settings-mobile.png",
     fullPage: true,
   });
+  const overflow = await page.evaluate(() => ({
+    width: innerWidth,
+    scroll: document.documentElement.scrollWidth,
+    elements: [...document.querySelectorAll("main *")]
+      .filter((el) => el.getBoundingClientRect().right > innerWidth + 1)
+      .slice(0, 20)
+      .map((el) => ({
+        tag: el.tagName,
+        class: el.className,
+        width: el.getBoundingClientRect().width,
+        text: el.textContent?.slice(0, 60),
+      })),
+  }));
+  assert.ok(overflow.scroll <= overflow.width, JSON.stringify(overflow));
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.screenshot({
     path: "artifacts/production/settings-desktop.png",
@@ -138,10 +147,7 @@ try {
     .locator("#instructions textarea")
     .fill("Ask one short question at a time.");
   await page.getByRole("button", { name: "Save instructions" }).click();
-  await page
-    .getByRole("status")
-    .getByText(/Changes saved/)
-    .waitFor();
+  await page.getByText(/Changes saved and recorded/).waitFor();
   assert.equal(
     JSON.parse(
       db.prepare("SELECT body FROM ai_settings WHERE scope='platform'").get()
