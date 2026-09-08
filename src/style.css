@@ -1191,3 +1191,245 @@ button.danger {
     display: none;
   }
 }
+
+/* Persistent injury production workspace */
+.production-expectation {
+  display: flex;
+  gap: 16px;
+  padding: 20px 24px;
+  background: #e9efe9;
+  border: 1px solid #d0ded2;
+  border-radius: 14px;
+  margin: 18px 0 24px;
+  color: #214b42;
+}
+.production-expectation svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.production-expectation p {
+  margin: 6px 0 0;
+  max-width: 850px;
+  line-height: 1.6;
+}
+.production-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid #ddd8cc;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+}
+.production-tabs button {
+  background: transparent;
+  color: #294940;
+}
+.production-tabs button[aria-selected="true"] {
+  background: #244d43;
+  color: white;
+}
+.production-columns {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+}
+.production-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.production-row {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+  gap: 8px;
+  background: #fffdf8;
+  color: #273e36;
+  border: 1px solid #dedbd2;
+  padding: 18px;
+  border-radius: 12px;
+  width: 100%;
+}
+.production-row.selected {
+  border-color: #285246;
+  box-shadow: inset 3px 0 #285246;
+}
+.production-row small,
+.production-row > span:last-child {
+  font-size: 12px;
+  color: #626d66;
+}
+.production-row strong {
+  font:
+    22px Georgia,
+    serif;
+}
+.production-detail dl {
+  margin: 24px 0;
+}
+.production-detail dt {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #637267;
+  margin-top: 20px;
+}
+.production-detail dd {
+  margin: 7px 0;
+  white-space: pre-wrap;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.production-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  background: #f0f2ed;
+  padding: 14px;
+  border-radius: 9px;
+}
+.production-progress span {
+  margin-left: auto;
+  font-size: 12px;
+}
+.production-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+.production-assets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.production-assets figure {
+  margin: 0;
+  border: 1px solid #ddd8cc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.production-assets img {
+  width: 100%;
+  display: block;
+  background: #fffdf8;
+}
+.production-assets figcaption {
+  padding: 10px;
+  font-size: 12px;
+}
+.production-download {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e4dfd5;
+  color: #214c41;
+  overflow-wrap: anywhere;
+}
+.production-download svg:last-child {
+  margin-left: auto;
+}
+.production-library {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+.production-form {
+  width: min(850px, 94vw) !important;
+  max-height: 90dvh;
+  overflow: auto;
+  padding: 28px !important;
+}
+.production-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 14px;
+}
+.production-form input,
+.production-form select,
+.production-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #c9ccc1;
+  border-radius: 7px;
+  background: #fffdf8;
+  color: #263e35;
+}
+.production-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.production-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+}
+.production-form .production-check {
+  flex-direction: row;
+  align-items: center;
+}
+.production-check input {
+  width: 18px;
+}
+.production-form fieldset {
+  border: 1px solid #cccfc4;
+  border-radius: 10px;
+  padding: 20px;
+}
+.production-form fieldset p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #14251db3;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.production-form.modal {
+  background: #fffdf8;
+  border-radius: 16px;
+  box-shadow: 0 18px 60px #0003;
+}
+.production-row .failed {
+  color: #9b3027;
+}
+.production-detail .fine {
+  line-height: 1.6;
+}
+@media (max-width: 800px) {
+  .production-columns {
+    grid-template-columns: 1fr;
+  }
+  .production-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  .production-form {
+    padding: 20px !important;
+  }
+  .production-actions > button {
+    flex: 1;
+    min-width: 145px;
+    min-height: 46px;
+  }
+  .production-expectation {
+    padding: 16px;
+  }
+  .production-assets {
+    grid-template-columns: 1fr;
+  }
+  .injury-workspace .section-heading {
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
