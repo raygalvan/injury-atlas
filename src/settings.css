@@ -543,3 +543,17 @@ tr.is-near td {
     grid-template-columns: 1fr;
   }
 }
+
+.usage-heading { display:flex; gap:1rem; justify-content:space-between; align-items:start; }
+.usage-metrics,.usage-fields,.usage-rate { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin:1rem 0; }
+.usage-metrics article,.usage-models article,.usage-quote,.usage-rate { padding:1rem; border:1px solid var(--line,#ddd); border-radius:12px; }
+.usage-metrics strong { display:block; font-size:1.6rem; }
+.usage-metrics span { display:block; font-size:.85rem; margin-top:.4rem; }
+#usage label { display:flex; flex-direction:column; gap:.5rem; margin:.6rem 0; min-width:0; }
+#usage input,#usage select { width:100%; min-width:0; padding:.65rem; border:1px solid #c9c6bd; border-radius:6px; background:var(--panel); color:inherit; }
+#usage fieldset { border:0; padding:0; min-width:0; }
+#usage .usage-check { flex-direction:row; align-items:center; }
+#usage .usage-check input { width:auto; }
+.usage-models { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; overflow-wrap:anywhere; }
+#usage h3 { margin-top:1.7rem; }
+@media(max-width:600px) { .usage-heading { flex-direction:column; } .usage-metrics,.usage-fields,.usage-rate,.usage-models { grid-template-columns:1fr; } #usage button { width:100%; } }

@@ -1,3 +1,5 @@
+import { testingUser, usagePolicy } from "./usage";
+import { libraryResponse } from "./library-response";
 import type { Store } from "../store";
 import type { AgentId } from "../../shared/ai";
 import { selectProvider, request } from "./providers";
@@ -10,12 +12,17 @@ export function agentClient(
   userId: string,
   task: AgentId,
   caseId?: string,
+  jobId?: string,
 ) {
   return {
     messages: {
       create: async (params: any) => {
         const { responseSchema, ...requestParams } = params;
         const config = await selectProvider(db, firmId, userId, task);
+        if (config.usageContext) config.usageContext.jobId = jobId;
+        const testing = testingUser(db, userId);
+        const limits = testing ? { maxTokens: usagePolicy(db).testingMaxTokens, maxCalls: 12, timeoutMs: 210000 } : undefined;
+        if (testing && task !== "library-research") requestParams.max_tokens = Math.max(requestParams.max_tokens || 0, usagePolicy(db).testingMaxTokens);
         const s = effectiveSettings(db, firmId);
         const research = !!params.tools?.some(
           (t: any) => t.name === "web_search",
@@ -33,6 +40,12 @@ export function agentClient(
             ? s.agents[task].instructions
             : agentGuidance(db, firmId, task, caseId));
         if (config.provider === "anthropic") {
+          if (task === "library-research") {
+            const response = await libraryResponse(config, {
+              ...requestParams, model: config.model, system,
+            }, request, Date.now, limits);
+            return { ...response, meta: { provider: config.provider, model: config.model } };
+          }
           let response: any;
           const messages = [...params.messages];
           for (let turn = 0; turn < 3; turn++) {
@@ -93,7 +106,7 @@ export function agentClient(
         const domains = params.tools?.find(
           (t: any) => t.name === "web_search",
         )?.allowed_domains;
-        const body = await request(config, "/responses", {
+        const responseRequest = {
           model: config.model,
           instructions: system,
           input,
@@ -110,7 +123,7 @@ export function agentClient(
                 },
               }
             : {}),
-          max_output_tokens: Math.max(params.max_tokens || 6000, 6000),
+          max_output_tokens: Math.max(requestParams.max_tokens || 6000, 6000),
           ...(research
             ? {
                 tools: [
@@ -125,7 +138,10 @@ export function agentClient(
                 ],
               }
             : {}),
-        });
+        };
+        const body = task === "library-research"
+          ? await libraryResponse(config, responseRequest, request, Date.now, limits)
+          : await request(config, "/responses", responseRequest);
         if (body.status === "incomplete")
           throw new Error(
             "The agent could not finish its response. Retry a narrower request.",

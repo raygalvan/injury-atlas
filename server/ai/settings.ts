@@ -1,3 +1,4 @@
+import { ensureUsage, testingUser } from "./usage";
 import { AiError } from "./error";
 // Adapted from law-bot settings, credentials and memory boundaries.
 import { z } from "zod";
@@ -17,6 +18,7 @@ export const providerEnvNames = {
   xai: "XAI_API_KEY",
 };
 export function ensureAi(db: Store) {
+  ensureUsage(db);
   db.exec(`CREATE TABLE IF NOT EXISTS ai_settings(scope TEXT PRIMARY KEY,body TEXT NOT NULL,updated INTEGER NOT NULL);
     CREATE TABLE IF NOT EXISTS ai_credentials(scope TEXT NOT NULL,provider TEXT NOT NULL,encrypted BLOB NOT NULL,suffix TEXT NOT NULL,updated INTEGER NOT NULL,PRIMARY KEY(scope,provider));
     CREATE TABLE IF NOT EXISTS ai_memories(id TEXT PRIMARY KEY,scope TEXT NOT NULL,case_id TEXT,content TEXT NOT NULL,state TEXT NOT NULL,source TEXT NOT NULL,creator TEXT NOT NULL,created INTEGER NOT NULL);
@@ -244,7 +246,7 @@ export function reserveRun(
       Date.now(),
       user.firm_id,
       since,
-      settings.dailyRunLimit,
+      testingUser(db, user.id) ? Number.MAX_SAFE_INTEGER : settings.dailyRunLimit,
     );
   if (!r.changes)
     throw new AiError(

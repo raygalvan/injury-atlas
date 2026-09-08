@@ -1,3 +1,4 @@
+import { usagePolicy } from "../server/ai/usage";
 import { createRealtimeProtocol } from "../src/assistant/realtime-protocol";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -506,6 +507,9 @@ test("coordinator settings, tools and provider routing preserve access and run r
       productionRecord(db, demandId)!.assets.some((a) => a.kind === "demand"),
     );
     assert.equal(productionRecord(db, demandId)!.source_review, 0);
+    assert.equal((await call("atty", "/settings/config?scope=platform", {section:"usage",value:usagePolicy(db)})).status,403);
+    assert.equal((await call("other", "/settings/config", {section:"usage",value:usagePolicy(db)})).status,403);
+    assert.equal((await call("admin", "/settings/config?scope=platform", {section:"usage",value:{...usagePolicy(db),testingEnabled:false}})).status,200);
     const quota = defaults();
     quota.dailyRunLimit = 1;
     saveSettings(db, "platform", quota, users.admin);

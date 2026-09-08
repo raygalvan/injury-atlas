@@ -1,3 +1,4 @@
+import { UsageSettings } from "./UsageSettings";
 // Settings sections and visual structure adapted from law.bot's settings page.
 import React, { useEffect, useState } from "react";
 import { api } from "./api";
@@ -125,6 +126,7 @@ export function Settings({ platformAdmin }: { platformAdmin: boolean }) {
           ["memory", "Memory"],
           ["skills", "Agents and skills"],
           ["models", "Models"],
+          ["usage", "Usage and pricing"],
           ["credentials", "Credentials"],
           ["integrations", "Integrations"],
         ].map(([id, label]) => (
@@ -363,6 +365,7 @@ export function Settings({ platformAdmin }: { platformAdmin: boolean }) {
           })}
         </div>
       </section>
+      <UsageSettings data={data.costs} editable={platformAdmin && scope === "platform"} busy={busy} onSave={value=>void config("usage",value)} onRefresh={()=>void load().catch(e=>setError(e.message))}/>
       <section className="settings-card" id="models">
         <div className="settings-section-head">
           <div>

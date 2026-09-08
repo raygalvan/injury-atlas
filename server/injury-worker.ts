@@ -2,6 +2,7 @@ import { agentClient as configuredAgentClient } from "./ai/agent-client";
 import { effectiveSettings } from "./ai/settings";
 import {
   claimLibraryJob,
+  recoverLibraryLimitFailures,
   processLibraryDefinition,
   notifyLibraryNext,
 } from "./library-agent";
@@ -183,6 +184,7 @@ export async function processProduction(
   generateOverride?: () => Promise<any>,
   agentClient?: any,
 ) {
+  const processingStarted = Date.now();
   let r = productionRecord(db, id)!;
   const stage = (text: string) =>
     db
@@ -219,6 +221,7 @@ export async function processProduction(
           r.creator,
           "demand-writer",
           r.case_id,
+          id,
         )
       ).messages.create({
         model: process.env.INJURY_AI_MODEL || "claude-opus-5",
@@ -316,6 +319,7 @@ export async function processProduction(
         r.creator,
         "demand-writer",
         r.case_id,
+        id,
       );
       const response = await client.messages.create({
         model: process.env.INJURY_AI_MODEL || "claude-opus-5",
@@ -565,6 +569,8 @@ export async function processProduction(
       Date.now(),
       id,
     );
+  } finally {
+    db.prepare("INSERT INTO injury_processing_usage(job_id,firm_id,duration_ms,created) VALUES(?,?,?,?)").run(id,r.firm_id,Date.now()-processingStarted,Date.now());
   }
 }
 export async function notifyNext(
@@ -696,6 +702,7 @@ if (
         await processProduction(db, storage, job.id);
         clearTimeout(watchdog);
       }
+      recoverLibraryLimitFailures(db);
       const libraryJob = claimLibraryJob(db);
       if (libraryJob) {
         const watchdog = setTimeout(() => process.exit(1), 8 * 60000);
