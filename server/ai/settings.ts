@@ -29,6 +29,16 @@ export function ensureAi(db: Store) {
     CREATE TABLE IF NOT EXISTS assistant_voice_sessions(id TEXT PRIMARY KEY,user_id TEXT NOT NULL,firm_id TEXT NOT NULL,case_id TEXT,expires INTEGER NOT NULL);`);
   ensureAfp(db);
   db.exec("CREATE TABLE IF NOT EXISTS afp_migrations(id TEXT PRIMARY KEY)");
+  if (!db.prepare("SELECT id FROM afp_migrations WHERE id='private-ui-editor-v1'").get()) {
+    db.exec('BEGIN IMMEDIATE');
+    try {
+      for(const row of db.prepare('SELECT scope,body FROM ai_settings').all()) {
+        const settings=JSON.parse(String(row.body));
+        if(settings.agents?.coordinator){settings.agents.coordinator.skills=[...new Set([...settings.agents.coordinator.skills,'inspect_private_afp_ui','edit_private_afp_ui'])];db.prepare('UPDATE ai_settings SET body=? WHERE scope=?').run(JSON.stringify(settings),row.scope);}
+      }
+      db.prepare("INSERT INTO afp_migrations VALUES('private-ui-editor-v1')").run();db.exec('COMMIT');
+    } catch(e){db.exec('ROLLBACK');throw e;}
+  }
   if (!db.prepare("SELECT id FROM afp_migrations WHERE id='private-workflow-tools-v1'").get()) {
     for (const row of db.prepare("SELECT scope,body FROM ai_settings").all()) {
       const settings=JSON.parse(String(row.body));

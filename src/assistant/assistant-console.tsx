@@ -219,6 +219,7 @@ export function AssistantConsole({
             });
             if (["set_private_afp_ui_preference","set_private_afp_presentation"].includes(name))
               await refreshPresentation();
+            if(name==='edit_private_afp_ui')window.dispatchEvent(new Event('afp-ui-refresh'));
             if (result.card)
               append({
                 id: localId(),
@@ -288,6 +289,7 @@ export function AssistantConsole({
         tools: { id: string; content: string; card: AssistantCard | null }[];
       }>("/api/assistant/messages", { text, caseId, topic });
       await refreshPresentation();
+      window.dispatchEvent(new Event('afp-ui-refresh'));
       for (const tool of result.tools) {
         if (tool.card)
           append({
