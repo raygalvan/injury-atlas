@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { UI_POINT, UI_CONTRACT, UI_FEATURE, UI_PERMISSION } from '../../shared/afp-ui';
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { WORKFLOW_POINT, WORKFLOW_CONTRACT, WORKFLOW_PERMISSION } from "../../shared/afp-workflow";
@@ -113,6 +114,7 @@ export function validateManifest(
           : (input as any)?.extensionPoints?.[0]?.id === "atlas-presentation"
             ? 2
             : (input as any)?.extensionPoints?.[0]?.id === WORKFLOW_POINT ? 3
+            : (input as any)?.extensionPoints?.[0]?.id === UI_POINT ? 4
             : 0
       ].safeParse(input);
     const issues = branch.success ? parsed.error.issues : branch.error.issues;
@@ -177,6 +179,7 @@ export function validateManifest(
         : m.extensionPoints[0].id === "atlas-presentation"
           ? "atlas-presentation"
           : m.extensionPoints[0].id === WORKFLOW_POINT ? WORKFLOW_POINT
+          : m.extensionPoints[0].id === UI_POINT ? UI_POINT
           : "rendering-preflight"),
   );
   if (!permission || permission.level === "Protected")
@@ -224,4 +227,7 @@ export function validateManifest(
 
 export function workflowManifest(actor: User, policies: AfpPolicy[], id: string, revision: number): AfpManifest {
   return {...presentationManifest(actor,policies),ownership:{scope:"Private",ownerId:actor.id,firmId:actor.firm_id},extensionId:`private-workflow-${id}`,definitionVersion:`0.1.${revision}`,extensionPoints:[{id:WORKFLOW_POINT,contract:WORKFLOW_CONTRACT}],requestedPermissions:[WORKFLOW_PERMISSION],allowedResourceClasses:["application-cpu","private-workflow-state"],requestedResources:["application-cpu","private-workflow-state"]};
+}
+export function uiManifest(actor:User,policies:AfpPolicy[]):AfpManifest {
+  return {...presentationManifest(actor,policies),extensionId:UI_FEATURE,extensionPoints:[{id:UI_POINT,contract:UI_CONTRACT}],requestedPermissions:[UI_PERMISSION]};
 }

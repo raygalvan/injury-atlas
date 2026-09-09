@@ -1,6 +1,7 @@
 import type { ProductionRecord } from "../server/production";
 import { InjuryWorkspace } from "./InjuryWorkspace";
 import { AfpWorkflows } from "./AfpWorkflows";
+import { usePrivateUi } from './afp-ui-runtime';
 import React, { useEffect, useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -72,6 +73,7 @@ function App() {
     [atlasExpanded, setAtlasExpanded] = useState(false),
     [busy, setBusy] = useState(false);
   const currentContext = useRef("");
+  usePrivateUi(member && member.role !== 'client' ? member.id : null);
   currentContext.current = `${member?.id || ""}:${caseId}`;
   const active = cases.find((c) => c.id === caseId);
   const client = member?.role === "client";

@@ -140,6 +140,10 @@ test("AFP SDK v0.1 enforces schema, tenancy, policy, revisions, resources and no
         "managePrivateWorkflow",
         "usePrivateWorkflow",
         "privateWorkflowHistory",
+        "inspectPrivateUi",
+        "editPrivateUi",
+        "observePrivateUi",
+        "privateUiHistory",
       ].sort(),
     );
     assert.equal(

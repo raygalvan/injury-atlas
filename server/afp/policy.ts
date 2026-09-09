@@ -16,6 +16,7 @@ const policy = (
   revision: 1,
 });
 export const afpPolicies: AfpPolicy[] = [
+  policy("application-presentation", "All private UI presentation edits", "Allowed", "Standing permission for declarative presentation across discovered host UI surfaces. No per-control approval. Does not alter actions, authentication, evidence or shared code.", "server/afp/ui.ts"),
   policy("private-workspace", "Private workflow features", "Allowed", "Versioned declarative staged checklists and notes. Preview, private activation, disable and rollback; no shared code changes, case mutations or external execution.", "server/afp/workflows.ts"),
   policy("atlas-presentation", "Private Atlas presentation", "Allowed", "Only allowlisted color tokens for the Select Injuries control. No arbitrary CSS or geometry.", "server/afp/presentation.ts"),
   policy(

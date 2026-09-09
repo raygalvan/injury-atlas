@@ -1,4 +1,5 @@
 import { colorTokens } from "./afp-lab";
+import { UI_POINT, UI_CONTRACT, UI_FEATURE, UI_PERMISSION } from './afp-ui';
 import { z } from "zod";
 import { WORKFLOW_POINT, WORKFLOW_CONTRACT, WORKFLOW_PERMISSION } from "./afp-workflow";
 export const AFP_SCHEMA = "injury.bot.afp/0.1" as const;
@@ -125,6 +126,7 @@ export const manifestSchema = z.union([
     allowedResourceClasses: z.tuple([z.literal("application-cpu"),z.literal("private-workflow-state")]),
     requestedResources: z.tuple([z.literal("application-cpu"),z.literal("private-workflow-state")]),
   }),
+  presentationManifestSchema.extend({extensionId:z.literal(UI_FEATURE),extensionPoints:z.tuple([z.strictObject({id:z.literal(UI_POINT),contract:z.literal(UI_CONTRACT)})]),requestedPermissions:z.tuple([z.literal(UI_PERMISSION)])}),
 ]);
 export type AfpManifest = z.infer<typeof manifestSchema>;
 export type Evaluation = {
