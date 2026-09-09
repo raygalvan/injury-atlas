@@ -74,7 +74,7 @@ export function readControlPlane(db: Store): AfpControlPlane {
     sdkBoundary: {
       version: AFP_VERSION,
       contract: RENDERING_CONTRACT,
-      contracts: [RENDERING_CONTRACT, "injury.bot.assistant.presentation/0.1", "injury.bot.atlas.presentation/0.1"],
+      contracts: [RENDERING_CONTRACT, "injury.bot.assistant.presentation/0.1", "injury.bot.atlas.presentation/0.1", "injury.bot.private-workflow/0.1"],
       privatePresentation: true,
       implemented: true,
       executable: false,
@@ -94,13 +94,14 @@ export function readControlPlane(db: Store): AfpControlPlane {
     featureCount: Number(
       db.prepare("SELECT count(*) n FROM afp_features").get()!.n,
     ),
+    privateWorkflowCount: db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='afp_workflow_features'").get() ? Number(db.prepare("SELECT count(*) n FROM afp_workflow_features WHERE state!='removed'").get()!.n) : 0,
     overall: deriveReadiness(readiness),
     protectedBoundaries: {
       policyLocked: policies
         .filter((p) => p.locked)
         .every((p) => p.level === "Protected"),
       label:
-        "Core policies locked; recipe-inspection and private presentation SDK permissions enforced; arbitrary execution unavailable",
+        "Core policies locked; private workflow and presentation SDK permissions enforced; arbitrary code execution unavailable",
     },
     externalResources: {
       provisionable: false,

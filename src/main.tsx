@@ -1,5 +1,6 @@
 import type { ProductionRecord } from "../server/production";
 import { InjuryWorkspace } from "./InjuryWorkspace";
+import { AfpWorkflows } from "./AfpWorkflows";
 import React, { useEffect, useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -46,6 +47,7 @@ const navigation = [
   ["reconstruction", "Reconstruction", Clapperboard],
   ["exhibits", "Exhibits", FileOutput],
   ["agents", "Agents", Bot],
+  ["afp", "My AFP Workspace", SlidersHorizontal],
   ["settings", "Settings", SettingsIcon],
 ] as const;
 const viewPath = (view: string) => (view === "dashboard" ? "/" : `/${view}`);
@@ -196,7 +198,7 @@ function App() {
     );
   return (
     <div
-      className={`app ${railOpen ? "" : "rail-closed"} ${view === "atlas" ? "view-atlas" : ""} ${atlasExpanded ? "atlas-expanded" : ""}`}
+      className={`app ${railOpen ? "" : "rail-closed"} ${view === "atlas" ? "view-atlas" : ""} ${view === "afp" ? "view-afp" : ""} ${atlasExpanded ? "atlas-expanded" : ""}`}
     >
       <header className="site-header">
         {!client && (
@@ -387,6 +389,7 @@ function App() {
           {!client && view === "settings" && (
             <Settings platformAdmin={!!member.platformAdmin} />
           )}
+          {!client && view === "afp" && <AfpWorkflows />}
           <div className="page-heading">
             <div>
               <p className="eyebrow">

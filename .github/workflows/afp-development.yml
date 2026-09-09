@@ -1,7 +1,5 @@
 name: AFP owner development
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
@@ -13,7 +11,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   develop:
-    if: github.ref == 'refs/heads/main'
+    # Archived executor. Private AFP features never publish shared repository changes.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:

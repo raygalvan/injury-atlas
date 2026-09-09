@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "updated": "2026-09-08",
+  "updated": "2026-09-09",
   "vision": "Make injury.bot an AFP-friendly pilot where people can shape their own application through an agent. Preserve the maintained base application while supporting isolated personal variations, approved extensions and upstream updates. Develop AFP as a separate platform and compatibility standard, using injury.bot and law.bot as pilots without derailing their primary products.",
   "principles": [
     "Start with a plain-language request. Let the coordinator explore the desired outcome, propose an approach and explain tradeoffs.",
@@ -23,7 +23,7 @@
       "id": "coordinator",
       "title": "Text and voice actions",
       "status": "Available foundation",
-      "detail": "The coordinator executes registered server tools. Application owners additionally have a real queued coding/deployment channel, separate from private presentation tools.",
+      "detail": "Text/voice share authenticated tools including private AFP workflow drafting, activation, progress and rollback. Shared coding suspended.",
       "evidence": "server/ai/coordinator.ts; src/assistant/realtime-protocol.ts"
     },
     {
@@ -78,15 +78,21 @@
     {
       "id": "owner-development-executor",
       "title": "Owner coding executor",
-      "status": "Implemented workflow; deployment verification required",
-      "detail": "Application-owner requests can queue repository coding tasks through text or voice. A signed GitHub runner executes Codex, tests and publishes the result. This is separate from private declarative SDK preferences and does not grant other users production coding access.",
+      "status": "Suspended",
+      "detail": "Shared executor removed from text/voice tools. Pending jobs cancel on startup, signed runners cannot publish, schedule and deploy dispatch removed. History retained. This was repository development, not isolated AFP execution.",
       "evidence": "server/afp/development.ts; .github/workflows/afp-development.yml; tests/afp-development.test.ts"
+    },
+    {
+      "id": "afp-private-workflows",
+      "title": "Private declarative workflow lifecycle",
+      "status": "Implemented; release validation required",
+      "detail": "injury.bot.private-workflow/0.1 on private-workspace supports staged checklist/notes packages under injury.bot.afp/0.1. Private preview, activation, immutable versions, per-run persistence, policy/ownership checks, disable/remove and rollback without shared source changes. Declarative interpreter, not arbitrary code execution.",
+      "evidence": "shared/afp-workflow.ts; server/afp/workflows.ts; src/AfpWorkflows.tsx; tests/afp-workflows.test.ts"
     }
   ],
   "gaps": [
     "Implement isolated preview execution, capability tokens and scoped artifact return around the existing v0.1 manifest/SDK contract; external protocol interoperability remains unproven.",
     "Build an isolated customization runtime and data ownership contract, including optional separate databases and graphics compute.",
-    "Extend the owner coding executor with private deployed previews and automatic post-deployment rollback decisions.",
     "Implement upstream update reconciliation and conflict review without losing personal customizations.",
     "Define feature sharing, developer approval, compute pricing, portability and a compatibility validator or registry."
   ],
@@ -100,6 +106,11 @@
       "id": "knowledge-journal-registry",
       "decision": "Committed project knowledge, durable mutable journal and structured registry/manifest definitions are separate. Coordinator proposals require human review. Injury.bot retains platform super-admin governance; law.bot PR #31 uses firm-owner governance.",
       "reference": "server/afp/management.ts; server/afp/control-plane.ts; law-bot PR #31"
+    },
+    {
+      "id": "afp-not-shared-deployment",
+      "decision": "Broader AFP testing must extend isolated features, not send personal requests into shared repository deployment. Staged workflows provide private data and reversible versions.",
+      "reference": "docs/afp-private-workflows.md"
     }
   ],
   "protocolAssumptions": [

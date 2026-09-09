@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { z } from "zod";
+import { WORKFLOW_POINT, WORKFLOW_CONTRACT, WORKFLOW_PERMISSION } from "../../shared/afp-workflow";
 import {
   manifestSchema,
   AFP_SCHEMA,
@@ -40,7 +41,7 @@ export function manifestTemplate(
   actor: User,
   policies: AfpPolicy[],
   version = applicationVersion(),
-): AfpManifest {
+): Extract<AfpManifest, {requestedPermissions: ["rendering.recipe.inspect"]}> {
   return {
     schemaVersion: AFP_SCHEMA,
     protocolVersion: AFP_VERSION,
@@ -69,7 +70,7 @@ export function presentationManifest(
   actor: User,
   policies: AfpPolicy[],
   version = applicationVersion(),
-): AfpManifest {
+): Extract<AfpManifest, {extensionId: typeof PRESENTATION_FEATURE}> {
   return {
     ...manifestTemplate(actor, policies, version),
     extensionId: PRESENTATION_FEATURE,
@@ -84,7 +85,7 @@ export function atlasPresentationManifest(
   actor: User,
   policies: AfpPolicy[],
   version = applicationVersion(),
-): AfpManifest {
+): Extract<AfpManifest, {extensionId: typeof ATLAS_PRESENTATION_FEATURE}> {
   return {
     ...presentationManifest(actor, policies, version),
     extensionId: ATLAS_PRESENTATION_FEATURE,
@@ -111,6 +112,7 @@ export function validateManifest(
           ? 1
           : (input as any)?.extensionPoints?.[0]?.id === "atlas-presentation"
             ? 2
+            : (input as any)?.extensionPoints?.[0]?.id === WORKFLOW_POINT ? 3
             : 0
       ].safeParse(input);
     const issues = branch.success ? parsed.error.issues : branch.error.issues;
@@ -174,6 +176,7 @@ export function validateManifest(
         ? "assistant-presentation"
         : m.extensionPoints[0].id === "atlas-presentation"
           ? "atlas-presentation"
+          : m.extensionPoints[0].id === WORKFLOW_POINT ? WORKFLOW_POINT
           : "rendering-preflight"),
   );
   if (!permission || permission.level === "Protected")
@@ -217,4 +220,8 @@ export function validateManifest(
     reasons,
     manifest: m,
   };
+}
+
+export function workflowManifest(actor: User, policies: AfpPolicy[], id: string, revision: number): AfpManifest {
+  return {...presentationManifest(actor,policies),ownership:{scope:"Private",ownerId:actor.id,firmId:actor.firm_id},extensionId:`private-workflow-${id}`,definitionVersion:`0.1.${revision}`,extensionPoints:[{id:WORKFLOW_POINT,contract:WORKFLOW_CONTRACT}],requestedPermissions:[WORKFLOW_PERMISSION],allowedResourceClasses:["application-cpu","private-workflow-state"],requestedResources:["application-cpu","private-workflow-state"]};
 }

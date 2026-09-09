@@ -16,6 +16,7 @@ const policy = (
   revision: 1,
 });
 export const afpPolicies: AfpPolicy[] = [
+  policy("private-workspace", "Private workflow features", "Allowed", "Versioned declarative staged checklists and notes. Preview, private activation, disable and rollback; no shared code changes, case mutations or external execution.", "server/afp/workflows.ts"),
   policy("atlas-presentation", "Private Atlas presentation", "Allowed", "Only allowlisted color tokens for the Select Injuries control. No arbitrary CSS or geometry.", "server/afp/presentation.ts"),
   policy(
     "assistant-presentation",

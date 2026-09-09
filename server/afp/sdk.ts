@@ -4,6 +4,7 @@ import {
   presentationPolicies,
   permissionDecision,
 } from "./lab";
+import { ensureWorkflows, workflowCapability } from "./workflows";
 import {
   ensurePresentation,
   presentationCapability,
@@ -37,6 +38,7 @@ import {
 export function ensureSdk(db: Store) {
   ensureLab(db);
   ensurePresentation(db);
+  ensureWorkflows(db);
   db.exec(`CREATE TABLE IF NOT EXISTS afp_manifests(id TEXT PRIMARY KEY,owner_id TEXT NOT NULL,firm_id TEXT NOT NULL,scope TEXT NOT NULL,revision INTEGER NOT NULL,body TEXT NOT NULL,digest TEXT NOT NULL,created INTEGER NOT NULL,updated INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS afp_sdk_audit(id TEXT PRIMARY KEY,actor TEXT NOT NULL,manifest_id TEXT,body TEXT NOT NULL,created INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS afp_manifest_revisions(manifest_id TEXT NOT NULL,revision INTEGER NOT NULL,body TEXT NOT NULL,actor TEXT NOT NULL,created INTEGER NOT NULL,PRIMARY KEY(manifest_id,revision));`);
@@ -134,6 +136,7 @@ export function createAfpSdk(db: Store, actorId: string) {
         ? presentationPolicies(db, actorId, "labels")
         : (input as any)?.extensionPoints?.[0]?.id === "atlas-presentation"
           ? presentationPolicies(db, actorId, "styling")
+          : (input as any)?.extensionPoints?.[0]?.id === "private-workspace" ? presentationPolicies(db, actorId, "workflow")
           : presentationPolicies(db, actorId, "rendering-preflight"),
       applicationVersion(),
       operation,
@@ -183,6 +186,10 @@ export function createAfpSdk(db: Store, actorId: string) {
     };
   }
   return Object.freeze({
+    listPrivateWorkflows() {return workflowCapability(db,actorId).list();},
+    privateWorkflowHistory() {return workflowCapability(db,actorId).history();},
+    managePrivateWorkflow(input: unknown, source: PreferenceSource) {return workflowCapability(db,actorId).command(input,source);},
+    usePrivateWorkflow(input: unknown, source: PreferenceSource) {return workflowCapability(db,actorId).run(input,source);},
     inspectPrivateCapability(category: string) {
       return permissionDecision(db, actorId, category);
     },
@@ -210,6 +217,7 @@ export function createAfpSdk(db: Store, actorId: string) {
           contract: RENDERING_CONTRACT,
           experimental: true,
           activationAvailable: false,
+          privateDeclarativeWorkflow: {contract:"injury.bot.private-workflow/0.1",preview:true,privateActivation:true,executableCode:false},
           template: manifestTemplate(u!, readControlPlane(db).policies),
           presentation: {
             contract: PRESENTATION_CONTRACT,
@@ -431,6 +439,10 @@ export function sdkRoutes(
   const sdk = (res: express.Response) => createAfpSdk(db, res.locals.user.id);
   const send = (res: express.Response, r: { status: number; body: unknown }) =>
     res.set("Cache-Control", "no-store").status(r.status).json(r.body);
+  app.get("/api/afp/workflows",staff,(_req,res)=>send(res,sdk(res).listPrivateWorkflows()));
+  app.get("/api/afp/workflows/history",staff,(_req,res)=>send(res,sdk(res).privateWorkflowHistory()));
+  app.post("/api/afp/workflows",staff,(req,res)=>send(res,sdk(res).managePrivateWorkflow(req.body,"settings")));
+  app.post("/api/afp/workflows/runs",staff,(req,res)=>send(res,sdk(res).usePrivateWorkflow(req.body,"settings")));
   app.get("/api/afp/preferences/presentation", staff, (_req, res) =>
     send(res, sdk(res).readPrivatePresentation()),
   );

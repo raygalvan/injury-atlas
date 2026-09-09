@@ -1,4 +1,5 @@
 import { AfpDevelopment } from "./AfpDevelopment";
+import { AfpWorkflows } from "./AfpWorkflows";
 import {AfpLabPermissions} from "./AfpLabPermissions";
 import { AfpPrivatePreference } from "./AfpPrivatePreference";
 import { AfpManifestInspector } from "./AfpManifestInspector";
@@ -189,7 +190,7 @@ export function AfpManagement() {
                 <span>Registered candidate boundaries</span>
               </article>
               <article>
-                <strong>{data.featureCount}</strong>
+                <strong>{data.featureCount + data.privateWorkflowCount}</strong>
                 <span>AFP feature records</span>
               </article>
               <article>
@@ -240,8 +241,8 @@ export function AfpManagement() {
               <article>
                 <h3>AFP Manifest · Implemented v0.1</h3>
                 <p>
-                  The experimental injury.bot-specific schema, validator and one
-                  SDK contract are implemented. Executable Runtime: Not
+                  The experimental injury.bot-specific schema, validator and
+                  SDK contracts and private declarative workflows are implemented. Arbitrary-code Runtime: Not
                   implemented.
                 </p>
                 <a href="/api/settings/afp/manifest" download>
@@ -561,17 +562,18 @@ export function AfpManagement() {
             hidden={view !== "features"}
           >
             <h3>AFP Features</h3>
+            <AfpWorkflows />
             <AfpPrivatePreference />
             <AfpPrivatePreference kind="atlas"/>
             <AfpManifestInspector />
             {!data.featureCount ? (
               <div className="afp-empty">
                 <p className="eyebrow">
-                  Ready to catalogue · runtime not connected
+                  Additional registry metadata
                 </p>
                 <h4>No additional feature definitions</h4>
                 <p>
-                  Additional executable customizations will appear here once the
+                  Private declarative workflows are shown above. Additional executable customizations will appear here once the
                   customization runtime and MCP are connected. Each feature can
                   declare its owner, scope, base version, extension points,
                   resources, cost, tests, security and rollback plan.

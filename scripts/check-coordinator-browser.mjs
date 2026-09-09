@@ -390,6 +390,42 @@ try {
   assert.equal(JSON.parse(afpRead).controlPlane.runtime.provisioning,false);
   assert.equal(JSON.parse(afpRead).controlPlane.sdkBoundary.implemented,true);
   await page.screenshot({path:"artifacts/production/afp-voice-memory.png",fullPage:true});
+  // Real private feature creation through the voice protocol, then browser preview and saved runs.
+  const definition={title:"My review sequence",description:"Private staged review",stages:[{id:"records",title:"Gather records",items:[{id:"collect",label:"Collect relevant records",required:true}]},{id:"review",title:"Review gaps",items:[{id:"missing",label:"Check missing information",required:true}]}]};
+  await page.evaluate(definition=>window.__voiceEvent({type:"response.done",response:{id:"workflow",status:"completed",output:[{type:"function_call",status:"completed",name:"manage_private_afp_workflow",call_id:"browser-workflow",arguments:JSON.stringify({action:"draft",revision:0,definition})}]}}),definition);
+  await page.waitForFunction(()=>window.__voiceSent.some(e=>e.item?.call_id==="browser-workflow"));
+  assert.equal(db.prepare("SELECT count(*) n FROM afp_workflow_features").get().n,1);
+  for(const width of [390,1440]) {
+    await page.setViewportSize({width,height:1000});
+    await page.goto("http://127.0.0.1:3198/afp");
+    await page.getByRole("heading",{name:"My review sequence",exact:true}).waitFor();
+    await page.getByRole("button",{name:"Preview v1",exact:true}).click();
+    await page.getByRole("checkbox",{name:/Collect relevant records/}).check();
+    await page.getByText("Preview only · Next stage · Review gaps",{exact:true}).waitFor();
+    assert.equal(db.prepare("SELECT count(*) n FROM afp_workflow_runs").get().n,0);
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    await page.screenshot({path:`artifacts/production/afp-workflow-${width}.png`,fullPage:true});
+    await page.getByRole("button",{name:"Close preview",exact:true}).click();
+  }
+  await page.getByRole("button",{name:"Use latest for me",exact:true}).click();
+  await page.getByRole("button",{name:"Start a workflow run",exact:true}).click();
+  await page.locator(".afp-workflow-run summary").click();
+  await page.getByRole("checkbox",{name:/Collect relevant records/}).check();
+  await page.getByLabel("Private run notes",{exact:true}).fill("Synthetic private progress");
+  await page.getByRole("button",{name:"Save progress",exact:true}).click();
+  await page.waitForFunction(()=>!document.querySelector(".afp-workflow-panel button")?.disabled);
+  assert.match(db.prepare("SELECT body FROM afp_workflow_runs").get().body,/Synthetic private progress/);
+  await page.reload();
+  await page.locator(".afp-workflow-run summary").click();
+  assert.equal(await page.getByLabel("Private run notes",{exact:true}).inputValue(),"Synthetic private progress");
+  await page.getByRole("button",{name:"Disable",exact:true}).click();
+  await page.getByText("Private · disabled",{exact:true}).waitFor();
+  assert.equal(await page.getByRole("button",{name:"Start a workflow run",exact:true}).count(),0);
+  const privatePeer=await browser.newContext({viewport:{width:390,height:844}});
+  db.prepare("INSERT INTO users VALUES('workflow-peer','workflow-peer@example.test','Other User','attorney','synthetic',1)").run();
+  await privatePeer.addCookies([{name:"atlas_session",value:consumeLink(db,issueLink(db,"workflow-peer")),domain:"127.0.0.1",path:"/"}]);
+  const peerPage=await privatePeer.newPage();await peerPage.goto("http://127.0.0.1:3198/afp");
+  await peerPage.getByText(/No private workflows yet/).waitFor();assert.equal(await peerPage.getByText("My review sequence",{exact:true}).count(),0);await privatePeer.close();
   assert.deepEqual(errors, []);
   console.log(
     "Center button, personalized text turn, voice interface, minimize, settings save, mobile layout: passed. Voice event to saved library job and visible receipt passed with a synthetic WebRTC provider; live microphone/provider speech is not tested.",

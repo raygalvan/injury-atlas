@@ -2,6 +2,8 @@
 
 # AFP Management
 
+Current lifecycle milestone: see `docs/afp-private-workflows.md`. The shared coding executor is suspended. Private declarative workflow packages now provide preview, activation, saved runs, disable/remove and rollback through the trusted SDK, without changing shared source. General executable runtimes and external provisioning remain future work.
+
 AFP Management is a super-admin workspace under Settings. It tracks injury.bot's progress toward personal application customization and gives the existing text and voice coordinator product context for recommendations. It does not implement a coding agent, MCP server, isolated fork runtime, provisioning or update reconciliation.
 
 ## Memory and continuity

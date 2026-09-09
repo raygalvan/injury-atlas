@@ -36,4 +36,6 @@ Private Coordinator presentation is a declarative SDK contract, not an executabl
 
 ## Owner development executor
 
-The application owner has explicitly authorized a real Coordinator coding executor. This supersedes earlier blanket prohibitions on coding runtimes for this owner-only channel. `execute_development_task` sends work to `.github/workflows/afp-development.yml`; it may edit repository code and run commands/tests without a per-button allowlist. Private user SDK policies remain separate. Do not claim a queued task is implemented or a merged task is deployed. Preserve authenticated ownership, actual test results and audit. No other firm owner inherits application-owner access.
+The shared repository executor is suspended. The owner clarified that the goal is broader AFP testing, not shared application coding. Never route a personal customization into a repository edit, PR or shared deployment as an implicit fallback. Retain archived job/audit history. Base-application engineering through Codex remains separately authorized work, not a user AFP feature.
+
+Private staged workflows are real declarative AFP features under `injury.bot.private-workflow/0.1`. Preserve host-derived identity, immutable versions, package integrity, policy/compatibility checks, isolated run state, preview, disable/remove and rollback. Do not put private feature definitions or run notes in product-context exports. No arbitrary code or external runtime exists. See `docs/afp-private-workflows.md`.

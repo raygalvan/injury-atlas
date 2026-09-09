@@ -18,6 +18,7 @@ const planned = (
 });
 export function afpResources(): AfpResource[] {
   return [
+    {id:"private-workflow-state",name:"Private workflow state",category:"Storage",status:"Implemented",availability:"Existing application",description:"SDK-owned workflow versions and runs in the existing persistent SQLite database. No database or filesystem interface is exposed to a feature.",isolation:"Every feature/run operation derives user and firm from the authenticated host. This is scoped storage, not a separate database or compute sandbox.",reference:"server/afp/workflows.ts",provisionable:false},
     {
       id: "primary-database",
       name: "Primary application database",
