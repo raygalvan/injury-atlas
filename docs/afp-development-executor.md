@@ -1,5 +1,7 @@
 # Owner development executor
 
+**Suspended on 2026-09-09.** This document describes the archived shared-code executor, not the current AFP path. The Coordinator no longer exposes these tools, queued/running tasks are cancelled on release startup, and runner publication authorization is denied. See `afp-private-workflows.md` for the current private feature lifecycle. Do not re-enable this as a fallback for personal customization.
+
 The application owner explicitly requested real coding access after the private preference experiments. This release adds a separate super-admin development channel. It does not broaden ordinary firm/user permissions. It can inspect and change repository code, run commands and tests, create a PR, and request production deployment. It is not confined to named buttons or CSS tokens.
 
 Text and voice share `execute_development_task` and `development_task_status`. The host derives the actor from the authenticated session. Existing tool receipts prevent repeat calls from queuing the same operation again. The owner can disable coding access under AFP Management → Permissions. A queued result is never presented as an applied change.

@@ -24,6 +24,7 @@ const point = (
   resourcePolicy,
 });
 export const extensionPoints: ExtensionPoint[] = [
+  {...point("private-workspace","Private AFP Workspace","Declarative workflow interpreter","User-defined staged checklists and notes with private run state, preview, activation and reversible versions.",["private staged workflow","checklist panel"],["user and firm ownership","base application","case/evidence records","audit"],"server/afp/workflows.ts; src/AfpWorkflows.tsx"),status:"Implemented",sdkContract:"injury.bot.private-workflow/0.1",customizationAllowed:"Validated data packages only. Private runtime state is host-scoped. No generated JavaScript, external requests or arbitrary code attachment."},
   point(
     "injury-workspace",
     "Injury Workspace",

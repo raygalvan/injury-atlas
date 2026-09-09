@@ -54,6 +54,7 @@ export function developmentContext(db: Store) {
     resources: registry.resources,
     // Counts and registered types only: no private labels, owner identifiers, manifest bodies or feature free text.
     featureRegistrySummary: {
+      privateWorkflows: db.prepare("SELECT state,count(*) count FROM afp_workflow_features GROUP BY state").all(),
       metadata: db
         .prepare(
           "SELECT json_extract(body,'$.scope') scope,json_extract(body,'$.status') status,count(*) count FROM afp_features GROUP BY scope,status",

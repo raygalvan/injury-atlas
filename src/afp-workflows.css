@@ -1,0 +1,110 @@
+.afp-workflows {
+  max-width: 960px;
+  min-width: 0;
+  margin: 1.5rem auto;
+}
+.view-afp .page-heading,
+.view-afp .case-strip {
+  display: none;
+}
+.afp-workflow-intro,
+.afp-workflow-feature {
+  padding: clamp(16px, 3vw, 28px);
+  border: 1px solid #d6dcd7;
+  border-radius: 14px;
+  background: #fffdf8;
+  margin-bottom: 20px;
+}
+.afp-workflows .afp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.afp-workflows a.primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.afp-workflows h2,
+.afp-workflows h3,
+.afp-workflows p {
+  overflow-wrap: anywhere;
+}
+.afp-workflows pre {
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.afp-workflows details {
+  margin: 16px 0;
+}
+.afp-workflows summary {
+  cursor: pointer;
+  padding: 10px 0;
+  overflow-wrap: anywhere;
+}
+.afp-workflow-preview {
+  border: 1px dashed #9caeaa;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 20px 0;
+  background: #f2f6f2;
+}
+.afp-workflow-panel {
+  display: grid;
+  gap: 16px;
+}
+.afp-workflow-panel fieldset {
+  min-width: 0;
+  border: 1px solid #d6dcd7;
+  border-radius: 8px;
+  padding: 16px;
+}
+.afp-workflow-panel legend {
+  padding: 0 6px;
+  font-weight: 600;
+}
+.afp-workflow-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0;
+}
+.afp-workflow-check input {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  margin: 2px 0;
+}
+.afp-workflow-check small {
+  display: block;
+  font-size: 11px;
+  color: #63736e;
+}
+.afp-workflow-panel textarea {
+  width: 100%;
+  min-height: 100px;
+  box-sizing: border-box;
+}
+.afp-workflow-progress {
+  color: #1f493d;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .afp-workflows .afp-actions > * {
+    flex: 1 1 140px;
+    min-height: 44px;
+    white-space: normal;
+  }
+  .afp-workflow-preview {
+    padding: 12px;
+  }
+  .afp-workflow-panel fieldset {
+    padding: 12px;
+  }
+}

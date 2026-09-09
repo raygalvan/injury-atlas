@@ -126,6 +126,7 @@ export type AfpControlPlane = {
   resources: AfpResource[];
   features: AfpFeature[];
   featureCount: number;
+  privateWorkflowCount: number;
   overall: {
     label: string;
     criteria: { id: string; label: string; met: boolean }[];
