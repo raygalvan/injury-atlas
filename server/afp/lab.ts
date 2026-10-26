@@ -57,6 +57,7 @@ export function labState(db: Store, id: string) {
         labels: "assistant-presentation",
         styling: "atlas-presentation",
         workflow: "private-workspace",
+        "ui-editing": "application-presentation",
         "rendering-preflight": "rendering-preflight",
       } as Record<string, string>
     )[c.id];
@@ -106,7 +107,7 @@ export function permissionDecision(db: Store, id: string, category: string) {
 export function presentationPolicies(
   db: Store,
   id: string,
-  category: "labels" | "styling" | "rendering-preflight" | "workflow",
+  category: "labels" | "styling" | "rendering-preflight" | "workflow" | "ui-editing",
 ) {
   const decisions = [category].map((c) => permissionDecision(db, id, c));
   const level = decisions.some((d) => d.level === "Blocked")
@@ -121,6 +122,7 @@ export function presentationPolicies(
         : category === "styling"
           ? "atlas-presentation"
           : category === "workflow" ? "private-workspace"
+          : category === "ui-editing" ? "application-presentation"
           : "rendering-preflight") && p.level !== "Protected"
       ? { ...p, level: level as typeof p.level }
       : p,

@@ -48,7 +48,7 @@ export const afpReadiness: ReadinessItem[] = [
     "user-isolation",
     "Per-user Feature Isolation",
     "Partial",
-    "Private presentation and staged workflow packages/runs are isolated by authenticated user and firm. No arbitrary-code sandbox exists.",
+    "Private UI edits across build-discovered surfaces, presentation and staged workflow packages/runs are isolated by authenticated user and firm. No arbitrary-code sandbox exists.",
     "server/afp/workflows.ts; tests/afp-workflows.test.ts",
     "Extend scoped capabilities beyond the declarative workflow interpreter.",
     ["protected-core", "sdk"],

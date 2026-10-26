@@ -13,6 +13,13 @@
   ],
   "checkpoints": [
     {
+      "id": "afp-private-ui-editor",
+      "title": "Broad private UI presentation",
+      "status": "Implemented; release validation required",
+      "detail": "Build-discovered application-presentation surfaces use one standing UI permission. Text and voice inspect and edit private padding, sizing, typography, colors, layout and static labels through the manifest/SDK. Revisions, undo, disable and browser-reported observations preserve isolation. Saved edits are not visual verification. No shared source edits or arbitrary code execution; Atlas iframe uses its separate bridge.",
+      "evidence": "shared/afp-ui.ts; scripts/afp-ui-compiler.mjs; server/afp/ui.ts; src/afp-ui-runtime.ts; tests/afp-ui.test.ts; scripts/check-afp-ui-browser.mjs"
+    },
+    {
       "id": "settings",
       "title": "Configurable agents and settings",
       "status": "Available foundation",

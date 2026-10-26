@@ -28,6 +28,8 @@ export const agentRoster = [
       "read_private_afp_workflows",
       "manage_private_afp_workflow",
       "use_private_afp_workflow",
+      "inspect_private_afp_ui",
+      "edit_private_afp_ui",
     ],
   },
   {
@@ -75,6 +77,8 @@ export type AssistantCard = {
   items?: { id: string; title: string; detail?: string; href?: string }[];
 };
 export const skillLabels: Record<string, string> = {
+  inspect_private_afp_ui: 'Inspect private UI presentation',
+  edit_private_afp_ui: 'Edit any discovered private UI surface',
   read_private_afp_workflows:"Read my private AFP workflows",
   manage_private_afp_workflow:"Create and manage my private AFP workflows",
   use_private_afp_workflow:"Use my private AFP workflows",

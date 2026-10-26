@@ -2,6 +2,7 @@ import { AfpDevelopment } from "./AfpDevelopment";
 import { AfpWorkflows } from "./AfpWorkflows";
 import {AfpLabPermissions} from "./AfpLabPermissions";
 import { AfpPrivatePreference } from "./AfpPrivatePreference";
+import { AfpUiEditor } from './AfpUiEditor';
 import { AfpManifestInspector } from "./AfpManifestInspector";
 import { useEffect, useState, useRef } from "react";
 import { api } from "./api";
@@ -190,7 +191,7 @@ export function AfpManagement() {
                 <span>Registered candidate boundaries</span>
               </article>
               <article>
-                <strong>{data.featureCount + data.privateWorkflowCount}</strong>
+                <strong>{data.featureCount + data.privateWorkflowCount + data.privateUiCount}</strong>
                 <span>AFP feature records</span>
               </article>
               <article>
@@ -564,6 +565,7 @@ export function AfpManagement() {
             <h3>AFP Features</h3>
             <AfpWorkflows />
             <AfpPrivatePreference />
+            <AfpUiEditor />
             <AfpPrivatePreference kind="atlas"/>
             <AfpManifestInspector />
             {!data.featureCount ? (

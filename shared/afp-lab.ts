@@ -36,12 +36,13 @@ const protectedCategory = (id: string, name: string) => ({
   locked: true,
 });
 export const labCategories = [
+  low("ui-editing", "All private UI presentation edits", true, true),
   low("labels", "UI text and labels", true, true),
   low("styling", "UI colors and styling", true, true),
-  low("typography", "Typography"),
-  low("spacing", "Spacing and sizing"),
-  low("visibility", "Show/hide UI elements"),
-  low("layout", "Ordering and layout"),
+  low("typography", "Typography", true, true),
+  low("spacing", "Spacing and sizing", true, true),
+  low("visibility", "Show/hide UI elements", true, true),
+  low("layout", "Ordering and layout", true, true),
   low("panels", "Private workspace panels", true, true),
   low("widgets", "Private dashboard/workspace widgets"),
   low("presentation", "Presentation preferences", true, true),

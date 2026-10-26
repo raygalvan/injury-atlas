@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "./api";
 import { permissionLevels, presets } from "../shared/afp-lab";
 import { AfpPrivatePreference } from "./AfpPrivatePreference";
+import { AfpUiEditor } from './AfpUiEditor';
 export function AfpLabPermissions() {
   const [data, setData] = useState<any>(null),
     [error, setError] = useState(""),
@@ -72,18 +73,19 @@ export function AfpLabPermissions() {
         </select>
       </label>
       <p>
-        Safe requires review. Standard allows minor presentation changes. Lab
+        Safe requires review. Standard allows private UI presentation edits. Lab
         allows broad reversible private testing. Turning Lab off restores your
         previous normal preset and its individual settings.
       </p>
       <p>
-        Labels currently support the Coordinator text tab. Styling currently
-        supports the Select Injuries color. Other allowed categories marked “Not
-        Implemented” still need an installed capability.
+        All private UI presentation edits is the single permission for padding,
+        spacing, sizing, typography, colors, visibility and layout across discovered
+        host surfaces. No per-button approval is required. Legacy Coordinator label
+        and embedded Atlas color controls retain their existing permissions.
       </p>
       {error && <p role="alert">{error}</p>}
       <div className="afp-lab-categories">
-        {data.categories.map((c: any) => (
+        {data.categories.filter((c:any)=>!['typography','spacing','visibility','layout'].includes(c.id)).map((c: any) => (
           <article key={c.id}>
             <div>
               <h5>{c.name}</h5>
@@ -158,6 +160,7 @@ export function AfpPrivateManagement() {
       ) : (
         <>
           <AfpPrivatePreference />
+          <AfpUiEditor />
           <AfpPrivatePreference kind="atlas" />
         </>
       )}

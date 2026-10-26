@@ -1,0 +1,7330 @@
+[
+  {
+    "id": "ui-dc4685267eab37850fdb",
+    "file": "src/AfpDevelopment.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cdfdbcc4a087d51898ae",
+    "file": "src/AfpDevelopment.tsx",
+    "tag": "summary",
+    "label": "Archived shared coding tasks",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4f5b81a07a59ca5d4479",
+    "file": "src/AfpDevelopment.tsx",
+    "tag": "p",
+    "label": "The shared repository executor is suspended. AFP customization uses private features, not shared deployments. Existing history is retained.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-97cfe78ee182129302d8",
+    "file": "src/AfpDevelopment.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7db491bbe3e43d7c55e0",
+    "file": "src/AfpDevelopment.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b94b0a7b064309f4b287",
+    "file": "src/AfpDevelopment.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bb5ef7c1e5d6c21e89f0",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-06131a1774919e704c02",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-lab-permissions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-27b87b3d805e60413c36",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b38912d2c35ac3f89fbd",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-59e39e8e1c20b15a5ac3",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c33edb3fecb5d8dbb76b",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "Allow my Coordinator to make ordinary AFP test customizations without separate approval.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bf07c843a078891231a3",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "Private to your account. Protected core controls stay locked.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f8a675e700e6d23ecc5b",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "afp-lab-toggle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f9db298a0b9954d0c9cc",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "input",
+    "label": "AFP Lab Mode",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-88b907b26b15ba1136b0",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "Only an owner or super admin can change these private permissions.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-eaa4dd824798b8b0d650",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2d2ec1ac1113f3b2a820",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "select",
+    "label": "AFP permission preset",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4df0d9937cc0a06aceab",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "Safe requires review. Standard allows private UI presentation edits. Lab allows broad reversible private testing. Turning Lab off restores your previous normal ",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c6553c270410117b5b1f",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "All private UI presentation edits is the single permission for padding, spacing, sizing, typography, colors, visibility and layout across discovered host surfac",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-20ffa7361bce3db0cba3",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fdd62983ed6f956b41ef",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-lab-categories",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d4d54c22724985d8e2c7",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b8e291e6325183c9c68d",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "h5",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f6c065f6ca022a8f576f",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "span",
+    "label": "Protected · Blocked",
+    "className": "afp-status",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2627ca6bdfeafd97c91e",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-146789b16a1b0dd79910",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f4a7be5b07c090883d68",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "ol",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-03abd4e8a26a74898367",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7aae1fd07995ca9420a5",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b11d136ccd9243c0d8aa",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "h2",
+    "label": "AFP Management",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-4d66d6b127fe8d2c40fc",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "nav",
+    "label": "AFP private management",
+    "className": "afp-tabs",
+    "textEditable": false
+  },
+  {
+    "id": "ui-09aae315cad741cc52aa",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "button",
+    "label": "Permissions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-b5646ff0cd1f29d6a516",
+    "file": "src/AfpLabPermissions.tsx",
+    "tag": "button",
+    "label": "AFP Features",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-3843a396ece280019318",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0bc045202852ce83ecb0",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d337034390b06f03cd75",
+    "file": "src/AfpManagement.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card afp-management",
+    "textEditable": false
+  },
+  {
+    "id": "ui-410ffd4e3bcf940e0d0e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "header",
+    "label": "",
+    "className": "afp-control-header",
+    "textEditable": false
+  },
+  {
+    "id": "ui-08d8345c33db5f8b0f2c",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0ef01fb2bcc3d92e0412",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "injury.bot · Reference implementation / pilot",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-36b8ee11caec1c6a0bf0",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h2",
+    "label": "AFP Management",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-07351b6648cdb47ace74",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Define where personal features can fit, what they may change, and what still needs to be built.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-68e26afc5e1db99c50bb",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "Super admin",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e4eaca06b9422943820d",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4fc2865beb4d21b3d9b1",
+    "file": "src/AfpManagement.tsx",
+    "tag": "a",
+    "label": "Discuss AFP with the coordinator",
+    "className": "primary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-44d076a638a332c26c75",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Refresh AFP state",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-228d7d955c72f0b897c5",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "AFP Management views",
+    "className": "afp-subtabs",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6a913c57515bf048517e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2132bbdfd09cadbe5000",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "work-notice error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-eeaeaab3417166396b76",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "settings-saved",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5499577b51328e3eff1e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Loading AFP registries…",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f820ef0a6eb992f7e342",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-91a36a426bf325249f61",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-overview-hero",
+    "textEditable": false
+  },
+  {
+    "id": "ui-88487c9d048cebd20193",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Customization architecture · target",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-48c6adc55eba15d85512",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f73464131c270e8127e5",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Keep injury.bot as the maintained shared application. Future features can belong to one person or firm and use separate infrastructure without cloning the whole",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-74d90899ad0d77bfb2ac",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "The control plane is real. Isolated extension execution is not connected.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bacd376769b4d5cddd75",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-metrics",
+    "textEditable": false
+  },
+  {
+    "id": "ui-23d5ba82acd077a83ead",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "Registered candidate boundaries",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-59296f714dad26d07ccd",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "AFP feature records",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e49473dec49c0bd2c35e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6859d5261593cfe9bb32",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-12ba6b5a97a63d88bfe7",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-overview-grid",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a03f4da2440be54a7fb5",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "Overall AFP readiness",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e178e0172b89304f54e7",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bd5e30c94beaf5f7e8d7",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "An isolated pilot requires every listed gate to be verified. Strong configuration controls cannot substitute for an execution boundary.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-43107e322a74e163b282",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Review pilot criteria",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-2072ee9374e18899b883",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "Protected boundaries",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d3f43baf5ba0e3840b1e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-faa3a57c58f0a9292226",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Review permissions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-35a19ac8c4ae34330e80",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "External resources",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-5c2f32a036d46ebc9838",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bc42999ec8dd12d409eb",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Inspect resources",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-949bbe767c5e980a0864",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "AFP Manifest · Implemented v0.1",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-96a571c61e4ae4b565ec",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "The experimental injury.bot-specific schema, validator and SDK contracts and private declarative workflows are implemented. Arbitrary-code Runtime: Not implemen",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e7cb74f50d5d5fe0d966",
+    "file": "src/AfpManagement.tsx",
+    "tag": "a",
+    "label": "Download manifest v0.1",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-084a018a899338c2adca",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0e722debf00258d252c2",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b0ce993510849083501f",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "AFP Readiness",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-2977866229ea7b509c02",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-151766f3710df2b1b257",
+    "file": "src/AfpManagement.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "afp-criteria",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a5ef2c1a1ddd59a02d8b",
+    "file": "src/AfpManagement.tsx",
+    "tag": "summary",
+    "label": "Required isolated-pilot criteria",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a7dc0723935b3b8512da",
+    "file": "src/AfpManagement.tsx",
+    "tag": "ul",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-347d3437394868189cd6",
+    "file": "src/AfpManagement.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-771c29bb1482e8dcf5ee",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fb41e466a3d283c4d253",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0bf7639ab5b20736b203",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Planned means not built. Foundation means supporting code or definitions exist. Partial means some AFP behavior works. Implemented means the described capabilit",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-deda1edcb289dcbf82d3",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-registry",
+    "textEditable": false
+  },
+  {
+    "id": "ui-416988d1d1ba853c8684",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-row-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2f962e75ccc70fd6566e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-19d2ef34ffb73b1426b4",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-48929d5633360c9ebb9e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e1830574a74390640cea",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2a2862bece8536797b33",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-63e15d34cac066f41ee4",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a2cb95bd95d3997123b6",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7d9cc352437db70306ff",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Verification history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-01985cb100c9c4b0cac1",
+    "file": "src/AfpManagement.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "settings-form afp-inline-review",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d535b70be50af52847bd",
+    "file": "src/AfpManagement.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9a06a96b582207d1e4dd",
+    "file": "src/AfpManagement.tsx",
+    "tag": "select",
+    "label": "Readiness status",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2e3173b03f8242923a8a",
+    "file": "src/AfpManagement.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d45fcd2efd71e1fa2ece",
+    "file": "src/AfpManagement.tsx",
+    "tag": "textarea",
+    "label": "Implementation / verification reference",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8b0ebc74b286a68d3703",
+    "file": "src/AfpManagement.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2f606881dd6d476b3b3f",
+    "file": "src/AfpManagement.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-217e620d07ddd8a009f9",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6655f57e3c6080a8b5ab",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Save readiness review",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a50bf8a0e40677bee1ec",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Cancel",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e1a37fe3935308673c76",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-64c7d1d747db599954c3",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "Extension Points",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1a3423277a052f0e0191",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "These registered candidates describe real application boundaries. Dynamic code attachment is not installed.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-54fba8631cfbde4c32e5",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-registry afp-two-columns",
+    "textEditable": false
+  },
+  {
+    "id": "ui-aec47be0a9a49f4aa398",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-row-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2c88eaec8cd23e921ffa",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-119c23ac7969f9792fda",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-004aa27daa07cf7f6665",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-61069aa4c82429174ed3",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-69d905d6a0c0eb0b5aac",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ac18c48042a73056fcd1",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7e5d3ef8ad0cdd88d9a4",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "Permissions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-745187c2f7ddb3b7d948",
+    "file": "src/AfpManagement.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "afp-developer-policies",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2c2170db2a4d6d6c3e78",
+    "file": "src/AfpManagement.tsx",
+    "tag": "summary",
+    "label": "Shared developer policies",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-65fe0d96d0e8b59ddf3a",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "These developer rules are consulted by the manifest validator and SDK. The SDK enforces rendering.recipe.inspect and assistant.presentation.private.write throug",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3aa69d465bdcaa621240",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-registry",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c3648723a59fa7d7a184",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-row-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bdf50fc4fa1416498065",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a7c215a67fc166b9b19d",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-05b7dfa1e636db8cfc1e",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d10e3062c6048d70f4fe",
+    "file": "src/AfpManagement.tsx",
+    "tag": "span",
+    "label": "Protected · locked",
+    "className": "afp-status afp-status-protected",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bc1856dd7eea018bc6b9",
+    "file": "src/AfpManagement.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-90a32210c53c72a8576f",
+    "file": "src/AfpManagement.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f86c066c09b2d4d1adca",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Policy history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-4ac65b1cdd0dbf608a0d",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-038e56ebf78ba6e86198",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "Resources",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-3f0ccae09a6ff9ca29af",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Existing application resources and future AFP resources are separate. No paid resource is provisioned from this page.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fdb883a53bb5d5cf6d87",
+    "file": "src/AfpManagement.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5bfa7e2a7c18a58e45ff",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "afp-group-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-315fdad55db7f9607ceb",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-registry afp-two-columns",
+    "textEditable": false
+  },
+  {
+    "id": "ui-724095b26c8572c244ca",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-row-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-57625cf33d4cc84ec1e8",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d1812dee31fc9ef83825",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-be3fdb4e7ad56a89532d",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ca672795020e943402aa",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3693fe4f1091393f7370",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-80bd72b0e63957cb9180",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "AFP Features",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-ebf60370425d09f994b8",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-empty",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cf92997ff90ba0582e32",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Additional registry metadata",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-89e24fa5d99444724d99",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "No additional feature definitions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-7d3a2b3d428f0d503d15",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "Private declarative workflows are shown above. Additional executable customizations will appear here once the customization runtime and MCP are connected. Each ",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-778bc126a490ea29cd2a",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "The registry can retain draft definitions now. Registration does not create a renderer, launch compute, share a feature or change another user's application.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-370fe184f60924d2eb40",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Explore extension points",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-36415644871619fc6017",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f58b7b3fd3f4b9ad4489",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-registry",
+    "textEditable": false
+  },
+  {
+    "id": "ui-451db3857cbf18c8a11f",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-row-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ef67da4b388250178cda",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1d526e66c6dc90a576af",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Feature history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-3276174f71cbb7f13c14",
+    "file": "src/AfpManagement.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6033fef730394bb409f8",
+    "file": "src/AfpManagement.tsx",
+    "tag": "aside",
+    "label": "AFP registry history",
+    "className": "afp-history",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0f8f175bb4495855b593",
+    "file": "src/AfpManagement.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2a56313c037e545512dc",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "No edits recorded.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5e81f07ed0cc0bc1f044",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-71e04b5aabb8c84bcf80",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-67e0e3b8cc0dffa284e3",
+    "file": "src/AfpManagement.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a89ef8170ea3a17e12b0",
+    "file": "src/AfpManagement.tsx",
+    "tag": "button",
+    "label": "Close registry history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1e2eb44fe851f0e4b15c",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-manifest-inspector",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6929a9fb437ffa3b3a0f",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "h4",
+    "label": "Experimental manifest inspector · v0.1",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-94d6f9aab5991a80b5fa",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "Inspect and retain a Private or Firm definition. Validation does not activate a feature. Only read-only rendering recipe inspection is available through the SDK",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7d95b5bedf8c834c2d2c",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "button",
+    "label": "New manifest draft",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-59ddfa9e2208d3b4df9d",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d38457d12ebc52c2b60b",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5fe61c3243cea913b6dd",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c33b6f8d2c4aea20c1ae",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "textarea",
+    "label": "Manifest JSON",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-61a665852786e224bd5c",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9a6453d2d492ddf4bc27",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "button",
+    "label": "Validate manifest",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-33f05b616fcf0d11d4e5",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "button",
+    "label": "Save manifest draft",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-9ff8fe42108279948606",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-617797ebeb6267cc2cdf",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-440e9ac1a59a6cdb43c5",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-66a5691fee829d12b235",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-registry",
+    "textEditable": false
+  },
+  {
+    "id": "ui-22c07da106dd99a5a10e",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-25a6c8817614abd702aa",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b5e770245f3c14a91da2",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-293f9774d5b5c685fbaf",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "button",
+    "label": "Inspect manifest",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1f61847ebd1d2c8af041",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8c1167993d9119776f92",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "summary",
+    "label": "Your SDK evaluation history",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b430b542df3c4632a71b",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "No evaluations yet.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f13d437021e733c8ef40",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-835a28ce943e441cf7fe",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-60170395547e136090e8",
+    "file": "src/AfpManifestInspector.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0a96e2abe3a932f90b38",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "afp-memory",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a5861179cf02badd22af",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1bf59a336460e563d170",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-922cbfe8e652dbd2db34",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Continuity and development",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-35c40bccca2614b3d868",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h3",
+    "label": "Memory &amp; Decisions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e8669c02777b087b854e",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "span",
+    "label": "Super admin",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-362661a355c067c6f811",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Shape how injury.bot becomes AFP friendly. Keep the direction, track what works, and discuss the next improvement with your coordinator.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-34884e503461e07ef68d",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3096ee19e92dcb5f303a",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "a",
+    "label": "Download AFP memory",
+    "className": "secondary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-884bafe89df8378fafd1",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "a",
+    "label": "AFP development context",
+    "className": "secondary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-9069a9996b6c264bdf12",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Refresh memory",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-6a523a5c293d34368bf2",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Text and voice share this memory. Try “What should we change next to make personal customizations easier?” or “Remember this AFP idea.” The coordinator can expl",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c34e4f9ada0d5c4652df",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "work-notice error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6df37ca8eaa2c5188f1b",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "settings-saved",
+    "textEditable": false
+  },
+  {
+    "id": "ui-327ffcf6e32011e6ebd0",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Loading AFP memory…",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8ff6413a396c3d3d4730",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "settings-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ded9d5c3c82fc085b112",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h3",
+    "label": "Direction and priorities",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-c380a2ce66873a593482",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "These editable priorities are persistent application data. They do not overwrite the committed project knowledge below.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-794131f2395ebaf26026",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Platform product knowledge only. Keep client records, medical evidence and credentials in their existing private workspaces.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cbf73bb649484f511f5c",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1a87a6a24a746c3d5af6",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-11eefeda897a187096e9",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-81752b8deedd0b85937d",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c47137c225efc99ecbaa",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1e563f689e8720517e0e",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Save AFP direction",
+    "className": "primary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a659bd89ec93a99400af",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "View direction history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-63f6e010c8a24ce638a0",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "afp-principles",
+    "textEditable": false
+  },
+  {
+    "id": "ui-582d35fb640aa88cfad4",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "summary",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1f1219c74f347d68d7cb",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-47564ae5569d5f55577f",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Ships with each release; updated through code review. Journal notes remain in the application database.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0c333dbd498414592155",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h3",
+    "label": "Current foundations",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-ffaf89020b18151022e6",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Maintained with the application release. These foundations support AFP development; they do not certify compatibility.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fbbdf8620e12279530a8",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-foundations",
+    "textEditable": false
+  },
+  {
+    "id": "ui-04c909875a2ca9123965",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-89a05c94fa1c3bb15149",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ea3bf7981e5541b3a09a",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dbb85c524b9c8eaa97bd",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-45405dcc93a03d4e5902",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "summary",
+    "label": "Implementation reference",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b4ffdc2fd0842a0cf6cc",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ab4cd73c167f244338a0",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "afp-principles",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7e9cf42d2557ad8e1d59",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "summary",
+    "label": "AFP principles and remaining gaps",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-07070e1f52d28fead009",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h4",
+    "label": "Principles",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-4fd20dc2c69df3cad788",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "ul",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-63952e09e046dcca5d51",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-74fad9a3db3c20f5209c",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h4",
+    "label": "Still to build",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-955a6088b894b0a43b12",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "ul",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-94a68e64b054c2edf52b",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dd21e21c1b08fe71b093",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-100d2fe7c16247716bb6",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-848a04f3e69bbc5490da",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h3",
+    "label": "AFP Development Record",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-233baab2fe6b48bd4458",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "Conversation notes begin as proposals. Mark progress verified only after checking its implementation reference.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-34f5e02f8f10c76e1a93",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e8e62d2809e2ce1eba6b",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "settings-form afp-note-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-afb1644df47a8a9dd3ad",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1fa6cffbb79aa40ed580",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-fields",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d16b760cbc8302f9bda5",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3471e857d7d1e4d9e0e1",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "select",
+    "label": "Record type",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b3f64259b36f02f73fdf",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8df5b318781922a936c2",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "select",
+    "label": "Progress status",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1e9a3cd2c9fa29c8d958",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-75ad40130ed9d3edfeed",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2c2687969bc54b5dd691",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0a5bc85e78e4c91425c7",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1d85a7e1e879099ad41b",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dab5bd2c221d64017166",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e5b549e90f475f101779",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4232ec39276dc6f05dea",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "primary-button",
+    "textEditable": false
+  },
+  {
+    "id": "ui-57ccb9c9f7650c6d10b3",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Cancel review",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-4f66a3a28f50bb4a054f",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "No discussion notes yet. Tell the coordinator your idea and ask her to remember it here.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-43fab7d14337656add26",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-entries",
+    "textEditable": false
+  },
+  {
+    "id": "ui-798e8b88cbc8c66551a1",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0885530494c3b1cb2675",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-960a644995f9dc41850f",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8baef35513fa035e26f3",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f5e209c958baf8316c14",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-note",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7e956d17fc09fa774556",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-793b3078490a2be42810",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ed5ab270f64f42d2b51f",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Review record",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-07d145f8c623793ecc81",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "View history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1d4941b1088b296bd894",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-99bc7529d32f88148763",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Newer notes",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-b193a84ad3c3f44e0f9f",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1427c654f774a46ba30f",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Older notes",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d01bbba029ae68012bec",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "aside",
+    "label": "",
+    "className": "afp-history",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bcc2e49fc9ab800fff77",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-03f833b815b4243ed96b",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "No edits recorded yet.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-27e7eafbb17847e04371",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-af814201a70f7c0cc51d",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-note",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fb9cea445e70ecc946a8",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b62cec4d560bd093d2c9",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a73e0e7223053851a179",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6fc4e6f876e9891e4719",
+    "file": "src/AfpMemoryDecisions.tsx",
+    "tag": "button",
+    "label": "Close history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-919200dc39b0e4ef3898",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fa99181ef9e6a7b8449a",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7b0a3576895223852125",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1c2f18e568899c7181d2",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6341c28b407a8e445724",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "p",
+    "label": "The default is in use. Ask the Coordinator to set your preference again to validate it against the current contract and policy.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dca82d78492b90549fb4",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bdfb23de5148464ca85f",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "button",
+    "label": "Disable private preference",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a9b63b010942cc8b551d",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "button",
+    "label": "Remove private preference",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-5ebf8fb4c1f4e60b6dc5",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "p",
+    "label": "Disable or remove restores the default. Removal clears the value; required audit history remains.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-06d7ead0da5db7d77f3d",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-71dd2cda254756ed2f3a",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "ol",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-51d42790389ca60df09f",
+    "file": "src/AfpPrivatePreference.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8eda4f9c7af6b99445dc",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "afp-workflow-panel",
+    "textEditable": false
+  },
+  {
+    "id": "ui-92f8862815fbbbea70cd",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-workflow-progress",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6bd64b429f57f34128cc",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "afp-workflow-check",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b0a8539bba1a1629fc3a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9bbc6db1607e1fb81fc5",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-23871bba6730e081cd6a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c257e269cc8e74c98fcf",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "textarea",
+    "label": "Private run notes",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-97f38a8c911b420d245d",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "Checklist progress does not approve injuries, alter evidence, or generate documents.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7dae436334d6056192f5",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d3110b032ea0e9cd0330",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "No preview entries are saved.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-222693e1d6433f89619c",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Save progress",
+    "className": "primary",
+    "textEditable": true
+  },
+  {
+    "id": "ui-3f3f4ba0a14ed639696c",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "section",
+    "label": "My AFP workflows",
+    "className": "afp-workflows",
+    "textEditable": false
+  },
+  {
+    "id": "ui-903e31343180a84925f0",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-workflow-intro",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bdd1d1055559c7f82457",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "BASE APPLICATION + YOUR PRIVATE FEATURES",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-537f177358d769ed8081",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "h2",
+    "label": "My AFP Workspace",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-58e36db71b3fdbd942fd",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "Build a workflow with the Coordinator. Preview it, use it for your own work, and return to a previous version without changing anyone else's application.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-80cf0130949f1313227a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "Try “Create and activate a private injury review workflow with stages for gathering records, checking missing information, and preparing my review. Give each st",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-53b3cfa9d694efed211d",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0eaccc333ec0a5929df5",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "a",
+    "label": "Ask the Coordinator",
+    "className": "primary",
+    "textEditable": true
+  },
+  {
+    "id": "ui-47f44edec05d489df59a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Refresh features",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-c8f5542b157a61313bfb",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Feature history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-fcc9e8c59444f750627a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4a908cc0cba35999f42a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "Loading your private features…",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0b467e56f4dc50e938f0",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "No private workflows yet. Describe the workflow you want to the text or voice Coordinator. You do not need to configure fields yourself.",
+    "className": "afp-empty",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0ec1e8251eed25fc2d4c",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-row-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f38384a76f95eff1b85e",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d3a557cbb78a937c9cfc",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "afp-status",
+    "textEditable": false
+  },
+  {
+    "id": "ui-457f3db561603d9877c8",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4994c1c7a43212ff0297",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "afp-reference",
+    "textEditable": false
+  },
+  {
+    "id": "ui-59c0f552ac951f7aff9d",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-74c1e551021104548352",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "summary",
+    "label": "Manifest and ownership",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-489204f1c5ab60884204",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b0eb47b271fe923686d3",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f61fc59e514724dfeb2b",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-de84ab10f89f8bd632d2",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-682776038fc13e21317c",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Use latest for me",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-7ee9c706b3eef3dcc3ce",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Disable",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-5bd306b176d4c3d1d47a",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Remove feature",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e396b0eab2fbf9642ad2",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-workflow-preview",
+    "textEditable": false
+  },
+  {
+    "id": "ui-07d80d1b6e9dc61ce45c",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "h4",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5cb48ce6a1519d29627f",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "afp-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-86b6cfdd2493c3251c23",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-baf7af91a086bee1f9ac",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Close preview",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-aba5f05cdd451dfb52b5",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Start a workflow run",
+    "className": "primary",
+    "textEditable": true
+  },
+  {
+    "id": "ui-71f03571c87960b19196",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "afp-workflow-run",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1d285150a2ed88684aae",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "summary",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5664462d3143d8ac18e4",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "This version needs compatibility or policy review before use.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-efcb6c5a1732943a6a63",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "aside",
+    "label": "Private workflow history",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-51507fec8833be998198",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "h3",
+    "label": "Feature history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-c959c230fbfc9b393c66",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "Lifecycle metadata only. Notes and conversations are not copied to the AFP audit.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0a09c9b45a940bdef75b",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "No changes recorded.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f5be7ea6fba8efa6ee4b",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f27225741aef6977183f",
+    "file": "src/AfpWorkflows.tsx",
+    "tag": "button",
+    "label": "Close history",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-22c47fcd92bcd5ebd16f",
+    "file": "src/Atlas.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cebbdafbfe14cf357d2f",
+    "file": "src/Atlas.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "viewer-toolbar",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b487afef04b600f41be2",
+    "file": "src/Atlas.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-857b8b3d71e3fc5d3536",
+    "file": "src/Atlas.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "live-dot",
+    "textEditable": false
+  },
+  {
+    "id": "ui-71472287edc22074fe0c",
+    "file": "src/Atlas.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "viewer-status",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e20db2c9ea2d6208f5a3",
+    "file": "src/Atlas.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "viewer-expand",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7d72b2ba4c4c0f245567",
+    "file": "src/Atlas.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "viewer-stage",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8b21897d17dffcc939ef",
+    "file": "src/Atlas.tsx",
+    "tag": "button",
+    "label": "Open workspace",
+    "className": "viewer-nav mobile",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0db1ef94c5d00a42b92a",
+    "file": "src/Atlas.tsx",
+    "tag": "iframe",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-893f5580d68bb4743ae2",
+    "file": "src/Atlas.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "viewer-empty",
+    "textEditable": false
+  },
+  {
+    "id": "ui-85034c47dc62e7a37871",
+    "file": "src/Atlas.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2a50a8313693de936c3b",
+    "file": "src/Atlas.tsx",
+    "tag": "p",
+    "label": "The application needs its pinned anatomy build before the 3D viewer can open.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5b5e22c2fb869aed5393",
+    "file": "src/Atlas.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "viewer-footer",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e360d29d478a389cf99b",
+    "file": "src/Atlas.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2cd0c113b6bfaafd18bd",
+    "file": "src/Coordinator.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "coordinator-workspace",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2a214ff9a043c8654c45",
+    "file": "src/Coordinator.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "coordinator-loading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2fb52207dd50fbce47e0",
+    "file": "src/Coordinator.tsx",
+    "tag": "button",
+    "label": "Back to workspace",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a60eae7090a89c63bca4",
+    "file": "src/Coordinator.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3fc4a6c3ef951699ef3a",
+    "file": "src/Coordinator.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "coordinator-config",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2dfd697099e5113a72b3",
+    "file": "src/Coordinator.tsx",
+    "tag": "a",
+    "label": "Settings",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-3ae00e6a026d2ee31bfe",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "injury-workspace",
+    "textEditable": false
+  },
+  {
+    "id": "ui-746a73bbfca5e28b3b9f",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9572517954d900a838c4",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c57e0a3cba76000222ac",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "INJURY PRODUCTION",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-92ed27315c83e1e2aab7",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h2",
+    "label": "Your injury workspace",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d7f80956dbb78ceb6ab6",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Describe, model, document and manage injuries. Your work stays with your firm.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-28ed194b5459a58c9510",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-24e6af8331ee70c363a7",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-expectation",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bbb647888fc03fe06358",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fd531b20c7ebb69c1ed1",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "3D rendering requires precise measurements and geometric modeling on the reference anatomy. Timing varies with complexity and queue length. Files are saved in E",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-85e8751fb0b2d6548c5e",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d03367a304b433ef0cc7",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "form",
+    "label": "AI case injury request",
+    "className": "card production-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6e521872f7eda354d165",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fdf0c316ada932644869",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-417d631baad1425f09db",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Close",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-b384811072561857c548",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-73512028407d84d4fc03",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fb3f7467175e14631094",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "The Injury Creation Agent reads available case evidence, prepares the medical explanation, and builds the anatomical illustration. You review the result. You ca",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c517a1413e8cca671649",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Send to Injury Creation Agent",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-c952619c7815e900d7d8",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-731622d5092b2adb600e",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-tabs",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d1ac125cb7cb8c127993",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-789bf0640a166ccd6889",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1ae09223df86b8f1dc95",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f576ca26a7c5090a581f",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-724330d7bde512b116da",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "notice",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cd44b355d527ad92cd86",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-columns",
+    "textEditable": false
+  },
+  {
+    "id": "ui-304e9a9b223f79c58bb6",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-list",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4d2f174fabc6a6df0d13",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-31aed8c2b936c62f52a4",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "Start with a documented injury",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e36cd635b3c2d1dd6e8c",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Give the agent an injury name or a short description. It reads available evidence and prepares the details for your review.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-91efde2fa598e3917a12",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8e073c3307d86cc5ab5a",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-73b5a1dd2cba8810f258",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-102737a2bbe26951c621",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7a16055119a410de045e",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "PRIVATE CASE RECORD",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c979b7db7126b308b05d",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f2c4001e474347cc7b87",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-progress",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e41c50012f72cf56f709",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cdc465155e49f7478905",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d8b47b0e770defae0455",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5c553989c5438786bd92",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e3ced6b1d63b92dacb4c",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Revise request",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-ea67a2e02e0997b9e191",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c120ad3b4bdb43998fd5",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-baa06e204c8dd5845479",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "Generated files in Evidence",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-dede5286e5c2b3b80b45",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-assets",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c50e09541a09b59e79ac",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "img",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a122f00f538eafa4bac8",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "a",
+    "label": "",
+    "className": "production-download",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ad6ce0cc30daffdf76a2",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-303079f49a9dd93447ed",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Issue reviewed exhibit",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-6faa8b4045c3e31cb849",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "Independent review decisions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a58ebef20a98e120ea2d",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9e9b8008096c815c6924",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0ed4268969b27ad235af",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Source approval confirms the cited finding. Placement and visual appearance require separate review. Draft files remain labeled for review.",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f480829bb8276cc66fed",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2186c9e2c20160dcf7c2",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ce5eab84e2c3d18ef1d9",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1167c6e60bb4e5db2bf6",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Open atlas",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-75db5343eda838100ea2",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f85650130a6aa771e2ae",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Submitting a generic version never removes your private injury. Client descriptions, evidence, impact and rendered case assets are not copied into the shared li",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cd785211b0e7df47f1f3",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2b3a248b6239f3a3e3aa",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "Select an injury",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-24e0a74baf88539d7af6",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Review its progress, files and approvals here.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b3a647c184696c3ed0c5",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-170d90d2ee73d42ea6b5",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ef4c219132a4a6ef4dd9",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "Reusable medical knowledge",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-131f429b3bd820ec30aa",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Approved entries are shared. Submitted entries remain private until review. Each application gets its own case measurements.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5124b1a4ce0b42393c23",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Add library entry",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-b7a1420d8dda4a7a9242",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "form",
+    "label": "AI library request",
+    "className": "card production-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fb5c87dffb0fbd69e391",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-809e0b0e48a912b3a827",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d4e259541142e6d32a29",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f7e79a25894146f80e55",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "The Injury Creation Agent writes the medical definition and researches cited references. You review the finished result. No client information is needed.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-56f8a1597e3abd709f01",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-06c769a146abfa51d0a7",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-37d0f4d19d5fbaa1f069",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Cancel",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-4600eab408dc18d02459",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-library",
+    "textEditable": false
+  },
+  {
+    "id": "ui-223b96b0cbfcb0684821",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "badge",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d8f4fe557bdaebc39d11",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-287125d4fd66d18ec850",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9e2a6e2918f5a15a8102",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f13acfbc952b8bb6df60",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-927bf997636ef43d72b2",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1759d3f262878ff15561",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "Completion email sent",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b3f693cd6cf2da283317",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Retry research",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-f8c5b1cf492bf14c618e",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-576d44de90a3b0a77d17",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Use in this case",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-2cdf257580663f9b8e38",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "Revise definition",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-ff09601c67f8d12d7107",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "production-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2198afa89debf9d7062b",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-835f5a9eb6fb13a1ba4c",
+    "file": "src/InjuryWorkspace.tsx",
+    "tag": "p",
+    "label": "No published injury definitions yet. Your private case records remain available in Case injuries.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b37816846e1668f1dfa3",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-shell",
+    "textEditable": false
+  },
+  {
+    "id": "ui-58ed4253a26927859fb2",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "Settings",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-6349bb3660f6951121b2",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5e81e092077267ef83b2",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-shell",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0a142ba508da2d1a944c",
+    "file": "src/Settings.tsx",
+    "tag": "header",
+    "label": "",
+    "className": "settings-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dbfa98f447563e7e2e4d",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-05a26f48275705d395dd",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c74a8baa4d3cf72ea9a1",
+    "file": "src/Settings.tsx",
+    "tag": "h1",
+    "label": "Settings",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-03e95420d4cdfd0df649",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Control what injury.bot's agents may remember, use, and do.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3cf3f2bfa9a66c1ee5bb",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f6a785293f58abc3808a",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2f350df31f474e124197",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "work-notice error",
+    "textEditable": false
+  },
+  {
+    "id": "ui-676edbb84d6dfd626867",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "settings-saved",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d62c556392979f6c90d7",
+    "file": "src/Settings.tsx",
+    "tag": "nav",
+    "label": "Settings sections",
+    "className": "settings-tabs",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9a344fa64d0c3ec91ed1",
+    "file": "src/Settings.tsx",
+    "tag": "a",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5ce19930bba4c0c10935",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-10e3cf7b6f0501ddef1c",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e94201d96ef356773ff7",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-65aab1f7bc6bc9dda522",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Coordinator",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4a1b8923075e72e86ed1",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "Working instructions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e847b485dd1eb3085496",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "Case boundaries preserved",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4030c9ecdeef983da327",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "These preferences guide the coordinator and agents. Source integrity and attorney review remain part of each workflow.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e848698f1374cc2a47b2",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "settings-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-40f42682502d7bdd88ab",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c452a45e65ee4cbb5cf0",
+    "file": "src/Settings.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c991dbcfe8a25f2665f6",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c2944c4e576816cd832b",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Save instructions",
+    "className": "primary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-3923eedb05e574f7d43a",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-08187e1a1f3960c314ef",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-50e505963760fbe1e87a",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-35fd9f92319b7af8ce96",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Controlled memory",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f1876c6258fee95e9464",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "What injury.bot may remember",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a1b3a9e7f0bbe39624de",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "Reviewed memory",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2b04c6f1bc7848cf6de0",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Agent proposals remain inactive until approved. Case memory stays with the selected case.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-40f514f7769a7429d071",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "memory-create",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d3c81a7844fa5f9d844a",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-81971547f7cd35347451",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-afe87e7df88512f97722",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "memory-content",
+    "textEditable": false
+  },
+  {
+    "id": "ui-22cf307b0f17462ea4d0",
+    "file": "src/Settings.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4d70c3db60df7bb91e00",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c0ae2d4005deb7089125",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Add approved memory",
+    "className": "primary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-642edc6a1e1a4855bd50",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "memory-list",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c99626ad664c1ffbca0d",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "No memories saved.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0f0d743fe39b2795e018",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2ea484214799b6b9c074",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "memory-meta",
+    "textEditable": false
+  },
+  {
+    "id": "ui-25d311248c75724ebbbb",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9f984b90f65efbd2bd2b",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-138e58ed104f366af237",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7600a8a65d2f608b7ddf",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-67cdf27e380e94ba8e56",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "memory-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-22b2cb50bf8ae20f19e1",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f981f95262814d0dc3a4",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-16c1d8f9e9253aae012b",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7ab7b6a9abe3546f861a",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-89127d04c3b7b743bb2a",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "AI staff",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-324e6c94f19188f0b54e",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "Agent instructions and skills",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-494c71da4040a87cba6f",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Choose who handles each task and which skills they may use.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-346adcfb83a258dcc2da",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "agent-settings-list",
+    "textEditable": false
+  },
+  {
+    "id": "ui-031b370b5eb4e3291489",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "agent-setting",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5a29db11ea24788be749",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "agent-setting-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-74edaf0ecf8b24bd0679",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d69a83b6bcaaf70e20da",
+    "file": "src/Settings.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fa93abd15bc7ae5c1eea",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-96ad5e8906db2fc18fdf",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "toggle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5a1b4b28976a9b2087b0",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-49a28d20cda3e80672af",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-27c38cd6a9c9ab552632",
+    "file": "src/Settings.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e83163efbb3fe94537ff",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f5aef0615fe912e92070",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c3e71f93f1c15680d3ce",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "skill-check",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f604786997e717699fb8",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c8d6cf877dfe2c3b941e",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b365d374ee116756cc89",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e19d3a40267e36be39d4",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "secondary-button",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0d6d46b93681d7c87f42",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-89c98cbc36492522d2bd",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8ba7d5284602515ee076",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7bad4fa659daaa481d5e",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Task routing",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1563abdb6d70f44d33c0",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "Permitted models",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-9357c7b58207a7d43e25",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "No automatic fallback",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-004cfb50ab6d742b4b25",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Add the exact API model IDs available to your account. Multiple models from one provider can be assigned to different agents above.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-303cf923a0f64c9ed4fe",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "model-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8cbc808dbcb67dea1007",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "model-row",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7fdb03e097cce2ad6c36",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1bfc175a13d6b77f5da1",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8fa1561f84545f86ef3f",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d6a250ed9addb65fa34a",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a7468b60a551637a537f",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "toggle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5627b4daee92fc7dbf08",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a437490c43779ad3d015",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c3e83573841cf4337bf4",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Add model",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-cb23b4ae4c1e6dbf9abc",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-57450fe769a14ca752dd",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b11173febbdc31eae57d",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "toggle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d38600b1639b9a6f346f",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a8a6c658d7429d194622",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "OpenAI and Claude can read PDF case evidence. The installed Grok adapter supports text and images, but not PDF evidence.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6758927cec28434a87d5",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-57b3ca566960cbb9b733",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Save model policy",
+    "className": "primary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d15c08d8597d8b0832b6",
+    "file": "src/Settings.tsx",
+    "tag": "h3",
+    "label": "Voice coordinator",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-964939f81539f186a55a",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Live voice uses OpenAI Realtime. Its voice model is selected separately from the text coordinator.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d60f09d70cf57c2ab555",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "settings-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-455a6357e28a99c2d3f1",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "toggle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c1e6857fbdef40494f72",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b8f1bf1a848c965b838c",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6b542edf9083ba07d25e",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0ed4ca39be2525b405f7",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1438cc3afecbab6dd5da",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5823c1fc47b89c4143e2",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1773cf26e62b3c18855f",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a9236e7abdce4f422b3f",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-83592d0914517bd88fd9",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Save voice settings",
+    "className": "primary-button",
+    "textEditable": true
+  },
+  {
+    "id": "ui-f3a5c68b6d72cbb19eb4",
+    "file": "src/Settings.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-608c008ca585b9521f61",
+    "file": "src/Settings.tsx",
+    "tag": "summary",
+    "label": "Recent model routing",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-59a148a5c87661541f78",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-499e876fbe597bbfe653",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-32aafe3bd63cd556e366",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6ba1011a0306d1a93dde",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f3467bde789e8050e564",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Provider access",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-38acbcd48e0ea205ff45",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "Credentials",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1f3cea4d3b3a926c9715",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "Encrypted server storage",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-95e93f1d45842cd49f19",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "settings-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-15b824617d8e6fc04b6b",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3d0d4d5afcfbaa86af5a",
+    "file": "src/Settings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fe231188b6ca4467551b",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Save credential source",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-751d46b6b291c866c9e2",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Keys stay on the server. Existing server environment keys remain available when no saved platform key overrides them.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9dcda6e2678aabe9db34",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "work-health",
+    "textEditable": false
+  },
+  {
+    "id": "ui-55f830b8c1cc809e801b",
+    "file": "src/Settings.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-55ff10836adf3a06f7e5",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0e1b617c7bfa47810ecc",
+    "file": "src/Settings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "work-form",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a13ae52b80f6fdb9b778",
+    "file": "src/Settings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-db5e7717ae3e3edb249b",
+    "file": "src/Settings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4ae373e07b70b6e7c1ae",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Validate and save",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-01d3f9cc1bd01a0f9467",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Remove saved key",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-a68058979b1ccd212eaa",
+    "file": "src/Settings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d0bca3061463f0f2f9e4",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "settings-section-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2fe36af22aaf3ea25698",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8941749951600b684ed5",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Firm tools",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7fe18c1d151c4cf16f23",
+    "file": "src/Settings.tsx",
+    "tag": "h2",
+    "label": "Integrations",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-6909186e7e198dd21d89",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "Per-firm access",
+    "className": "settings-lock",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9e2711235b01b30126b6",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Authorize read access for this firm. Connections never send messages or import case records automatically.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b376d4645038a1189c17",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "integration-grid",
+    "textEditable": false
+  },
+  {
+    "id": "ui-776ec349bb58abb8fa02",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "integration-card-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-039d35956f1b2eb0222e",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-76c755779c6fc8794044",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-35e353cddbccd3ca307d",
+    "file": "src/Settings.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7a6baa4c8b198671b224",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8505a6c0a3153fd1d00b",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "integration-connections",
+    "textEditable": false
+  },
+  {
+    "id": "ui-54546afa11cb2ef2a12f",
+    "file": "src/Settings.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7908e98591c44757883c",
+    "file": "src/Settings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "work-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e0954884cda30650ed9b",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Read records",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e2508a1910b94f5132ec",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Disconnect",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-2b1347f07f5cc1a444d1",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Connect for read access",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e6eb7c4ae7e4bcba1d6e",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9724fc70a1d54d7492e4",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "Requires licensed developer access and an installed adapter.",
+    "className": "muted",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1b887d80e92fe7f069ef",
+    "file": "src/Settings.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c3a2a1a6079429eb6f60",
+    "file": "src/Settings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1e72b8f5a0714717e8cf",
+    "file": "src/Settings.tsx",
+    "tag": "button",
+    "label": "Close records",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-2ed9184032c332fd8d49",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "button",
+    "label": "Open injury.bot menu",
+    "className": "drawer-trigger",
+    "textEditable": false
+  },
+  {
+    "id": "ui-828b20a7f03ecdaef774",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "button",
+    "label": "Close menu",
+    "className": "drawer-scrim",
+    "textEditable": false
+  },
+  {
+    "id": "ui-01c96d48ac23a9fd45c3",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "aside",
+    "label": "injury.bot menu",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-28188f53aee3a3ce6cd0",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "header",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d0bc68bc47f09aaba5d8",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-333e28e40a5b774d7dee",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6780dd391393a34c81df",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "h2",
+    "label": "Control center",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-0285ab0e4e47827a0a92",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dfbbe38a1f5ad9978198",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "span",
+    "label": "Super Admin",
+    "className": "super-badge",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e6b584a7a7b212d640f1",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "button",
+    "label": "Close menu",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-b8799abebe903291f9f4",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "nav",
+    "label": "Features",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5db50d587a798e2dc893",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "p",
+    "label": "Features",
+    "className": "drawer-label",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ed8afb2d34a7cabe646a",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Command center",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d0a084b312ad3a2db6fa",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Talk to the coordinator",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-8f049cf75eb331dc0559",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Human Atlas",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-15fbbc5bd5172d2e5969",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Cases",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-f9256db9e3ac93012f97",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Injury workspace",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-b5fd9fc64edaf8503e20",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Evidence",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-fe18374a8feb51d6fc42",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Exhibits",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-2e00d5cecd9bb7997667",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Agents",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-bc39111f52236e4ab526",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "nav",
+    "label": "Customization",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-534d49da277b243467a9",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "p",
+    "label": "Customization",
+    "className": "drawer-label",
+    "textEditable": false
+  },
+  {
+    "id": "ui-433c3a261a6a0d5d8bae",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Instructions",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-fb45cf485622aa857b46",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Memory",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-4f147f4d5839e39caeb7",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "AFP Management",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-7195fc28d16adb362a6d",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Agent skills",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-5262d454d82c5f7f1c39",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Model choices",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-209081b4b7beb7311676",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Provider credentials",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-cfee13c3572e9e9d978a",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Integrations",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-240a6f7b0805a8905566",
+    "file": "src/SettingsDrawer.tsx",
+    "tag": "a",
+    "label": "Open all settings",
+    "className": "drawer-settings-link",
+    "textEditable": true
+  },
+  {
+    "id": "ui-0a44ba19e5d7bd2c5100",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-53c2eb764208ad02dc3a",
+    "file": "src/UsageSettings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0ec188e6b05c78b82f51",
+    "file": "src/UsageSettings.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "settings-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-45203341013d60280cee",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "usage-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-df28b1947bd850bb24eb",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-768717ea5cad1e0ef8b8",
+    "file": "src/UsageSettings.tsx",
+    "tag": "h2",
+    "label": "Usage and pricing",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-8948ab72c65679993bbc",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "Last 30 days. Provider-reported tokens include retries and failed responses. Tracking starts with this release.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3a2a044780c7d3096132",
+    "file": "src/UsageSettings.tsx",
+    "tag": "button",
+    "label": "Refresh usage",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-405f868bdfce5faba379",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "usage-metrics",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1582cc2ab5d5af19d4c8",
+    "file": "src/UsageSettings.tsx",
+    "tag": "span",
+    "label": "Input tokens, including cache",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3c72a55106e8bf6fd5ce",
+    "file": "src/UsageSettings.tsx",
+    "tag": "span",
+    "label": "Output tokens, including reported reasoning",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c017c79dfc5544afd02d",
+    "file": "src/UsageSettings.tsx",
+    "tag": "span",
+    "label": "Estimated AI subtotal",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c5ef1cc2ada1c450eb5a",
+    "file": "src/UsageSettings.tsx",
+    "tag": "span",
+    "label": "Calls without a cost estimate",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9f8d87caf41f5e147c05",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0771e6410ff78215a03e",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "usage-models",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0989e9ed40c545e98566",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-83e1fcad69b7d5818647",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cbc8922bb0fc7588a049",
+    "file": "src/UsageSettings.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d1cf072db5cfb679e2fe",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "usage-check",
+    "textEditable": false
+  },
+  {
+    "id": "ui-53b0fbddd42218a15c1e",
+    "file": "src/UsageSettings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-01455f8f39455f9b2bc0",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "Removes the daily AI run cap for active super admins and expands library research to 12 provider calls per stage. Other users keep their normal policy. Provider",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-09796b857fa9209a1771",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ad99da93b6c57fd6eada",
+    "file": "src/UsageSettings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-df8dc4182e9e99d88a82",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "Set this within the selected model’s supported output limit. Research starts with a smaller budget and expands automatically when output is truncated.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-abaf97ce44198c3311dc",
+    "file": "src/UsageSettings.tsx",
+    "tag": "h3",
+    "label": "Provider rates",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-36d9f0d2459103361208",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "USD per million tokens and per thousand searches. Initial Claude Opus 5 and GPT-6 Astra rates are standard short-context reference rates checked September 8, 20",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-be9b0d37fa198d2d024a",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c5b332ef3aa82f9be863",
+    "file": "src/UsageSettings.tsx",
+    "tag": "a",
+    "label": "Claude pricing",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-89711e7a7e0b41ebd7cb",
+    "file": "src/UsageSettings.tsx",
+    "tag": "a",
+    "label": "OpenAI pricing",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-603b75e35ebe272233f8",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "usage-rate",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f20b1fe2d2bcff080c09",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-13e02414ec38c3db30b1",
+    "file": "src/UsageSettings.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b2971bb786c27b96504d",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6fd70cf4bab0ec03891a",
+    "file": "src/UsageSettings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6d66c066460d30e228e7",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d7cbf001de13b5e5c874",
+    "file": "src/UsageSettings.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bbd4307165ef78d90d22",
+    "file": "src/UsageSettings.tsx",
+    "tag": "button",
+    "label": "Remove rate",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-6f06dabb849b294d409d",
+    "file": "src/UsageSettings.tsx",
+    "tag": "button",
+    "label": "Add model rate",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-661fca935f03edf32da7",
+    "file": "src/UsageSettings.tsx",
+    "tag": "h3",
+    "label": "Rendering price calculator",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d6ccac6360a1c41e0884",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "usage-fields",
+    "textEditable": false
+  },
+  {
+    "id": "ui-eda3e8a783039922f99d",
+    "file": "src/UsageSettings.tsx",
+    "tag": "button",
+    "label": "Save usage and pricing",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-98e8f7df522b4f1d3bce",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "The super admin manages pricing and testing controls in Platform settings.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a306e09eec6420d76248",
+    "file": "src/UsageSettings.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e0b80dcd41e0236eeffc",
+    "file": "src/UsageSettings.tsx",
+    "tag": "select",
+    "label": "Inspect a job",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-18774ea70a81946140ae",
+    "file": "src/UsageSettings.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "usage-quote",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5c12e12348a03d7a91ec",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f1c5a348d5187863e846",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5ada721d4e4ec7d56710",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bc81cc470e1e3ff29e19",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b8027cb0eceeb31ad13e",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "Set the missing provider rates before relying on a recommended price.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-35489ac9c66f5e2d5054",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "Library research alone is not a completed 3D rendering. Use a completed rendering job for a rendering quote. No customer is charged by this calculator.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-eb5f8a09bb9dc88663aa",
+    "file": "src/UsageSettings.tsx",
+    "tag": "p",
+    "label": "For a 70% gross margin, divide delivery cost by 0.30. Include revisions and attorney review time in your allowance before choosing a selling price.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0f4f3f6e248f6ca73d55",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f5b6b19985eef979d661",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "header",
+    "label": "",
+    "className": "as-head",
+    "textEditable": false
+  },
+  {
+    "id": "ui-46e9b898ec478eae0ec5",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "button",
+    "label": "Minimize coordinator",
+    "className": "as-minimize as-back",
+    "textEditable": false
+  },
+  {
+    "id": "ui-caa840269abbd371e259",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "as-firm",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0774175bcccdd1a550de",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "as-viewer",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5e41f42fc9b74f798c52",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "div",
+    "label": "Coordinator mode",
+    "className": "as-mode-toggle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c8b71aa940cc5da3d8dc",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-304d03a0e4e23f55bdef",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "button",
+    "label": "Voice",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-36f043a78cd6b7f3f111",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3865b452bfcde1f13388",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-578d2f43b27c2db836c5",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "as-stage-tools",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5adc6fcedb6a004bd5dc",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dd6d36b196cf9fa0f10f",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "as-chip as-chip-live",
+    "textEditable": false
+  },
+  {
+    "id": "ui-69dfdacf898de3368584",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "as-live-dot",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6108acf959d326318699",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "as-note",
+    "textEditable": false
+  },
+  {
+    "id": "ui-efd3fae47d253067399e",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "ol",
+    "label": "",
+    "className": "as-thread",
+    "textEditable": false
+  },
+  {
+    "id": "ui-833628032206f80fdc77",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "as-empty",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a8eb3b4cbbefe1d65307",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "as-msg as-msg-tool",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5f52f556164c7386f277",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-594a9b1d1e97ebb0c2dd",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "li",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a9fd5a4e2149ae11b346",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "as-msg-text",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6844b242d3c37549da52",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "as-msg-meta",
+    "textEditable": false
+  },
+  {
+    "id": "ui-21b47467f00c579c47b8",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "as-composer",
+    "textEditable": false
+  },
+  {
+    "id": "ui-daeaea59a9726e0167b8",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "button",
+    "label": "Switch to voice",
+    "className": "as-mic",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bdc1f61ebff2675e0ca3",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "textarea",
+    "label": "Message",
+    "className": "as-input",
+    "textEditable": false
+  },
+  {
+    "id": "ui-286b7b67bd734e1a6add",
+    "file": "src/assistant/assistant-console.tsx",
+    "tag": "button",
+    "label": "Send",
+    "className": "as-send",
+    "textEditable": false
+  },
+  {
+    "id": "ui-18a238f8351604d8a5aa",
+    "file": "src/assistant/cards.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-052a40591a1bb96340c0",
+    "file": "src/assistant/cards.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-face60953fd34ddc7953",
+    "file": "src/assistant/cards.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "as-card-row",
+    "textEditable": false
+  },
+  {
+    "id": "ui-950d8351f67e95dc039c",
+    "file": "src/assistant/cards.tsx",
+    "tag": "a",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e4acf5872db12a18ca25",
+    "file": "src/assistant/cards.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-59af772b5da419c91a7a",
+    "file": "src/assistant/cards.tsx",
+    "tag": "a",
+    "label": "Open workspace →",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1c152c01b984b00f505c",
+    "file": "src/assistant/voice-orb.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1118637541345e0058bd",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "Opening injury.bot…",
+    "className": "loading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-416bf42cfc099bd89f0f",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3a44a63761a1a5d4e554",
+    "file": "src/main.tsx",
+    "tag": "header",
+    "label": "",
+    "className": "site-header",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d8975449e75a86124842",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Toggle workspace",
+    "className": "rail-toggle desktop",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7db39b2425a11f656cf3",
+    "file": "src/main.tsx",
+    "tag": "a",
+    "label": "",
+    "className": "site-brand",
+    "textEditable": false
+  },
+  {
+    "id": "ui-66ab7d61473fc32ab454",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": ".bot",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-554f6a28c00816566a9f",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "site-header-side",
+    "textEditable": false
+  },
+  {
+    "id": "ui-63187af83d5853b209d2",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Private pilot",
+    "className": "pilot-badge",
+    "textEditable": false
+  },
+  {
+    "id": "ui-db8c5bb1422a37b9e45f",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3318fbdb4745f476215a",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "scrim",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9064a63b662ff66f1a9a",
+    "file": "src/main.tsx",
+    "tag": "aside",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c9dd60ead6a83180b20e",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "brand",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d5966ce0c4ad91ebcc93",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-41108f0eac1748a3011f",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Close navigation",
+    "className": "close",
+    "textEditable": false
+  },
+  {
+    "id": "ui-653927aeaf52f74e2828",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "rail-label",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f198f2ed3e7f6fcc0109",
+    "file": "src/main.tsx",
+    "tag": "nav",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1704ec480932b3fd3c72",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-79dfeb01a9e2531f5d6a",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "live-dot",
+    "textEditable": false
+  },
+  {
+    "id": "ui-320ec011c5fb632765b8",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "rail-bottom",
+    "textEditable": false
+  },
+  {
+    "id": "ui-83eef6c8b4d3bb94bdcb",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "PILOT WORKSPACE",
+    "className": "pilot",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f73fca77a6480250b15f",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b0453365014b7ac46e69",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "profile",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e8c9d86e4ad980a9f8ca",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-575fafd1d39336ae8ed4",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d3534859538829d8f01d",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1a7cd31642a10b03c0b4",
+    "file": "src/main.tsx",
+    "tag": "nav",
+    "label": "Quick navigation",
+    "className": "mobile-nav",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9b7c84b45bacc177cea2",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f47cfcfacbd78900f6cd",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "mobile-tab-icon mobile-tab-icon-primary",
+    "textEditable": false
+  },
+  {
+    "id": "ui-aa2eff63dd9f27cf7b1c",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-78569c46b63d0127c617",
+    "file": "src/main.tsx",
+    "tag": "main",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9012738047803439332b",
+    "file": "src/main.tsx",
+    "tag": "header",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f3db63cdca879a517e1a",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Open navigation",
+    "className": "mobile",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f42e48e2f19f455743ee",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "breadcrumb",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7abb2142046df77c4e75",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "/",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-958e5b25ef4d0f279115",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "header-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ffe9f3c4ec24c00fa163",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e404e02eadb43a674916",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "secure",
+    "textEditable": false
+  },
+  {
+    "id": "ui-667ad1bc6b24e88c2047",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-beb059962f06094f82c9",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "page-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ceb9339d178d050b26e9",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8298ec6db24b9e6aa6dd",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9d8fef950b37ff9ae6d7",
+    "file": "src/main.tsx",
+    "tag": "h1",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-64d61d22c54a9580bdad",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "primary",
+    "textEditable": false
+  },
+  {
+    "id": "ui-aa6909b477af71c2103b",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "case-strip",
+    "textEditable": false
+  },
+  {
+    "id": "ui-513ddeb94b0b5a50163f",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "ACTIVE CASE",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cb4e4a40c99c937b6db5",
+    "file": "src/main.tsx",
+    "tag": "select",
+    "label": "Active case",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-64b4da16d4fbef67f12c",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Archived",
+    "className": "tag",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c3501df6ce16678002aa",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "subtle",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c467864af2feeb0ee84d",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Manage case",
+    "className": "manage-case",
+    "textEditable": false
+  },
+  {
+    "id": "ui-92ef50364c385c45e933",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Manage",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-36bd560b705cb40775d9",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "alert",
+    "textEditable": false
+  },
+  {
+    "id": "ui-292dcb564672636ea438",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "notice",
+    "textEditable": false
+  },
+  {
+    "id": "ui-af2f6255d033b5865e44",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "atlas-layout",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b4e85df5e8b597c581da",
+    "file": "src/main.tsx",
+    "tag": "aside",
+    "label": "",
+    "className": "context-panel",
+    "textEditable": false
+  },
+  {
+    "id": "ui-41c40d8cbcb3bcf3ac34",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "CASE CONTEXT",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c968c617f404cb339357",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a60b1e1a21cbcb6c1fa9",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e7fb67c63a4b90e8295e",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "mini-stat",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0f5dab9f76210c34875b",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Evidence files",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d92122a9330402bfea36",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "mini-stat",
+    "textEditable": false
+  },
+  {
+    "id": "ui-86956f8c283a45a737bd",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Injury findings",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1634088e2a05ece196d1",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "mini-stat",
+    "textEditable": false
+  },
+  {
+    "id": "ui-de6f1e855b2f33d6d27d",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Placement approved",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-afab3f88c75e69a62fda",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "REVIEW SEQUENCE",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-88a9ed4669a0f5296c4f",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "sequence",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f3581dd9b95f5aa094a3",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-06efc2e2067a32e60a9a",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "wide",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8c2de77948bf5b32d29e",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Reviewed injury illustrations are available through the Injury workspace. Incident reconstruction remains separate.",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-35342f93dbb212097f51",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "hero",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2a72a8252362316e7a01",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9d7c68eed96fdbdcd26b",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "THE ANATOMY OF YOUR CASE",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f9c28de6aec074006cf0",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0b8e7d8e2a059f8e1194",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d74c63ca91a774859446",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "primary",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5c6e3f2adcf84f132f77",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "hero-number",
+    "textEditable": false
+  },
+  {
+    "id": "ui-53d4581260c87b732015",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "ACTIVE CASES",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fb5b6b82940ab96351c5",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "stats",
+    "textEditable": false
+  },
+  {
+    "id": "ui-23ea604bf072aa8faf82",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fee4c716fc65a5b3f389",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9e1f98f9267e324eb9ff",
+    "file": "src/main.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "card command-review",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d0c5b255ff39ce5f6b5c",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d20fafafb09068000b9e",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-89922ee41a89c29dc134",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "LAWYER REVIEW",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e36f7ac9f448193db602",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "Decisions waiting",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-7f7befbff769e18d94ee",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Open review queue",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-d753574ef0df3fe7d74f",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-c0d80babdf89f8de71a5",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "command-row",
+    "textEditable": false
+  },
+  {
+    "id": "ui-37edfc88330f88b4dbdb",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-29aeb103a84ea56ba47c",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9af98d22835e77a87d42",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Review",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-0d6b8f5d5e099b1e1cf6",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "No source findings are awaiting review in this case.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5dfe0771cb9ce518ec0a",
+    "file": "src/main.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "card command-review",
+    "textEditable": false
+  },
+  {
+    "id": "ui-9bf197138edd566d27f9",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cb2e89db181c91352b2c",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-49e07f65209d3501976c",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "CASE WORKSPACE",
+    "className": "eyebrow",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ee1c4dde732beb06aafd",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "Active cases",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-1da8cfd56e6a3f996b9b",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "All cases",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-f8dd249b6c03533d7cb6",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "command-row",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e95a5a3730e23f46a03c",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-48f423d9db7cba2ffd4b",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-56f57a9d348d59bbb007",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Open atlas",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-8d6168d6353f94b75d07",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Create your first case, then upload evidence and open Human Atlas.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-05b0c17e0b320e93c584",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "case-grid",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2784990cec9a2352c805",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "card case-card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1e15be652154d1d3914d",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-6bfd4eb3c151511701b9",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a59615db5ff8f2373493",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-673d6e3afb1d0994eef8",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-eaf7a0182fe7f2f34600",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8eea16e8b947282b6f4f",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-79d5c89f6b6f0da9ec48",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cd3ac81b6c5136085dfe",
+    "file": "src/main.tsx",
+    "tag": "input",
+    "label": "Upload evidence",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-576e754924d36a458a87",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "file-list",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3f943e7d2b0f65013eb2",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "file-row",
+    "textEditable": false
+  },
+  {
+    "id": "ui-227229ce3cb9fe7fb352",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5c241b80ca0ef1b119e9",
+    "file": "src/main.tsx",
+    "tag": "a",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-49c734cda831dc9ad917",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-41439bc4c3b42ddabfee",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-92661e3bc2ae68f22a56",
+    "file": "src/main.tsx",
+    "tag": "details",
+    "label": "",
+    "className": "card",
+    "textEditable": false
+  },
+  {
+    "id": "ui-605f8dd648532dadd478",
+    "file": "src/main.tsx",
+    "tag": "summary",
+    "label": "Existing evidence findings",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-197392b5586a4e9d3309",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-edf46507d112041469a6",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-bb54ff56bc6731d0bbfa",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "Documented injury findings",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-608c7061692f1c6bdd9a",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Source approval does not approve anatomical placement or rendering.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a610d62fb318a53288a1",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7320962a63e8b1368ee1",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-464a83727fcf70b98a27",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "badge",
+    "textEditable": false
+  },
+  {
+    "id": "ui-32fa782b9568655459b1",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-53bd043b0c3fcb6f73d7",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1087683cfd7ac2562416",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b7d14de29c2d70576598",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "review-grid",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e52617e80db47c91f959",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-f8f3c6d0b30ad40dddc8",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-670bf80974b3ba42f454",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-49012bfb247c09bdab1e",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-993d0d8bbea5fa7ea4cf",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2c63a10e8e42749d44e9",
+    "file": "src/main.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ae86585d39b23a7bc758",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "section-heading",
+    "textEditable": false
+  },
+  {
+    "id": "ui-343bd8dec9317bbfae59",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fdd63da3fe4009d4e89c",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "Exhibits and demand material",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-e081dd41aa26d3af6be4",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Saved documents from your injury production records. Reviewed exports retain the approved case version.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-d3cfbc52bff9ff8e67a6",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Open injury workspace",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-eeb8521cf8b972de9bbb",
+    "file": "src/main.tsx",
+    "tag": "h3",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-20009792bb7b66640b12",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-648089bb8f5bce2f1320",
+    "file": "src/main.tsx",
+    "tag": "a",
+    "label": "",
+    "className": "production-download",
+    "textEditable": false
+  },
+  {
+    "id": "ui-329854d3b9aa415ea6df",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Describe the injury in ordinary language. The Injury Creation Agent handles evidence reading, medical documentation, anatomy selection and geometric production ",
+    "className": "intro",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e61a2e15ed77a0a9c627",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "Injury Creation Agent",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-500be1890d3b450b4b7b",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "",
+    "className": "badge",
+    "textEditable": false
+  },
+  {
+    "id": "ui-af1b01f1b2865d81d524",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Reads available case evidence, prepares the injury explanation, builds a registered illustration and delivers the files to Evidence. You review and apply the re",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-638bf7dafebd4076786d",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Open injury application panel",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-0af645de524eec58ab88",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "Coordinator",
+    "className": "",
+    "textEditable": true
+  },
+  {
+    "id": "ui-acad2ce8217a2660642f",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "Start a client file, ask for an injury analysis, or assemble your demand material by text or voice.",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e2e43a6ae00602f04254",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Open coordinator",
+    "className": "primary",
+    "textEditable": true
+  },
+  {
+    "id": "ui-25e8feae27a33397daf6",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "case-grid",
+    "textEditable": false
+  },
+  {
+    "id": "ui-42bb0696c75526eb497b",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3cb3fdbeaa40ed26c92a",
+    "file": "src/main.tsx",
+    "tag": "span",
+    "label": "Planned",
+    "className": "badge",
+    "textEditable": false
+  },
+  {
+    "id": "ui-42f13bc6860574e23efa",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "modal-backdrop",
+    "textEditable": false
+  },
+  {
+    "id": "ui-eaf46e3f1df95d133d1f",
+    "file": "src/main.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "modal",
+    "textEditable": false
+  },
+  {
+    "id": "ui-998c1868a0fa4b8533d4",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "Close dialog",
+    "className": "close",
+    "textEditable": false
+  },
+  {
+    "id": "ui-1c0915ba0f0a5acaae1d",
+    "file": "src/main.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5d6de640e1104107be37",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "alert",
+    "textEditable": false
+  },
+  {
+    "id": "ui-52ec47a528c48315bc5d",
+    "file": "src/main.tsx",
+    "tag": "form",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8d42a95fbae31ec53289",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5ac83b91876589bf1dec",
+    "file": "src/main.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-b42fb773220ce24cadbc",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "dialog-actions",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3d950dad91f44c25de67",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-5ff2374bb74e862b4f28",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "danger",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0f2be49423716dddb29f",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a666a42019f786cf585a",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-ab71c6df9a09eecd21ff",
+    "file": "src/main.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-324a2fce7f5cd7b563fb",
+    "file": "src/main.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "fine",
+    "textEditable": false
+  },
+  {
+    "id": "ui-669a5002cec5d8eb83d7",
+    "file": "src/main.tsx",
+    "tag": "div",
+    "label": "",
+    "className": "form-grid",
+    "textEditable": false
+  },
+  {
+    "id": "ui-0cc994b13c4a40485613",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-8dc85e565efbbbd21aad",
+    "file": "src/main.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-59a26c5dbc5b729ecfbe",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a8a1867b5ff3f7a88abc",
+    "file": "src/main.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-a07623541458aa86c0a5",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-70cba401dc2323fd2ab5",
+    "file": "src/main.tsx",
+    "tag": "select",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-dd5e6c0d7a524ff55be4",
+    "file": "src/main.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-4846277eb5399c949c55",
+    "file": "src/main.tsx",
+    "tag": "textarea",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-7ad790d838444de4cec5",
+    "file": "src/main.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-37c1daea5bb14bfc6931",
+    "file": "src/ui.tsx",
+    "tag": "label",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-3fab13ec8eddf6529a9d",
+    "file": "src/ui.tsx",
+    "tag": "input",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-2c9e22df975352c57295",
+    "file": "src/ui.tsx",
+    "tag": "section",
+    "label": "",
+    "className": "empty",
+    "textEditable": false
+  },
+  {
+    "id": "ui-cf05537da6ee3095ab77",
+    "file": "src/ui.tsx",
+    "tag": "h2",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-e005b0caaa6bd3ff7924",
+    "file": "src/ui.tsx",
+    "tag": "p",
+    "label": "",
+    "className": "",
+    "textEditable": false
+  },
+  {
+    "id": "ui-fd2739cb308c38bf97f3",
+    "file": "src/ui.tsx",
+    "tag": "button",
+    "label": "",
+    "className": "primary",
+    "textEditable": false
+  }
+]
